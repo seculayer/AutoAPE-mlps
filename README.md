@@ -1,2 +1,2 @@
 # automl-mlps
-Auto ML - Machine Learning Processing Server (MLPS
+Auto ML - MLPS(Machine Learning Processing Server)
