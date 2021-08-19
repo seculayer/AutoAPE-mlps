@@ -27,6 +27,10 @@ class FileUtils(object):
     def is_exist(file):
         return os.path.exists(file)
 
+    @staticmethod
+    def file_pointer(filename, mode):
+        return open(filename, mode, encoding='UTF-8', errors='ignore')
+
 
 if __name__ == '__main__':
     pass

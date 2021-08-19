@@ -12,3 +12,11 @@ class StringUtil(object):
             return int(data)
         except ValueError:
             return -1
+
+    @staticmethod
+    def get_boolean(data) -> bool:
+        val = str(data).lower()
+        if val == "y" or val == "true":
+            return True
+        else:
+            return False
