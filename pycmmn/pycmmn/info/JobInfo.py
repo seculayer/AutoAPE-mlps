@@ -15,16 +15,16 @@ from pycmmn.info.DatasetInfo import DatasetInfo
 
 class JobInfo(object):
     def __init__(self, hist_no, task_idx, job_type, job_dir, logger):
-        self.job_type = job_type
-        self.hist_no = hist_no
-        self.task_idx = task_idx
-        self.job_dir = job_dir
+        self.job_type: str = job_type
+        self.hist_no: str = hist_no
+        self.task_idx: str = task_idx
+        self.job_dir: str = job_dir
         self.LOGGER = logger
 
-        self.info_dict = self._load()
+        self.info_dict: dict = self._load()
         self.LOGGER.info(self.info_dict)
 
-        self.dataset_list = self._create_dataset(self.info_dict.get("datasets"))
+        self.dataset_info: DatasetInfo = self._create_dataset(self.info_dict.get("datasets"))
 
     # ---- loading
     def _create_job_filename(self) -> str:
@@ -48,23 +48,18 @@ class JobInfo(object):
 
         return job_dict
 
-    def _create_dataset(self, dataset_dict_list) -> List[DatasetInfo]:
-        result_list = list()
-        for dataset_dict in dataset_dict_list:
-            dataset = DatasetInfo(dataset_dict)
-            self.LOGGER.debug(str(dataset))
-            result_list.append(dataset)
-        return result_list
+    def _create_dataset(self, dataset_dict) -> DatasetInfo:
+        dataset = DatasetInfo(dataset_dict)
+        self.LOGGER.debug(str(dataset))
+
+        return dataset
 
     # ---- get
     def get_hist_no(self) -> str:
         return self.hist_no
 
-    def get_dataset_list(self) -> List[DatasetInfo]:
-        return self.dataset_list
-
-    def num_dataset(self) -> int:
-        return len(self.dataset_list)
+    def get_dataset(self) -> DatasetInfo:
+        return self.dataset_info
 
     def get_job_type(self) -> str:
         return self.job_type
@@ -72,8 +67,8 @@ class JobInfo(object):
     def get_task_idx(self) -> str:
         return self.task_idx
 
-    def get_fields(self, dataset_idx: int):
-        return self.dataset_list[dataset_idx].get_fields()
+    def get_fields(self):
+        return self.dataset_info.get_fields()
 
     def get_sampling_type(self) -> str:
         return self.info_dict.get("sample_type_cd", "4")  # SAMPLE_TYPE_NONE
@@ -108,11 +103,11 @@ class JobInfo(object):
     def get_statistic_yn(self) -> str:
         return self.info_dict.get("statistic_yn", "N")
 
-    def get_dataset_lines(self, dataset_idx: int) -> List[int]:
-        return self.get_dataset_list()[dataset_idx].get_dist_lines()
+    def get_dataset_lines(self) -> List[int]:
+        return self.get_dataset().get_dist_lines()
 
-    def get_dataset_cnt_labels(self, dataset_idx: int) -> dict:
-        return self.get_dataset_list()[dataset_idx].get_statistic()["label"]["unique"]
+    def get_dataset_cnt_labels(self) -> dict:
+        return self.get_dataset().get_statistic()["label"]["unique"]
 
     # ----- rtdetect
     def get_detect_type_cd(self) -> str:
@@ -121,11 +116,8 @@ class JobInfo(object):
     def get_models_list(self) -> list:
         return self.info_dict.get("models", list())
 
-    def get_datasets_list_json(self) -> list:
-        return self.info_dict.get("datasets", [])
-
-    def get_datasets_info_json(self) -> list:
-        return self.info_dict.get("datasets", list())
+    def get_datasets_info_json(self) -> dict:
+        return self.info_dict.get("datasets", dict())
 
     def get_detect_id(self) -> str:
         return self.info_dict.get("detect_id", "")
