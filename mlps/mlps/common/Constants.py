@@ -12,25 +12,35 @@ from pycmmn.tools.ConfUtils import ConfUtils
 from pycmmn.tools.VersionManagement import VersionManagement
 
 
-# class : Constants
 class Constants(object, metaclass=Singleton):
-    _WORKING_DIR = os.getcwd()
-    _WORKING_DIR = _WORKING_DIR[:_WORKING_DIR.find("/mlps/")+5]  # +5 : "/mlps"
+    _working_dir = os.getcwd()
+    _data_cvt_dir = _working_dir + "/../mlps"
+    _conf_xml_filename = _data_cvt_dir + "/conf/mlps-conf.xml"
 
-    # load configuration file
-    _conf_xml_filename = _WORKING_DIR + "/conf/mlps-conf.xml"
+    _MODE = "deploy"
+
+    if not FileUtils.is_exist(_conf_xml_filename):
+        _MODE = "dev"
+
+        if _working_dir != "/eyeCloudAI/app/ape/mlps":
+            os.chdir(FileUtils.get_realpath(__file__) + "/../../")
+
+        _working_dir = os.getcwd()
+        _data_cvt_dir = _working_dir + "/../mlps"
+        _conf_xml_filename = _working_dir + "/conf/mlps-conf.xml"
+
     _CONFIG = ConfUtils.load(filename=_conf_xml_filename)
 
     # DEFAULT
     try:
-        VERSION_MANAGER = VersionManagement(app_path=_WORKING_DIR)
+        VERSION_MANAGER = VersionManagement(app_path=_working_dir)
     except Exception as e:
         VersionManagement.generate(
             version="3.0.0",
-            app_path=_WORKING_DIR,
+            app_path=_working_dir,
             module_nm="mlps",
         )
-        VERSION_MANAGER = VersionManagement(app_path=_WORKING_DIR)
+        VERSION_MANAGER = VersionManagement(app_path=_working_dir)
     VERSION = VERSION_MANAGER.VERSION
     MODULE_NM = VERSION_MANAGER.MODULE_NM
 
@@ -77,6 +87,10 @@ class Constants(object, metaclass=Singleton):
         DATAPROCESS_CVT_DATA = False  # AS DEFAULT
 
     JOB_TYPE_LEARN = "learn"
+    SAMPLE_TYPE_RANDOM = "1"
+    SAMPLE_TYPE_OVER = "2"
+    SAMPLE_TYPE_UNDER = "3"
+    SAMPLE_TYPE_NONE = "4"
 
     COM_CODE = {
         "APE003": {

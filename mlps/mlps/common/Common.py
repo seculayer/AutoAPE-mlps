@@ -4,20 +4,13 @@
 #  Powered by Seculayer © 2021 Service Model Team, R&D Center.
 #
 
-from typing import Tuple, List
-import os
-
-# ----  pycmmn
 from pycmmn.common.Singleton import Singleton
 from pycmmn.interfaces.FileUtils import FileUtils
 from pycmmn.logger.MPLogger import MPLogger
 from pycmmn.common.StringUtil import StringUtil
-
-# ----  mlps
 from mlps.common.Constants import Constants
 
 
-# class : Common
 class Common(object, metaclass=Singleton):
     # MAKE DIR
     FileUtils.mkdir(Constants.DIR_LOG)
@@ -34,29 +27,6 @@ class Common(object, metaclass=Singleton):
     # LOG SETTING
     LOGGER = MPLogger(log_name=Constants.LOG_NAME, log_level=Constants.LOG_LEVEL, log_dir=Constants.DIR_LOG)
     LOGGER.getLogger().info("MLPS v.%s MLPS Logger initialized..." % Constants.VERSION)
-
-    @classmethod
-    def get_feature_files(cls, directory="./", sep="_", info=None, ext=".done", filename_list=None) \
-            -> Tuple[List[str], int]:
-        if info is None:
-            info = []
-        if filename_list is None:
-            filename_list = []
-
-        file_list = os.listdir(directory)
-        result_list = list()
-        max_files = 1
-        for filename in file_list:
-            filename_split = os.path.splitext(filename)
-            if ext == filename_split[-1]:
-                if cls.match_feature_filename(filename_split[0], info, sep):
-                    full_filename = "%s/%s" % (directory, filename)
-                    if not cls.check_duplicate_filenames(full_filename, filename_list):
-                        max_files = cls.get_max_files(filename_split[0], sep) + 1
-                        result_list.append(full_filename)
-                else:
-                    continue
-        return result_list, max_files
 
     @staticmethod
     def get_max_files(filename, sep="_") -> int:

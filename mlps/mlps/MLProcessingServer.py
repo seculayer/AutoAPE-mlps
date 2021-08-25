@@ -23,7 +23,7 @@ class MLProcessingServer(object):
         # waiting ETLS
         time.sleep(5)
 
-        self.processor = MLPSProcessor(key, job_type, task_idx)
+        self.processor = MLPSProcessor(key, task_idx, job_type)
         
     def run(self) -> None:
         self.processor.run()

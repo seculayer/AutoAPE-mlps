@@ -105,8 +105,8 @@
     </property>
     <property>
         <name>max_sub_process</name>
-        <value>1</value>
-        <description>None</description>
+        <value>2</value>
+        <description>Cnt of Data Loader SUB Processor</description>
     </property>
     <property>
         <name>remove_temp_folder</name>
