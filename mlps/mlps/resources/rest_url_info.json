@@ -1,0 +1,8 @@
+{
+    "cnvr_list": "/mrms/get_cvt_fn",
+    "learn_status_update": "/mrms/status_update/learn",
+    "inference_status_update": "/mrms/status_update/inference",
+    "learn_result_return": "/mrms/results/learn",
+    "inference_result_return": "/mrms/results/inference",
+    "execute_time_update": "/mrms/time_check"
+}

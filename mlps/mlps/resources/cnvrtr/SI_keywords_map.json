@@ -1,0 +1,548 @@
+{
+  "!": {
+    "value": 3
+  },
+  "\"": {
+    "value": 4
+  },
+  "#": {
+    "value": 5
+  },
+  "$": {
+    "value": 12
+  },
+  "%": {
+    "value": 15
+  },
+  "&": {
+    "value": 11
+  },
+  "'": {
+    "value": 10
+  },
+  "(": {
+    "value": 14
+  },
+  ")": {
+    "value": 17
+  },
+  "*": {
+    "value": 16
+  },
+  "+": {
+    "value": 8
+  },
+  ",": {
+    "value": 13
+  },
+  "-": {
+    "value": 6
+  },
+  ".": {
+    "value": 7
+  },
+  "/": {
+    "value": 9
+  },
+  "0": {
+    "value": 48
+  },
+  "1": {
+    "value": 49
+  },
+  "2": {
+    "value": 50
+  },
+  "3": {
+    "value": 51
+  },
+  "4": {
+    "value": 52
+  },
+  "5": {
+    "value": 53
+  },
+  "6": {
+    "value": 54
+  },
+  "7": {
+    "value": 55
+  },
+  "8": {
+    "value": 56
+  },
+  "9": {
+    "value": 57
+  },
+  ":": {
+    "value": 19
+  },
+  ";": {
+    "value": 22
+  },
+  "<": {
+    "value": 18
+  },
+  "=": {
+    "value": 2
+  },
+  ">": {
+    "value": 20
+  },
+  "?": {
+    "value": 21
+  },
+  "@": {
+    "value": 23
+  },
+  "[": {
+    "value": 24
+  },
+  "\\": {
+    "value": 28
+  },
+  "]": {
+    "value": 25
+  },
+  "^": {
+    "value": 29
+  },
+  "_": {
+    "value": 26
+  },
+  "`": {
+    "value": 27
+  },
+  "address": {
+    "value": 72
+  },
+  "admin": {
+    "value": 77
+  },
+  "all": {
+    "value": 65
+  },
+  "and": {
+    "value": 70
+  },
+  "as": {
+    "value": 90
+  },
+  "availablemedia": {
+    "value": 80
+  },
+  "benchmark": {
+    "value": 97
+  },
+  "by": {
+    "value": 65
+  },
+  "case": {
+    "value": 65
+  },
+  "cast": {
+    "value": 90
+  },
+  "char": {
+    "value": 65
+  },
+  "character": {
+    "value": 65
+  },
+  "chr": {
+    "value": 66
+  },
+  "cmd": {
+    "value": 78
+  },
+  "cmdshell": {
+    "value": 84
+  },
+  "column": {
+    "value": 66
+  },
+  "concat": {
+    "value": 66
+  },
+  "connect": {
+    "value": 89
+  },
+  "content": {
+    "value": 98
+  },
+  "convert": {
+    "value": 66
+  },
+  "cookie": {
+    "value": 98
+  },
+  "count": {
+    "value": 66
+  },
+  "create": {
+    "value": 67
+  },
+  "data": {
+    "value": 72
+  },
+  "database": {
+    "value": 72
+  },
+  "db": {
+    "value": 98
+  },
+  "dba": {
+    "value": 72
+  },
+  "dbms": {
+    "value": 98
+  },
+  "declare": {
+    "value": 67
+  },
+  "decode": {
+    "value": 86
+  },
+  "default": {
+    "value": 86
+  },
+  "delay": {
+    "value": 86
+  },
+  "delete": {
+    "value": 67
+  },
+  "desc": {
+    "value": 89
+  },
+  "dir": {
+    "value": 98
+  },
+  "dirtree": {
+    "value": 84
+  },
+  "distinct": {
+    "value": 67
+  },
+  "document": {
+    "value": 86
+  },
+  "drop": {
+    "value": 67
+  },
+  "echo": {
+    "value": 78
+  },
+  "enumdsn": {
+    "value": 83
+  },
+  "etc": {
+    "value": 72
+  },
+  "eval": {
+    "value": 86
+  },
+  "exe": {
+    "value": 78
+  },
+  "exec": {
+    "value": 78
+  },
+  "execresultset": {
+    "value": 84
+  },
+  "file": {
+    "value": 73
+  },
+  "filelist": {
+    "value": 83
+  },
+  "filename": {
+    "value": 73
+  },
+  "from": {
+    "value": 68
+  },
+  "function": {
+    "value": 68
+  },
+  "get": {
+    "value": 99
+  },
+  "getmappingxpath": {
+    "value": 87
+  },
+  "grant": {
+    "value": 71
+  },
+  "group": {
+    "value": 68
+  },
+  "having": {
+    "value": 68
+  },
+  "hex": {
+    "value": 87
+  },
+  "http": {
+    "value": 99
+  },
+  "id": {
+    "value": 73
+  },
+  "if": {
+    "value": 68
+  },
+  "ifnull": {
+    "value": 69
+  },
+  "inaddr": {
+    "value": 77
+  },
+  "information": {
+    "value": 77
+  },
+  "insert": {
+    "value": 69
+  },
+  "int": {
+    "value": 90
+  },
+  "into": {
+    "value": 69
+  },
+  "is": {
+    "value": 87
+  },
+  "like": {
+    "value": 69
+  },
+  "limit": {
+    "value": 69
+  },
+  "log": {
+    "value": 90
+  },
+  "login": {
+    "value": 87
+  },
+  "loginconfig": {
+    "value": 83
+  },
+  "makecab": {
+    "value": 83
+  },
+  "master": {
+    "value": 79
+  },
+  "match": {
+    "value": 87
+  },
+  "md": {
+    "value": 97
+  },
+  "mysql": {
+    "value": 99
+  },
+  "name": {
+    "value": 73
+  },
+  "not": {
+    "value": 88
+  },
+  "ntsec": {
+    "value": 82
+  },
+  "null": {
+    "value": 88
+  },
+  "or": {
+    "value": 70
+  },
+  "oracle": {
+    "value": 99
+  },
+  "order": {
+    "value": 70
+  },
+  "passwd": {
+    "value": 73
+  },
+  "password": {
+    "value": 74
+  },
+  "pg": {
+    "value": 74
+  },
+  "post": {
+    "value": 99
+  },
+  "pwd": {
+    "value": 74
+  },
+  "query": {
+    "value": 100
+  },
+  "rand": {
+    "value": 90
+  },
+  "referer": {
+    "value": 100
+  },
+  "reg": {
+    "value": 84
+  },
+  "regaddmultistring": {
+    "value": 82
+  },
+  "regdelete": {
+    "value": 79
+  },
+  "regdeletekey": {
+    "value": 82
+  },
+  "regdeletevalue": {
+    "value": 82
+  },
+  "regenumbalues": {
+    "value": 81
+  },
+  "regenumkeys": {
+    "value": 81
+  },
+  "regenumvalues": {
+    "value": 81
+  },
+  "regread": {
+    "value": 81
+  },
+  "regremovemultistring": {
+    "value": 80
+  },
+  "regwrite": {
+    "value": 80
+  },
+  "replace": {
+    "value": 97
+  },
+  "request": {
+    "value": 88
+  },
+  "resource": {
+    "value": 74
+  },
+  "schema": {
+    "value": 77
+  },
+  "select": {
+    "value": 70
+  },
+  "servicecontrol": {
+    "value": 85
+  },
+  "sets": {
+    "value": 88
+  },
+  "shell": {
+    "value": 79
+  },
+  "sleep": {
+    "value": 90
+  },
+  "sp": {
+    "value": 79
+  },
+  "sql": {
+    "value": 100
+  },
+  "sqlmap": {
+    "value": 100
+  },
+  "substring": {
+    "value": 97
+  },
+  "sys": {
+    "value": 74
+  },
+  "system": {
+    "value": 75
+  },
+  "table": {
+    "value": 75
+  },
+  "tablename": {
+    "value": 75
+  },
+  "tables": {
+    "value": 75
+  },
+  "terminate": {
+    "value": 80
+  },
+  "to": {
+    "value": 88
+  },
+  "uid": {
+    "value": 75
+  },
+  "union": {
+    "value": 70
+  },
+  "update": {
+    "value": 71
+  },
+  "user": {
+    "value": 76
+  },
+  "username": {
+    "value": 76
+  },
+  "users": {
+    "value": 76
+  },
+  "utl": {
+    "value": 76
+  },
+  "value": {
+    "value": 76
+  },
+  "values": {
+    "value": 77
+  },
+  "var": {
+    "value": 89
+  },
+  "varchar": {
+    "value": 89
+  },
+  "version": {
+    "value": 77
+  },
+  "waitfor": {
+    "value": 89
+  },
+  "webserver": {
+    "value": 85
+  },
+  "when": {
+    "value": 71
+  },
+  "where": {
+    "value": 71
+  },
+  "xp": {
+    "value": 79
+  },
+  "{": {
+    "value": 30
+  },
+  "|": {
+    "value": 32
+  },
+  "}": {
+    "value": 33
+  },
+  "~": {
+    "value": 31
+  }
+}

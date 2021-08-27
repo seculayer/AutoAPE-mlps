@@ -9,7 +9,7 @@ from typing import List
 
 from mlps.common.Common import Common
 from mlps.common.Constants import Constants
-from pycmmn.info.JobInfo import JobInfo
+from mlps.common.info import JobInfo
 
 
 class DataSampler(object):

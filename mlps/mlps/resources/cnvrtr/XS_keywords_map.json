@@ -1,0 +1,593 @@
+{
+  "!": {
+    "value": 3
+  },
+  "\"": {
+    "value": 4
+  },
+  "#": {
+    "value": 5
+  },
+  "$": {
+    "value": 12
+  },
+  "%": {
+    "value": 15
+  },
+  "&": {
+    "value": 11
+  },
+  "'": {
+    "value": 10
+  },
+  "(": {
+    "value": 14
+  },
+  ")": {
+    "value": 17
+  },
+  "*": {
+    "value": 16
+  },
+  "+": {
+    "value": 8
+  },
+  ",": {
+    "value": 13
+  },
+  "-": {
+    "value": 6
+  },
+  ".": {
+    "value": 7
+  },
+  "/": {
+    "value": 9
+  },
+  "0": {
+    "value": 48
+  },
+  "1": {
+    "value": 49
+  },
+  "2": {
+    "value": 50
+  },
+  "3": {
+    "value": 51
+  },
+  "4": {
+    "value": 52
+  },
+  "5": {
+    "value": 53
+  },
+  "6": {
+    "value": 54
+  },
+  "7": {
+    "value": 55
+  },
+  "8": {
+    "value": 56
+  },
+  "9": {
+    "value": 57
+  },
+  ":": {
+    "value": 19
+  },
+  ";": {
+    "value": 22
+  },
+  "<": {
+    "value": 18
+  },
+  "=": {
+    "value": 2
+  },
+  ">": {
+    "value": 20
+  },
+  "?": {
+    "value": 21
+  },
+  "@": {
+    "value": 23
+  },
+  "[": {
+    "value": 24
+  },
+  "\\": {
+    "value": 28
+  },
+  "]": {
+    "value": 25
+  },
+  "^": {
+    "value": 29
+  },
+  "_": {
+    "value": 26
+  },
+  "`": {
+    "value": 27
+  },
+  "action": {
+    "value": 67
+  },
+  "alert": {
+    "value": 102
+  },
+  "allowscriptaccess": {
+    "value": 75
+  },
+  "animate": {
+    "value": 74
+  },
+  "appendchild": {
+    "value": 90
+  },
+  "audio": {
+    "value": 70
+  },
+  "autofocus": {
+    "value": 71
+  },
+  "background": {
+    "value": 74
+  },
+  "baiduspider": {
+    "value": 106
+  },
+  "base": {
+    "value": 70
+  },
+  "behavior": {
+    "value": 101
+  },
+  "brute": {
+    "value": 67
+  },
+  "button": {
+    "value": 68
+  },
+  "card ": {
+    "value": 73
+  },
+  "charset": {
+    "value": 101
+  },
+  "childnodes": {
+    "value": 99
+  },
+  "clonenode": {
+    "value": 99
+  },
+  "cmd": {
+    "value": 104
+  },
+  "content": {
+    "value": 100
+  },
+  "contenteditable": {
+    "value": 65
+  },
+  "contextmenu": {
+    "value": 72
+  },
+  "cookie": {
+    "value": 103
+  },
+  "createelement": {
+    "value": 90
+  },
+  "csrf": {
+    "value": 106
+  },
+  "defineproperties": {
+    "value": 98
+  },
+  "div": {
+    "value": 75
+  },
+  "document": {
+    "value": 102
+  },
+  "domain": {
+    "value": 102
+  },
+  "echo": {
+    "value": 103
+  },
+  "embed": {
+    "value": 66
+  },
+  "eval": {
+    "value": 88
+  },
+  "event": {
+    "value": 98
+  },
+  "exec": {
+    "value": 103
+  },
+  "expression": {
+    "value": 87
+  },
+  "feimage": {
+    "value": 74
+  },
+  "find": {
+    "value": 88
+  },
+  "form": {
+    "value": 67
+  },
+  "formaction": {
+    "value": 69
+  },
+  "frames": {
+    "value": 100
+  },
+  "frameset": {
+    "value": 75
+  },
+  "fromcharcode": {
+    "value": 97
+  },
+  "function": {
+    "value": 90
+  },
+  "fuzzelement": {
+    "value": 105
+  },
+  "geturl": {
+    "value": 101
+  },
+  "handler": {
+    "value": 74
+  },
+  "hash": {
+    "value": 89
+  },
+  "head": {
+    "value": 99
+  },
+  "hello": {
+    "value": 105
+  },
+  "href": {
+    "value": 67
+  },
+  "html": {
+    "value": 73
+  },
+  "iframe": {
+    "value": 66
+  },
+  "img": {
+    "value": 69
+  },
+  "import": {
+    "value": 101
+  },
+  "initmouseevent": {
+    "value": 98
+  },
+  "injectx": {
+    "value": 105
+  },
+  "innerhtml": {
+    "value": 65
+  },
+  "input": {
+    "value": 67
+  },
+  "isindex": {
+    "value": 68
+  },
+  "javascript": {
+    "value": 66
+  },
+  "keygen": {
+    "value": 71
+  },
+  "link": {
+    "value": 70
+  },
+  "location": {
+    "value": 89
+  },
+  "marquee": {
+    "value": 70
+  },
+  "match": {
+    "value": 99
+  },
+  "math": {
+    "value": 66
+  },
+  "menu": {
+    "value": 72
+  },
+  "message": {
+    "value": 103
+  },
+  "meta": {
+    "value": 72
+  },
+  "msgbox": {
+    "value": 104
+  },
+  "navigator": {
+    "value": 102
+  },
+  "netsparker": {
+    "value": 106
+  },
+  "object": {
+    "value": 73
+  },
+  "onafterscriptexecute": {
+    "value": 86
+  },
+  "onbeforeload": {
+    "value": 87
+  },
+  "onbeforescriptexecute": {
+    "value": 86
+  },
+  "onbeforeunload": {
+    "value": 87
+  },
+  "onblur": {
+    "value": 76
+  },
+  "onchange": {
+    "value": 85
+  },
+  "onclick": {
+    "value": 77
+  },
+  "oncontextmenu": {
+    "value": 77
+  },
+  "oncopy": {
+    "value": 77
+  },
+  "oncut": {
+    "value": 77
+  },
+  "ondblclick": {
+    "value": 78
+  },
+  "ondrag": {
+    "value": 78
+  },
+  "oneonerrorrror": {
+    "value": 85
+  },
+  "onerror": {
+    "value": 83
+  },
+  "onevent": {
+    "value": 73
+  },
+  "onfinish": {
+    "value": 86
+  },
+  "onfocus": {
+    "value": 76
+  },
+  "onformchange": {
+    "value": 87
+  },
+  "onhashchange": {
+    "value": 83
+  },
+  "onhelp": {
+    "value": 84
+  },
+  "oninput": {
+    "value": 78
+  },
+  "onkeydown": {
+    "value": 78
+  },
+  "onkeypress": {
+    "value": 79
+  },
+  "onkeyup": {
+    "value": 79
+  },
+  "onload": {
+    "value": 76
+  },
+  "onloadstart": {
+    "value": 84
+  },
+  "onmousedown": {
+    "value": 79
+  },
+  "onmousemove": {
+    "value": 79
+  },
+  "onmouseout": {
+    "value": 80
+  },
+  "onmouseover": {
+    "value": 76
+  },
+  "onmouseup": {
+    "value": 80
+  },
+  "onorientationchange": {
+    "value": 82
+  },
+  "onpageshow": {
+    "value": 83
+  },
+  "onpaste": {
+    "value": 80
+  },
+  "onresize": {
+    "value": 84
+  },
+  "onscroll": {
+    "value": 83
+  },
+  "onshow": {
+    "value": 85
+  },
+  "onstart": {
+    "value": 84
+  },
+  "onsubmit": {
+    "value": 76
+  },
+  "ontoggle": {
+    "value": 85
+  },
+  "ontouchcancel": {
+    "value": 82
+  },
+  "ontouchend": {
+    "value": 82
+  },
+  "ontouchmove": {
+    "value": 82
+  },
+  "ontouchstart": {
+    "value": 80
+  },
+  "open": {
+    "value": 100
+  },
+  "openbugbounty": {
+    "value": 106
+  },
+  "option": {
+    "value": 71
+  },
+  "parent": {
+    "value": 97
+  },
+  "prompt": {
+    "value": 98
+  },
+  "rel": {
+    "value": 90
+  },
+  "script": {
+    "value": 65
+  },
+  "select": {
+    "value": 71
+  },
+  "self": {
+    "value": 97
+  },
+  "setInterval": {
+    "value": 89
+  },
+  "slice": {
+    "value": 89
+  },
+  "source": {
+    "value": 88
+  },
+  "src": {
+    "value": 66
+  },
+  "srcdoc": {
+    "value": 69
+  },
+  "string": {
+    "value": 97
+  },
+  "style": {
+    "value": 70
+  },
+  "submit": {
+    "value": 68
+  },
+  "substr": {
+    "value": 99
+  },
+  "svg": {
+    "value": 65
+  },
+  "table": {
+    "value": 74
+  },
+  "target": {
+    "value": 73
+  },
+  "test": {
+    "value": 105
+  },
+  "textarea": {
+    "value": 72
+  },
+  "top": {
+    "value": 88
+  },
+  "tostring": {
+    "value": 88
+  },
+  "type": {
+    "value": 68
+  },
+  "unescape": {
+    "value": 100
+  },
+  "url": {
+    "value": 89
+  },
+  "value": {
+    "value": 68
+  },
+  "vbscript": {
+    "value": 87
+  },
+  "vibrate": {
+    "value": 102
+  },
+  "video": {
+    "value": 71
+  },
+  "window": {
+    "value": 97
+  },
+  "write": {
+    "value": 103
+  },
+  "x": {
+    "value": 65
+  },
+  "xlink": {
+    "value": 69
+  },
+  "xmlhttp": {
+    "value": 100
+  },
+  "xmlns": {
+    "value": 69
+  },
+  "xss": {
+    "value": 105
+  },
+  "{": {
+    "value": 30
+  },
+  "|": {
+    "value": 32
+  },
+  "}": {
+    "value": 33
+  },
+  "~": {
+    "value": 31
+  }
+}

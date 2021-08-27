@@ -5,8 +5,6 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="Remote Python 3.7.7 (sftp://root@10.1.35.114:22/usr/local/bin/python3.7)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="pycmmn" />
-    <orderEntry type="module" module-name="dataconverter" />
     <orderEntry type="module" module-name="apeflow" />
   </component>
 </module>

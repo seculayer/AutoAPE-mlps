@@ -1,0 +1,258 @@
+{
+  "!": {
+    "value": 3
+  },
+  "\"": {
+    "value": 4
+  },
+  "#": {
+    "value": 5
+  },
+  "$": {
+    "value": 12
+  },
+  "%": {
+    "value": 15
+  },
+  "&": {
+    "value": 11
+  },
+  "'": {
+    "value": 10
+  },
+  "(": {
+    "value": 14
+  },
+  ")": {
+    "value": 17
+  },
+  "*": {
+    "value": 16
+  },
+  "+": {
+    "value": 8
+  },
+  ",": {
+    "value": 13
+  },
+  "-": {
+    "value": 6
+  },
+  ".": {
+    "value": 7
+  },
+  "/": {
+    "value": 9
+  },
+  "0": {
+    "value": 48
+  },
+  "1": {
+    "value": 49
+  },
+  "2": {
+    "value": 50
+  },
+  "3": {
+    "value": 51
+  },
+  "4": {
+    "value": 52
+  },
+  "5": {
+    "value": 53
+  },
+  "6": {
+    "value": 54
+  },
+  "7": {
+    "value": 55
+  },
+  "8": {
+    "value": 56
+  },
+  "9": {
+    "value": 57
+  },
+  ":": {
+    "value": 19
+  },
+  ";": {
+    "value": 22
+  },
+  "<": {
+    "value": 18
+  },
+  "=": {
+    "value": 2
+  },
+  ">": {
+    "value": 20
+  },
+  "?": {
+    "value": 21
+  },
+  "@": {
+    "value": 23
+  },
+  "[": {
+    "value": 24
+  },
+  "\\": {
+    "value": 28
+  },
+  "]": {
+    "value": 25
+  },
+  "^": {
+    "value": 29
+  },
+  "_": {
+    "value": 26
+  },
+  "`": {
+    "value": 27
+  },
+  "{": {
+    "value": 30
+  },
+  "|": {
+    "value": 32
+  },
+  "}": {
+    "value": 33
+  },
+  "~": {
+    "value": 31
+  },
+  "aaaa": {"value": 98},
+  "abcd": {"value": 98},
+  "abcdefg": {"value": 100},
+  "acensus": {"value": 68},
+  "admin": {"value": 97},
+  "admindb": {"value": 86},
+  "adminid": {"value": 88},
+  "administrat": {"value": 86},
+  "administrateur": {"value": 86},
+  "administrator": {"value": 89},
+  "administrators": {"value": 89},
+  "adminmaster": {"value": 87},
+  "anonymous": {"value": 84},
+  "asdf": {"value": 90},
+  "asdfasdf": {"value": 100},
+  "asdfg": {"value": 99},
+  "asdfgh": {"value": 98},
+  "aut": {"value": 75},
+  "author": {"value": 77},
+  "authorization": {"value": 101},
+  "baiduspider": {"value": 102},
+  "bak": {"value": 78},
+  "basic": {"value": 101},
+  "bin": {"value": 71},
+  "center": {"value": 66},
+  "changelog": {"value": 69},
+  "check": {"value": 73},
+  "ckfinder": {"value": 80},
+  "conf": {"value": 68},
+  "config": {"value": 66},
+  "configuration": {"value": 79},
+  "console": {"value": 67},
+  "content": {"value": 72},
+  "cpython": {"value": 101},
+  "cs": {"value": 69},
+  "csql": {"value": 76},
+  "db": {"value": 69},
+  "dbadmin": {"value": 85},
+  "details": {"value": 73},
+  "dll": {"value": 76},
+  "dzs": {"value": 76},
+  "edit": {"value": 76},
+  "editor": {"value": 79},
+  "ehlo": {"value": 102},
+  "empappupdtlogin": {"value": 71},
+  "encoding": {"value": 71},
+  "export": {"value": 69},
+  "fckeditor": {"value": 80},
+  "ftpuser": {"value": 83},
+  "funcspecs": {"value": 66},
+  "gpin": {"value": 75},
+  "guest": {"value": 83},
+  "howto": {"value": 73},
+  "iisadminpwd": {"value": 99},
+  "import": {"value": 75},
+  "inc": {"value": 73},
+  "index": {"value": 73},
+  "inf": {"value": 80},
+  "info": {"value": 70},
+  "jmx": {"value": 68},
+  "join": {"value": 70},
+  "log": {"value": 72},
+  "login": {"value": 70},
+  "loginform": {"value": 74},
+  "manager": {"value": 97},
+  "master": {"value": 81},
+  "myadmin": {"value": 65},
+  "mysqladmin": {"value": 85},
+  "openapi": {"value": 68},
+  "operator": {"value": 84},
+  "pass": {"value": 97},
+  "passwd": {"value": 90},
+  "password": {"value": 97},
+  "phpadmin": {"value": 87},
+  "phpmy": {"value": 80},
+  "phpmyadmin": {"value": 78},
+  "phpmyadminold": {"value": 78},
+  "plugins": {"value": 74},
+  "pma": {"value": 67},
+  "pmaauth": {"value": 86},
+  "pmahomme": {"value": 79},
+  "pmapass": {"value": 78},
+  "pmauser": {"value": 85},
+  "portal": {"value": 75},
+  "properties": {"value": 74},
+  "python": {"value": 101},
+  "qwer": {"value": 90},
+  "qwerty": {"value": 97},
+  "rd": {"value": 72},
+  "resource": {"value": 77},
+  "rest": {"value": 76},
+  "rhksflwk": {"value": 81},
+  "root": {"value": 89},
+  "rootadmin": {"value": 88},
+  "rootpassword": {"value": 99},
+  "rootroot": {"value": 99},
+  "saedit": {"value": 65},
+  "sap": {"value": 72},
+  "scan": {"value": 102},
+  "scott": {"value": 84},
+  "scripts": {"value": 66},
+  "security": {"value": 71},
+  "server": {"value": 66},
+  "service": {"value": 74},
+  "servlet": {"value": 69},
+  "setup": {"value": 70},
+  "spmgr": {"value": 72},
+  "status": {"value": 70},
+  "super": {"value": 85},
+  "superuser": {"value": 89},
+  "sysmaster": {"value": 85},
+  "system": {"value": 83},
+  "test": {"value": 90},
+  "testcookie": {"value": 102},
+  "testuser": {"value": 87},
+  "tomcat": {"value": 84},
+  "transfer": {"value": 67},
+  "upload": {"value": 77},
+  "user": {"value": 84},
+  "view": {"value": 76},
+  "vti": {"value": 67},
+  "web": {"value": 68},
+  "weblogic": {"value": 90},
+  "webmail": {"value": 87},
+  "webmaste": {"value": 98},
+  "webmaster": {"value": 98},
+  "wp": {"value": 65},
+  "wsomg": {"value": 75},
+  "zmeu": {"value": 101},
+  "zoomsounds": {"value": 77}
+}

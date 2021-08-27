@@ -1,0 +1,321 @@
+{
+  "!": {
+    "value": 3
+  },
+  "\"": {
+    "value": 4
+  },
+  "#": {
+    "value": 5
+  },
+  "$": {
+    "value": 12
+  },
+  "%": {
+    "value": 15
+  },
+  "&": {
+    "value": 11
+  },
+  "'": {
+    "value": 10
+  },
+  "(": {
+    "value": 14
+  },
+  ")": {
+    "value": 17
+  },
+  "*": {
+    "value": 16
+  },
+  "+": {
+    "value": 8
+  },
+  ",": {
+    "value": 13
+  },
+  "-": {
+    "value": 6
+  },
+  ".": {
+    "value": 7
+  },
+  "/": {
+    "value": 9
+  },
+  "0": {
+    "value": 48
+  },
+  "1": {
+    "value": 49
+  },
+  "2": {
+    "value": 50
+  },
+  "3": {
+    "value": 51
+  },
+  "4": {
+    "value": 52
+  },
+  "5": {
+    "value": 53
+  },
+  "6": {
+    "value": 54
+  },
+  "7": {
+    "value": 55
+  },
+  "8": {
+    "value": 56
+  },
+  "9": {
+    "value": 57
+  },
+  ":": {
+    "value": 19
+  },
+  ";": {
+    "value": 22
+  },
+  "<": {
+    "value": 18
+  },
+  "=": {
+    "value": 2
+  },
+  ">": {
+    "value": 20
+  },
+  "?": {
+    "value": 21
+  },
+  "@": {
+    "value": 23
+  },
+  "[": {
+    "value": 24
+  },
+  "\\": {
+    "value": 28
+  },
+  "]": {
+    "value": 25
+  },
+  "^": {
+    "value": 29
+  },
+  "_": {
+    "value": 26
+  },
+  "`": {
+    "value": 27
+  },
+  "{": {
+    "value": 30
+  },
+  "|": {
+    "value": 32
+  },
+  "}": {
+    "value": 33
+  },
+  "~": {
+    "value": 31
+  },
+  "access": {"value": 90},
+  "admin": {"value": 98},
+  "administrator": {"value": 74},
+  "and": {"value": 67},
+  "apache": {"value": 90},
+  "apachectl": {"value": 105},
+  "apachegroup": {"value": 76},
+  "appevent": {"value": 108},
+  "applicationhost": {"value": 106},
+  "appstore": {"value": 109},
+  "asa": {"value": 119},
+  "asp": {"value": 119},
+  "aspnet": {"value": 107},
+  "authorized": {"value": 110},
+  "available": {"value": 80},
+  "bak": {"value": 118},
+  "bash": {"value": 113},
+  "bashrc": {"value": 115},
+  "bin": {"value": 106},
+  "boot": {"value": 86},
+  "changelog": {"value": 102},
+  "cmdline": {"value": 86},
+  "cnf": {"value": 116},
+  "conf": {"value": 114},
+  "confetc": {"value": 117},
+  "config": {"value": 117},
+  "configuration": {"value": 97},
+  "content": {"value": 98},
+  "cpuinfo": {"value": 88},
+  "css": {"value": 116},
+  "d": {"value": 114},
+  "dat": {"value": 116},
+  "data": {"value": 75},
+  "debug": {"value": 77},
+  "default": {"value": 114},
+  "defaults": {"value": 80},
+  "defs": {"value": 115},
+  "desktop": {"value": 108},
+  "documents": {"value": 82},
+  "drivers": {"value": 81},
+  "environ": {"value": 110},
+  "err": {"value": 117},
+  "error": {"value": 90},
+  "etc": {"value": 65},
+  "eula": {"value": 104},
+  "evt": {"value": 118},
+  "exe": {"value": 116},
+  "explorer": {"value": 100},
+  "extra": {"value": 82},
+  "fastab": {"value": 89},
+  "files": {"value": 69},
+  "filezilla": {"value": 77},
+  "filezillaftp": {"value": 78},
+  "foundation": {"value": 77},
+  "fstab": {"value": 87},
+  "ftproot": {"value": 90},
+  "global": {"value": 112},
+  "group": {"value": 85},
+  "grub": {"value": 84},
+  "gz": {"value": 114},
+  "history": {"value": 113},
+  "home": {"value": 67},
+  "host": {"value": 87},
+  "hostname": {"value": 106},
+  "hosts": {"value": 111},
+  "htdocs": {"value": 82},
+  "html": {"value": 117},
+  "htpasswd": {"value": 113},
+  "httpd": {"value": 107},
+  "httperr": {"value": 107},
+  "humans": {"value": 97},
+  "id": {"value": 111},
+  "iis": {"value": 100},
+  "inc": {"value": 116},
+  "include": {"value": 71},
+  "index": {"value": 105},
+  "inetpub": {"value": 66},
+  "inetsrv": {"value": 77},
+  "inf": {"value": 115},
+  "information": {"value": 70},
+  "ini": {"value": 114},
+  "init": {"value": 73},
+  "interrupts": {"value": 88},
+  "issue": {"value": 85},
+  "jeus": {"value": 72},
+  "keys": {"value": 111},
+  "keystore": {"value": 118},
+  "known": {"value": 111},
+  "lamp": {"value": 73},
+  "lampp": {"value": 73},
+  "library": {"value": 72},
+  "license": {"value": 104},
+  "local": {"value": 99},
+  "log": {"value": 115},
+  "logfiles": {"value": 112},
+  "login": {"value": 98},
+  "logs": {"value": 67},
+  "meminfo": {"value": 88},
+  "mercury": {"value": 102},
+  "mercurymail": {"value": 78},
+  "metabase": {"value": 110},
+  "minint": {"value": 68},
+  "mkuser": {"value": 84},
+  "motd": {"value": 85},
+  "mounts": {"value": 86},
+  "my": {"value": 113},
+  "mysql": {"value": 106},
+  "netsetup": {"value": 110},
+  "network": {"value": 112},
+  "nginx": {"value": 86},
+  "notepad": {"value": 100},
+  "ntuser": {"value": 112},
+  "opt": {"value": 65},
+  "osdlogs": {"value": 81},
+  "panther": {"value": 78},
+  "passwd": {"value": 84},
+  "php": {"value": 116},
+  "phpinfo": {"value": 102},
+  "phpmyadmin": {"value": 72},
+  "plugins": {"value": 79},
+  "ports": {"value": 107},
+  "private": {"value": 73},
+  "proc": {"value": 65},
+  "profile": {"value": 88},
+  "program": {"value": 68},
+  "programfiles": {"value": 69},
+  "properties": {"value": 102},
+  "pub": {"value": 118},
+  "recycle": {"value": 66},
+  "regback": {"value": 82},
+  "repair": {"value": 78},
+  "resolv": {"value": 89},
+  "robots": {"value": 97},
+  "root": {"value": 65},
+  "rsa": {"value": 111},
+  "rtf": {"value": 117},
+  "sa": {"value": 118},
+  "sam": {"value": 104},
+  "sav": {"value": 118},
+  "schema": {"value": 107},
+  "secevent": {"value": 109},
+  "security": {"value": 89},
+  "self": {"value": 74},
+  "sendmail": {"value": 103},
+  "server": {"value": 99},
+  "services": {"value": 89},
+  "sessions": {"value": 99},
+  "settings": {"value": 103},
+  "setupinfo": {"value": 108},
+  "shadow": {"value": 88},
+  "shells": {"value": 89},
+  "sites": {"value": 80},
+  "smsosd": {"value": 75},
+  "software": {"value": 104},
+  "ssh": {"value": 74},
+  "ssl": {"value": 108},
+  "stable": {"value": 81},
+  "style": {"value": 97},
+  "sysconfig": {"value": 74},
+  "sysprep": {"value": 87},
+  "sysprepsysprep": {"value": 104},
+  "sysprepunattend": {"value": 105},
+  "sysprepunattended": {"value": 105},
+  "system": {"value": 100},
+  "systeminit": {"value": 97},
+  "temp": {"value": 101},
+  "tomcat": {"value": 109},
+  "txt": {"value": 115},
+  "unattend": {"value": 87},
+  "unattended": {"value": 87},
+  "users": {"value": 109},
+  "usr": {"value": 65},
+  "var": {"value": 66},
+  "variables": {"value": 108},
+  "version": {"value": 86},
+  "vhosts": {"value": 84},
+  "volume": {"value": 69},
+  "wamp": {"value": 70},
+  "web": {"value": 109},
+  "webalizer": {"value": 103},
+  "webdav": {"value": 103},
+  "weblogic": {"value": 101},
+  "webserver": {"value": 80},
+  "win": {"value": 101},
+  "windows": {"value": 70},
+  "windowsupdate": {"value": 101},
+  "winnt": {"value": 70},
+  "wp": {"value": 98},
+  "wpsettings": {"value": 100},
+  "wsconfig": {"value": 114},
+  "wwwroot": {"value": 75},
+  "xampp": {"value": 71},
+  "xml": {"value": 115}
+}

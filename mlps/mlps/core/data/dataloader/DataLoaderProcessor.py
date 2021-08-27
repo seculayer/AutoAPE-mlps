@@ -5,14 +5,14 @@
 
 import multiprocessing
 from multiprocessing import Queue
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
-from dataconverter.core.cnvrtr.ConvertAbstract import ConvertAbstract
-from dataconverter.core.cnvrtr.ConvertFactory import ConvertFactory
+from mlps.core.data.cnvrtr.ConvertAbstract import ConvertAbstract
+from mlps.core.data.cnvrtr.ConvertFactory import ConvertFactory
 from mlps.common.Common import Common
-from pycmmn.info.FieldInfo import FieldInfo
-from pycmmn.interfaces.FileUtils import FileUtils
-from pycmmn.interfaces.JSONUtils import JSONUtils
+from mlps.common.info.FieldInfo import FieldInfo
+from mlps.common.utils.FileUtils import FileUtils
+from mlps.common.utils.JSONUtils import JSONUtils
 
 
 class DataLoaderProcessor(multiprocessing.Process):
@@ -92,7 +92,7 @@ class DataLoaderProcessor(multiprocessing.Process):
 
 class DataLoaderProcessorBuilder(object):
     def __init__(self):
-        self.data_queue: Queue
+        self.data_queue: Union[Queue, None] = None
         self.file_name: str = ""
         self.fields = list()
         self.idx: int = 0

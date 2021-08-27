@@ -22,6 +22,11 @@
         <description>None</description>
     </property>
     <property>
+        <name>resource_cnvrtr</name>
+        <value>/cnvrtr</value>
+        <description>resource folder for data converting.</description>
+    </property>
+    <property>
         <name>dir_data_root</name>
         <value>/data</value>
         <description>None</description>
@@ -81,6 +86,16 @@
         <value>/errors</value>
         <description>None</description>
     </property>
+    <property>
+        <name>user_custom_converter_package_nm</name>
+        <value>cnvrtr</value>
+        <description>eyeCloudAI Custom converter class file path. default is [cnvrtr].</description>
+    </property>
+    <property>
+        <name>user_custom_algorithm_package_root</name>
+        <value>/eyeCloudAI/app/ape/custom</value>
+        <description>None</description>
+    </property>
     <!-- log setting -->
     <property>
         <name>log_dir</name>
@@ -128,6 +143,17 @@
     <property>
         <name>cvt_data</name>
         <value>True</value>
+        <description>None</description>
+    </property>
+    <!-- rest url setting -->
+    <property>
+        <name>rest_server_ip</name>
+        <value>10.1.35.231</value>
+        <description>None</description>
+    </property>
+    <property>
+        <name>rest_server_port</name>
+        <value>5543</value>
         <description>None</description>
     </property>
 </configuration>

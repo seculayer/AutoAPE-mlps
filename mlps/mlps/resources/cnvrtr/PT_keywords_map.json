@@ -1,0 +1,473 @@
+{
+  "!": {
+    "value": 3
+  },
+  "\"": {
+    "value": 4
+  },
+  "#": {
+    "value": 5
+  },
+  "$": {
+    "value": 12
+  },
+  "%": {
+    "value": 15
+  },
+  "&": {
+    "value": 11
+  },
+  "'": {
+    "value": 10
+  },
+  "(": {
+    "value": 14
+  },
+  ")": {
+    "value": 17
+  },
+  "*": {
+    "value": 16
+  },
+  "+": {
+    "value": 8
+  },
+  ",": {
+    "value": 13
+  },
+  "-": {
+    "value": 6
+  },
+  ".": {
+    "value": 7
+  },
+  "/": {
+    "value": 9
+  },
+  "0": {
+    "value": 48
+  },
+  "1": {
+    "value": 49
+  },
+  "2": {
+    "value": 50
+  },
+  "3": {
+    "value": 51
+  },
+  "4": {
+    "value": 52
+  },
+  "5": {
+    "value": 53
+  },
+  "6": {
+    "value": 54
+  },
+  "7": {
+    "value": 55
+  },
+  "8": {
+    "value": 56
+  },
+  "9": {
+    "value": 57
+  },
+  ":": {
+    "value": 19
+  },
+  ";": {
+    "value": 22
+  },
+  "<": {
+    "value": 18
+  },
+  "=": {
+    "value": 2
+  },
+  ">": {
+    "value": 20
+  },
+  "?": {
+    "value": 21
+  },
+  "@": {
+    "value": 23
+  },
+  "Xdefaults": {
+    "value": 175
+  },
+  "Xresources": {
+    "value": 176
+  },
+  "[": {
+    "value": 24
+  },
+  "\\": {
+    "value": 28
+  },
+  "]": {
+    "value": 25
+  },
+  "^": {
+    "value": 29
+  },
+  "_": {
+    "value": 26
+  },
+  "`": {
+    "value": 27
+  },
+  "access": {
+    "value": 61
+  },
+  "allow": {
+    "value": 62
+  },
+  "anaconda": {
+    "value": 63
+  },
+  "apache": {
+    "value": 65
+  },
+  "apache2": {
+    "value": 64
+  },
+  "at": {
+    "value": 67
+  },
+  "atfp": {
+    "value": 66
+  },
+  "history": {
+    "value": 66
+  },
+  "audit": {
+    "value": 69
+  },
+  "auth": {
+    "value": 68
+  },
+  "bash": {
+    "value": 70
+  },
+  "bashrc": {
+    "value": 73
+  },
+  "boot": {
+    "value": 74
+  },
+  "cfg": {
+    "value": 75
+  },
+  "cgi": {
+    "value": 76
+  },
+  "chrootUsers": {
+    "value": 78
+  },
+  "chroot": {
+    "value": 77
+  },
+  "list": {
+    "value": 77
+  },
+  "cnf": {
+    "value": 79
+  },
+  "conf": {
+    "value": 80
+  },
+  "config": {
+    "value": 81
+  },
+  "cpanel": {
+    "value": 82
+  },
+  "cron": {
+    "value": 84
+  },
+  "crontab": {
+    "value": 83
+  },
+  "cups": {
+    "value": 85
+  },
+  "deny": {
+    "value": 87
+  },
+  "error": {
+    "value": 89
+  },
+  "etc": {
+    "value": 90
+  },
+  "exim": {
+    "value": 91
+  },
+  "exports": {
+    "value": 94
+  },
+  "faillog": {
+    "value": 95
+  },
+  "fstab": {
+    "value": 99
+  },
+  "ftp": {
+    "value": 96
+  },
+  "proxy": {
+    "value": 96
+  },
+  "ftpaccess": {
+    "value": 97
+  },
+  "ftpchroot": {
+    "value": 98
+  },
+  "group": {
+    "value": 101
+  },
+  "grub": {
+    "value": 102
+  },
+  "gtkrc": {
+    "value": 100
+  },
+  "home": {
+    "value": 103
+  },
+  "hosts": {
+    "value": 104
+  },
+  "httpd": {
+    "value": 105
+  },
+  "httpsd": {
+    "value": 105
+  },
+  "id": {
+    "value": 106
+  },
+  "dsa": {
+    "value": 106
+  },
+  "rsa": {
+    "value": 107
+  },
+  "identity": {
+    "value": 108
+  },
+  "inc": {
+    "value": 109
+  },
+  "info": {
+    "value": 110
+  },
+  "ini": {
+    "value": 111
+  },
+  "interfaces": {
+    "value": 113
+  },
+  "interrupts": {
+    "value": 112
+  },
+  "issue": {
+    "value": 114
+  },
+  "lamp": {
+    "value": 115
+  },
+  "lampp": {
+    "value": 115
+  },
+  "lib": {
+    "value": 116
+  },
+  "lighttpd": {
+    "value": 117
+  },
+  "local": {
+    "value": 118
+  },
+  "log": {
+    "value": 122
+  },
+  "login": {
+    "value": 119
+  },
+  "logout": {
+    "value": 120
+  },
+  "logrotate": {
+    "value": 121
+  },
+  "logs": {
+    "value": 122
+  },
+  "mail": {
+    "value": 123
+  },
+  "meminfo": {
+    "value": 124
+  },
+  "message": {
+    "value": 125
+  },
+  "motd": {
+    "value": 126
+  },
+  "mounts": {
+    "value": 127
+  },
+  "mysql": {
+    "value": 129
+  },
+  "nano": {
+    "value": 130
+  },
+  "network": {
+    "value": 131
+  },
+  "opt": {
+    "value": 132
+  },
+  "paniclog": {
+    "value": 133
+  },
+  "passwd": {
+    "value": 134
+  },
+  "pdb": {
+    "value": 135
+  },
+  "pdn": {
+    "value": 136
+  },
+  "php": {
+    "value": 139
+  },
+  "php4": {
+    "value": 137
+  },
+  "php5": {
+    "value": 138
+  },
+  "pl": {
+    "value": 140
+  },
+  "printcap": {
+    "value": 141
+  },
+  "proc": {
+    "value": 142
+  },
+  "profile": {
+    "value": 143
+  },
+  "proftpd": {
+    "value": 144
+  },
+  "pub": {
+    "value": 145
+  },
+  "pure": {
+    "value": 177
+  },
+  "ftpd": {
+    "value": 146
+  },
+  "pureftpd": {
+    "value": 146
+  },
+  "root": {
+    "value": 147
+  },
+  "run": {
+    "value": 148
+  },
+  "sbin": {
+    "value": 149
+  },
+  "self": {
+    "value": 150
+  },
+  "shadow": {
+    "value": 151
+  },
+  "ssh": {
+    "value": 155
+  },
+  "sshd": {
+    "value": 154
+  },
+  "ssl": {
+    "value": 156
+  },
+  "stats": {
+    "value": 152
+  },
+  "sysconfig": {
+    "value": 158
+  },
+  "ubuntu": {
+    "value": 159
+  },
+  "usr": {
+    "value": 160
+  },
+  "utmp": {
+    "value": 161
+  },
+  "var": {
+    "value": 162
+  },
+  "version": {
+    "value": 163
+  },
+  "viminfo": {
+    "value": 164
+  },
+  "vsftpd": {
+    "value": 165
+  },
+  "warn": {
+    "value": 166
+  },
+  "style": {
+    "value": 168
+  },
+  "wtmp": {
+    "value": 167
+  },
+  "www": {
+    "value": 169
+  },
+  "xampp": {
+    "value": 171
+  },
+  "xferlog": {
+    "value": 172
+  },
+  "xinitrc": {
+    "value": 173
+  },
+  "xsession": {
+    "value": 174
+  },
+  "{": {
+    "value": 30
+  },
+  "|": {
+    "value": 32
+  },
+  "}": {
+    "value": 33
+  },
+  "~": {
+    "value": 31
+  }
+}

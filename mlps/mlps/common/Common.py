@@ -4,10 +4,10 @@
 #  Powered by Seculayer © 2021 Service Model Team, R&D Center.
 #
 
-from pycmmn.common.Singleton import Singleton
-from pycmmn.interfaces.FileUtils import FileUtils
-from pycmmn.logger.MPLogger import MPLogger
-from pycmmn.common.StringUtil import StringUtil
+from mlps.common.Singleton import Singleton
+from mlps.common.utils.FileUtils import FileUtils
+from mlps.common.logger.MPLogger import MPLogger
+from mlps.common.utils.StringUtil import StringUtil
 from mlps.common.Constants import Constants
 
 
@@ -23,6 +23,14 @@ class Common(object, metaclass=Singleton):
     FileUtils.mkdir(Constants.DIR_RESULT)
     FileUtils.mkdir(Constants.DIR_ML_TMP)
     FileUtils.mkdir(Constants.DIR_ERROR)
+    FileUtils.mkdir(Constants.DIR_LOG)
+    FileUtils.mkdir(Constants.DIR_USER_CUSTOM_ROOT)
+    FileUtils.mkdir(Constants.DIR_USER_CUSTOM_ROOT + "/{}".format(Constants.CUSTOM_PACK_NM))
+
+    CNVRTR_PACK_LIST = [
+        "mlps.core.data.cnvrtr.functions",
+        Constants.CUSTOM_PACK_NM
+    ]
 
     # LOG SETTING
     LOGGER = MPLogger(log_name=Constants.LOG_NAME, log_level=Constants.LOG_LEVEL, log_dir=Constants.DIR_LOG)

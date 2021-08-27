@@ -4,12 +4,13 @@
 #  Powered by Seculayer © 2021 Service Model Team, R&D Center.
 
 import os
+import json
 
 #  pycmmn
-from pycmmn.common.Singleton import Singleton
-from pycmmn.interfaces.FileUtils import FileUtils
-from pycmmn.tools.ConfUtils import ConfUtils
-from pycmmn.tools.VersionManagement import VersionManagement
+from mlps.common.Singleton import Singleton
+from mlps.common.utils.FileUtils import FileUtils
+from mlps.common.utils.ConfUtils import ConfUtils
+from mlps.tools.VersionManagement import VersionManagement
 
 
 class Constants(object, metaclass=Singleton):
@@ -57,7 +58,10 @@ class Constants(object, metaclass=Singleton):
     DIR_RESULT = DIR_PROCESSING + _CONFIG.get("dir_result", "/results")
     DIR_ML_TMP = DIR_PROCESSING + _CONFIG.get("dir_ml_tmp", "/temp")
     DIR_ERROR = DIR_PROCESSING + _CONFIG.get("dir_error", "/errors")
-    DIR_RESOURCES = FileUtils.get_realpath(file=__file__) + "/../../" + _CONFIG.get("dir_resources", "/resources")
+    DIR_RESOURCES = FileUtils.get_realpath(file=__file__) + "/.." + _CONFIG.get("dir_resources", "/resources")
+    DIR_USER_CUSTOM_ROOT = _CONFIG.get("user_custom_algorithm_package_root", "/eyeCloudAI/app/ape/custom")
+    CUSTOM_PACK_NM = _CONFIG.get("user_custom_converter_package_nm", "cnvrtr")
+    DIR_RESOURCES_CNVRTR = DIR_RESOURCES + "/cnvrtr"
 
     # LOG SETTING
     DIR_LOG = DIR_APP + _CONFIG.get("log_dir", "/logs")
@@ -92,38 +96,25 @@ class Constants(object, metaclass=Singleton):
     SAMPLE_TYPE_UNDER = "3"
     SAMPLE_TYPE_NONE = "4"
 
-    COM_CODE = {
-        "APE003": {
-            "1": "Classifier",
-            "2": "Regressor",
-            "3": "Clustering",
-            "4": "WE",
-            "5": "DR",
-            "6": "FE",
-            "7": "OD",
-            "8": "STS",
-            "9": "DNSD",
-            "10": "TA"
-        },
-        "APE004": {
-            "1": "Single",
-            "2": "TimeSeries"
-        },
-        "APE005": {
-            "1": "Basic",
-            "2": "DataAttach",
-            "3": "ModelAttach",
-            "4": "Parallel"
-        },
-        "APE007": {
-            "1": "RandomSampling",
-            "2": "OverSampling",
-            "3": "UnderSampling",
-            "4": "NoneSampling"
-        }
-    }
+    REST_URL_ROOT = "https://{}:{}".format(
+        _CONFIG.get("rest_server_ip", "10.1.35.231"),
+        _CONFIG.get("rest_server_port", "5543"))
+
+    with open(DIR_RESOURCES + "/rest_url_info.json", "r") as f:
+        REST_URL_DICT = json.load(f)
+
+    with open(DIR_RESOURCES + "/com_code.json", "r") as f:
+        COM_CODE = json.load(f)
+
+    STATUS_LEARNING = 5
+    STATUS_LEARN_COMPLETE = 6
+    STATUS_LEARN_ERROR = 7
+    STATUS_EVALUATING = 8
+    STATUS_EVALUATE_COMPLETE = 9
+    STATUS_EVALUATE_ERROR = 10
+    STATUS_DATA_CONVERTING = 18
+    STATUS_DATA_CONVERT_ERROR = 19
 
 
 if __name__ == '__main__':
-    print(Constants._CONFIG)
-
+    print(Constants.__dict__)

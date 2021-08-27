@@ -1,0 +1,231 @@
+{
+  "special_keyword": {
+    "!": {
+      "value": 3
+    },
+    "\"": {
+      "value": 4
+    },
+    "#": {
+      "value": 5
+    },
+    "$": {
+      "value": 12
+    },
+    "%": {
+      "value": 15
+    },
+    "&": {
+      "value": 11
+    },
+    "'": {
+      "value": 10
+    },
+    "(": {
+      "value": 14
+    },
+    ")": {
+      "value": 17
+    },
+    "*": {
+      "value": 16
+    },
+    "+": {
+      "value": 8
+    },
+    ",": {
+      "value": 13
+    },
+    "-": {
+      "value": 6
+    },
+    ".": {
+      "value": 7
+    },
+    "/": {
+      "value": 9
+    },
+    "0": {
+      "value": 48
+    },
+    "1": {
+      "value": 49
+    },
+    "2": {
+      "value": 50
+    },
+    "3": {
+      "value": 51
+    },
+    "4": {
+      "value": 52
+    },
+    "5": {
+      "value": 53
+    },
+    "6": {
+      "value": 54
+    },
+    "7": {
+      "value": 55
+    },
+    "8": {
+      "value": 56
+    },
+    "9": {
+      "value": 57
+    },
+    ":": {
+      "value": 19
+    },
+    ";": {
+      "value": 22
+    },
+    "<": {
+      "value": 18
+    },
+    "=": {
+      "value": 2
+    },
+    ">": {
+      "value": 20
+    },
+    "?": {
+      "value": 21
+    },
+    "@": {
+      "value": 23
+    },
+    "[": {
+      "value": 24
+    },
+    "\\": {
+      "value": 28
+    },
+    "]": {
+      "value": 25
+    },
+    "^": {
+      "value": 29
+    },
+    "_": {
+      "value": 26
+    },
+    "`": {
+      "value": 27
+    },
+    "{": {
+      "value": 30
+    },
+    "options": {
+      "value": 180
+    },
+    "get": {
+      "value": 181
+    },
+    "head": {
+      "value": 182
+    },
+    "post": {
+      "value": 183
+    },
+    "put": {
+      "value": 184
+    },
+    "delete": {
+      "value": 185
+    },
+    "trace": {
+      "value": 186
+    },
+    "connect": {
+      "value": 187
+    },
+    "¾": {
+      "value": 190
+    },
+    "¿": {
+      "value": 191
+    },
+    "À": {
+      "value": 192
+    },
+    "Á": {
+      "value": 193
+    },
+    "Â": {
+      "value": 194
+    },
+    "È": {
+      "value": 200
+    },
+    "contains": {
+      "value": 220
+    },
+    "substring": {
+      "value": 221
+    },
+    "string": {
+      "value": 222
+    },
+    "length": {
+      "value": 222
+    },
+    "position": {
+      "value": 223
+    },
+    "node": {
+      "value": 224
+    },
+    "parent": {
+      "value": 225
+    },
+    "child": {
+      "value": 226
+    },
+    "count": {
+      "value": 227
+    },
+    "name": {
+      "value": 228
+    },
+    "and": {
+      "value": 229
+    },
+    "or": {
+      "value": 230
+    },
+    "last": {
+      "value": 231
+    },
+    "text": {
+      "value": 232
+    },
+    "starts": {
+      "value": 233
+    },
+    "with": {
+      "value": 234
+    }
+  },
+  "special_regex": {
+    "HTTP/\\d\\.\\d\\s1\\d{2}": {
+      "value": "¾"
+    },
+    "HTTP/\\d\\.\\d\\s2\\d{2}": {
+      "value": "¿"
+    },
+    "HTTP/\\d\\.\\d\\s3\\d{2}": {
+      "value": "À"
+    },
+    "HTTP/\\d\\.\\d\\s4\\d{2}": {
+      "value": "Á"
+    },
+    "HTTP/\\d\\.\\d\\s5\\d{2}": {
+      "value": "Â"
+    },
+    "0x\\d{2}": {
+      "value": "È"
+    }
+  }
+}

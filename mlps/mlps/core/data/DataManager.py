@@ -9,15 +9,16 @@ from multiprocessing import Queue
 from queue import Queue as nQ
 from typing import List
 
-from pycmmn.common.Singleton import Singleton
-from pycmmn.info.JobInfo import JobInfo
-from pycmmn.info.FieldInfo import FieldInfo
+from mlps.common.Singleton import Singleton
+from mlps.common.info.JobInfo import JobInfo
+from mlps.common.info.FieldInfo import FieldInfo
 
 from mlps.common.Common import Common
 from mlps.common.Constants import Constants
 from mlps.core.data.dataloader.DataLoaderProcessor import DataLoaderProcessor, DataLoaderProcessorBuilder
 from mlps.core.data.sampling.DataSampler import DataSampler
-from pycmmn.common.DecoratorManager import TryExceptDecorator
+from mlps.common.decorator.TryExceptDecorator import TryExceptDecorator
+from mlps.core.RestManager import RestManager
 
 
 class DataManager(threading.Thread, metaclass=Singleton):
@@ -31,9 +32,12 @@ class DataManager(threading.Thread, metaclass=Singleton):
         self.dataset_info = self.job_info.get_dataset_info()
         self.dataset = {}
 
-    @TryExceptDecorator(4, "wlekjlrj")
+    @TryExceptDecorator(Constants.STATUS_DATA_CONVERT_ERROR, Constants.REST_URL_DICT.get("learn_status_update", ""))
     def run(self) -> None:
         self.LOGGER.info("DataManager Start.")
+        url = Constants.REST_URL_DICT.get("learn_status_update", "")
+        obj = RestManager.make_post_data(Constants.STATUS_DATA_CONVERTING, "-")
+        RestManager.post(url=url, data=obj)
 
         # ---- data load
         data_list = self.read_files(Constants.DIR_LEARN_FEAT, self.dataset_info.get_fields())
