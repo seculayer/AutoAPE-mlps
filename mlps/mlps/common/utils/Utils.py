@@ -43,7 +43,7 @@ class Utils(object, metaclass=Singleton):
     def get_model_type(model_type_cd):
         # APE003 : 모델 타입
         try:
-            return Constants.COM_CODE["APE003"][str(model_type_cd)]
+            return Common.COM_CODE["APE003"][str(model_type_cd)]
         except Exception as e:
             Common.LOGGER.getLogger().error(str(e))
             return None
@@ -52,7 +52,7 @@ class Utils(object, metaclass=Singleton):
     def get_dataset_type(data_type_cd):
         # APE004 : 데이터셋 타입
         try:
-            return Constants.COM_CODE["APE004"][str(data_type_cd)]
+            return Common.COM_CODE["APE004"][str(data_type_cd)]
         except Exception as e:
             Common.LOGGER.getLogger().error(str(e))
             return None
@@ -61,7 +61,7 @@ class Utils(object, metaclass=Singleton):
     def get_method_type(method_type_cd):
         # APE005 : 앙상블 메소드 타입
         try:
-            return Constants.COM_CODE["APE005"][str(method_type_cd)]
+            return Common.COM_CODE["APE005"][str(method_type_cd)]
         except Exception as e:
             Common.LOGGER.getLogger().error(str(e))
             return None
@@ -70,7 +70,7 @@ class Utils(object, metaclass=Singleton):
     def get_sampling_type(sample_type_cd):
         # APE005 : 앙상블 메소드 타입
         try:
-            return Constants.COM_CODE["APE007"][str(sample_type_cd)]
+            return Common.COM_CODE["APE007"][str(sample_type_cd)]
         except Exception as e:
             Common.LOGGER.getLogger().error(str(e))
             return None

@@ -4,6 +4,7 @@
 #  Powered by Seculayer © 2021 Service Model Team, R&D Center.
 #
 
+import json
 from mlps.common.Singleton import Singleton
 from mlps.common.utils.FileUtils import FileUtils
 from mlps.common.logger.MPLogger import MPLogger
@@ -31,6 +32,21 @@ class Common(object, metaclass=Singleton):
         "mlps.core.data.cnvrtr.functions",
         Constants.CUSTOM_PACK_NM
     ]
+
+    with open(Constants.DIR_RESOURCES + "/com_code.json", "r") as f:
+        COM_CODE = json.load(f)
+
+    with open(Constants.DIR_RESOURCES + "/com_func.json", "r") as f:
+        COMMON_FUNC = json.load(f)
+
+    with open(Constants.DIR_RESOURCES + "/rest_url_info.json", "r") as f:
+        REST_URL_DICT = json.load(f)
+
+    ACTIVATE_FN_CODE_DICT = COMMON_FUNC.get("activation_fn_code")
+    CONV_FN_CODE_DICT = COMMON_FUNC.get("conv_fn_code")
+    POOLING_FN_CODE_DICT = COMMON_FUNC.get("pooling_fn_code")
+    UPSAMPLING_FN_CODE_DICT = COMMON_FUNC.get("upsample_fn_code")
+    OPTIMIZER_FN_CODE_DICT = COMMON_FUNC.get("optimizer_fn_code")
 
     # LOG SETTING
     LOGGER = MPLogger(log_name=Constants.LOG_NAME, log_level=Constants.LOG_LEVEL, log_dir=Constants.DIR_LOG)

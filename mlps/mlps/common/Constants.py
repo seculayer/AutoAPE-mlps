@@ -4,9 +4,7 @@
 #  Powered by Seculayer © 2021 Service Model Team, R&D Center.
 
 import os
-import json
 
-#  pycmmn
 from mlps.common.Singleton import Singleton
 from mlps.common.utils.FileUtils import FileUtils
 from mlps.common.utils.ConfUtils import ConfUtils
@@ -32,10 +30,10 @@ class Constants(object, metaclass=Singleton):
 
     _CONFIG = ConfUtils.load(filename=_conf_xml_filename)
 
-    # DEFAULT
     try:
         VERSION_MANAGER = VersionManagement(app_path=_working_dir)
     except Exception as e:
+        # DEFAULT
         VersionManagement.generate(
             version="3.0.0",
             app_path=_working_dir,
@@ -90,30 +88,65 @@ class Constants(object, metaclass=Singleton):
     except:
         DATAPROCESS_CVT_DATA = False  # AS DEFAULT
 
+    REST_URL_ROOT = "https://{}:{}".format(
+        _CONFIG.get("rest_server_ip", "10.1.35.231"),
+        _CONFIG.get("rest_server_port", "5543"))
+
     JOB_TYPE_LEARN = "learn"
     SAMPLE_TYPE_RANDOM = "1"
     SAMPLE_TYPE_OVER = "2"
     SAMPLE_TYPE_UNDER = "3"
     SAMPLE_TYPE_NONE = "4"
 
-    REST_URL_ROOT = "https://{}:{}".format(
-        _CONFIG.get("rest_server_ip", "10.1.35.231"),
-        _CONFIG.get("rest_server_port", "5543"))
+    STATUS_LEARNING = "5"
+    STATUS_LEARN_COMPLETE = "6"
+    STATUS_LEARN_ERROR = "7"
+    STATUS_EVALUATING = "8"
+    STATUS_EVALUATE_COMPLETE = "17"  # Model Distribution
+    STATUS_EVALUATE_ERROR = "10"
+    STATUS_DATA_CONVERTING = "18"
+    STATUS_DATA_CONVERT_ERROR = "19"
 
-    with open(DIR_RESOURCES + "/rest_url_info.json", "r") as f:
-        REST_URL_DICT = json.load(f)
+    RST_TYPE_LEARN = "1"
+    RST_TYPE_EVAL = "2"
+    RST_TYPE_RAW = "3"
 
-    with open(DIR_RESOURCES + "/com_code.json", "r") as f:
-        COM_CODE = json.load(f)
+    # APEFlow Setting
+    BATCH_SIZE = int(_CONFIG.get("batch_size", "32"))
+    REDIS_SERVER_IP = _CONFIG.get("redis_s2s_ip", "10.1.35.236")
+    REDIS_SERVER_PORT = _CONFIG.get("redis_s2s_port", "6379")
 
-    STATUS_LEARNING = 5
-    STATUS_LEARN_COMPLETE = 6
-    STATUS_LEARN_ERROR = 7
-    STATUS_EVALUATING = 8
-    STATUS_EVALUATE_COMPLETE = 9
-    STATUS_EVALUATE_ERROR = 10
-    STATUS_DATA_CONVERTING = 18
-    STATUS_DATA_CONVERT_ERROR = 19
+    EARLY_TYPE_NONE = "0"
+    EARLY_TYPE_MIN = "1"
+    EARLY_TYPE_MAX = "2"
+    EARLY_TYPE_VAR = "3"
+
+    TF = "TF"
+    KERAS = "Keras"
+    TFV1 = "TFV1"
+    TF_BACKEND_LIST = [TF, KERAS, TFV1]
+    TF_BACKEND_V1 = "TFv1"
+    TF_BACKEND_V2 = "TFv2"
+    TF_BACKEND_NONE = "None"
+    GENSIM = "GS"
+    SCIKIT_LEARN = "SKL"
+    APEFLOW = "APE"
+
+    TF_DEVICE_CPU = "CPU"
+    TF_DEVICE_GPU = "GPU"
+
+    DIST_TYPE_SINGLE = "single"
+    DIST_TYPE_DISTRIBUTE = "distribute"
+
+    OUT_MODEL_PB = "pb"
+    OUT_MODEL_TF = "tf"
+    OUT_MODEL_JSON = "json"
+    OUT_MODEL_JAVA = "java"
+    OUT_MODEL_FOLDER = "folder"
+    OUT_MODEL_HYBRID = "hybrid"
+    OUT_MODEL_HYBRID_TF = "hybridTF"
+    OUT_MODEL_KERAS_TOKENIZER = "kToken"
+    OUT_MODEL_APE_OUTLIER_DETCTION = "APE_OUTLIER_DETECTION"
 
 
 if __name__ == '__main__':
