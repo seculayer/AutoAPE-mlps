@@ -6,7 +6,7 @@
 from mlps.core.data.cnvrtr.ConvertAbstract import ConvertAbstract
 
 
-class IPTransfer(ConvertAbstract):
+class IPTransferDivide(ConvertAbstract):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.num_feat = 4
@@ -24,5 +24,5 @@ class IPTransfer(ConvertAbstract):
 
 if __name__ == "__main__":
     payload = "192.168.1.110"
-    tokenizer = IPTransfer(stat_dict=None, arg_list=None)
+    tokenizer = IPTransferDivide(stat_dict=None, arg_list=None)
     print(tokenizer.apply(payload))

@@ -4,6 +4,10 @@
 # Powered by Seculayer © 2021 Service Model Team, R&D Center.
 
 import requests as rq
+import json
+from typing import List, Union
+from mlps.common.Common import Common
+from mlps.common.Constants import Constants
 from mlps.common.Singleton import Singleton
 
 
@@ -12,10 +16,10 @@ class RestManager(object, metaclass=Singleton):
         self.url = url
 
     @staticmethod
-    def get(url):
+    def get(url) -> str:
         response = rq.get(url)
 
-        return response
+        return response.text
 
     @staticmethod
     def post(url: str, data: dict) -> rq.Response:
@@ -24,8 +28,30 @@ class RestManager(object, metaclass=Singleton):
         return response
 
     @staticmethod
-    def make_post_data(status: str, message: str) -> dict:
-        return {
+    def get_cnvr_dict() -> dict:
+        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("cnvr_list", [])
+        return json.loads(RestManager.get(url))
+
+    @staticmethod
+    def update_status_cd(status: str, job_key: str, task_idx: str, msg: str) -> None:
+        url = Common.REST_URL_DICT.get("learn_status_update", "")
+        obj = {
             "status": status,
-            "message": message
+            "job_key": job_key,
+            "task_idx": task_idx,
+            "message": msg
         }
+        RestManager.post(url=url, data=obj)
+
+    @staticmethod
+    def post_learn_result(job_key: str, task_idx: str, rst_type: str, rst: List[Union[list, dict, int, str]]):
+        url = Common.REST_URL_DICT.get("learn_result_return", "")
+        obj = {
+            "job_key": job_key,
+            "task_idx": task_idx,
+            "rst_type": rst_type,
+            "result": rst
+        }
+        RestManager.post(url=url, data=obj)
+
+

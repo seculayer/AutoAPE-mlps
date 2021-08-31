@@ -4,11 +4,14 @@
 # Powered by Seculayer © 2021 Service Model Team, R&D Center.
 import importlib
 
+from mlps.common.Common import Common
 from mlps.common.utils.FileUtils import FileUtils
 from mlps.common.exceptions.DynamicClassModuleNotExist import DynamicClassModuleNotExist
 
 
 class DynamicClassLoader(object):
+    LOGGER = Common.LOGGER.getLogger()
+
     @staticmethod
     def load_module(package, class_nm):
         # return loaded Class
@@ -19,8 +22,13 @@ class DynamicClassLoader(object):
         for package in packages:
             try:
                 return cls.load_module(package, class_nm)
-            except:
+
+            except (ModuleNotFoundError, FileNotFoundError):
                 continue
+
+            except Exception as e:
+                cls.LOGGER.error(e, exc_info=True)
+
         raise DynamicClassModuleNotExist(class_nm)
 
     @classmethod
@@ -39,8 +47,8 @@ class DynamicClassLoader(object):
 if __name__ == '__main__':
     try:
         print(DynamicClassLoader.load_multi_packages(["pycmmn.common", "pycmmn.db"], "DBFactory"))
-    except Exception as e:
-        print(str(e))
+    except Exception as err:
+        print(str(err))
 
     print(
         DynamicClassLoader.get_packages(

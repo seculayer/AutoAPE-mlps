@@ -8,6 +8,7 @@ import os
 from multiprocessing import Queue
 from queue import Queue as nQ
 from typing import List
+# import traceback
 
 from mlps.common.Singleton import Singleton
 from mlps.common.info.JobInfo import JobInfo
@@ -17,35 +18,42 @@ from mlps.common.Common import Common
 from mlps.common.Constants import Constants
 from mlps.core.data.dataloader.DataLoaderProcessor import DataLoaderProcessor, DataLoaderProcessorBuilder
 from mlps.core.data.sampling.DataSampler import DataSampler
-from mlps.common.decorator.TryExceptDecorator import TryExceptDecorator
 from mlps.core.RestManager import RestManager
+from mlps.common.decorator.CalTimeDecorator import CalTimeDecorator
+from mlps.common.info.DatasetInfo import DatasetInfo
 
 
 class DataManager(threading.Thread, metaclass=Singleton):
-    def __init__(self, job_info: JobInfo):
+
+    def __init__(self, job_info: JobInfo) -> None:
         threading.Thread.__init__(self)
         self.LOGGER = Common.LOGGER.getLogger()
-        self.job_info = job_info
+        self.job_info: JobInfo = job_info
         self.data_queue: Queue = Queue()
         self.DataSampler = DataSampler(self.job_info)
 
-        self.dataset_info = self.job_info.get_dataset_info()
+        self.dataset_info: DatasetInfo = self.job_info.get_dataset_info()
         self.dataset = {}
 
-    @TryExceptDecorator(Constants.STATUS_DATA_CONVERT_ERROR, Constants.REST_URL_DICT.get("learn_status_update", ""))
+    @CalTimeDecorator
     def run(self) -> None:
-        self.LOGGER.info("DataManager Start.")
-        url = Constants.REST_URL_DICT.get("learn_status_update", "")
-        obj = RestManager.make_post_data(Constants.STATUS_DATA_CONVERTING, "-")
-        RestManager.post(url=url, data=obj)
+        try:
+            self.LOGGER.info("DataManager Start.")
+            RestManager.update_status_cd(Constants.STATUS_DATA_CONVERTING, self.job_info.get_key(),
+                                         self.job_info.get_task_idx(), '-')
 
-        # ---- data load
-        data_list = self.read_files(Constants.DIR_LEARN_FEAT, self.dataset_info.get_fields())
+            # ---- data load
+            data_list = self.read_files(Constants.DIR_LEARN_FEAT, self.dataset_info.get_fields())
 
-        self.DataSampler.set_data(data_list)
-        self.dataset = self.DataSampler.sampling()
+            self.DataSampler.set_data(data_list)
+            self.dataset = self.DataSampler.sampling()
 
-        self.LOGGER.info("DataManager End.")
+            self.LOGGER.info("DataManager End.")
+        except Exception as e:
+            self.LOGGER.error(e, exc_info=True)
+            # RestManager.update_status_cd(Constants.STATUS_DATA_CONVERT_ERROR, self.job_info.get_key(),
+            #                              self.job_info.get_task_idx(), traceback.format_exc())
+            raise e
 
     def read_files(self, features_dir: str, fields: List[FieldInfo]) \
             -> List:
@@ -94,7 +102,7 @@ class DataManager(threading.Thread, metaclass=Singleton):
 
         return [features, labels, raw_data]
 
-    def _create_proc(self, file_name: str, fields: List[FieldInfo], idx: int):
+    def _create_proc(self, file_name: str, fields: List[FieldInfo], idx: int) -> DataLoaderProcessor:
         return DataLoaderProcessorBuilder() \
             .set_data_queue(self.data_queue) \
             .set_filename(file_name) \

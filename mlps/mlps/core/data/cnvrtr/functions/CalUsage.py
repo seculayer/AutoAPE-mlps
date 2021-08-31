@@ -11,7 +11,7 @@ class CalDevUsage(ConvertAbstract):
         super().__init__(**kwargs)
 
     def apply(self, data):
-        try :
+        try:
             row = float(data) / 100
         except Exception as e:
             self.LOGGER.error(e)

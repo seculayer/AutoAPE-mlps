@@ -2,17 +2,11 @@
 # Author : Seungyeon Jo
 # e-mail : syjo@seculayer.co.kr
 # Powered by Seculayer © 2018 AI-Core Team
-######################################################################################
-###### import modules ######
-### python basic
 from datetime import datetime
-
-### MLPS
 from mlps.core.data.cnvrtr.ConvertAbstract import ConvertAbstract
 
-######################################################################################
-# class : Implement com.seculayer.ape.cnvrtr.function.logic.Trim.java as Python
-class Trim(ConvertAbstract):
+
+class UnixTimeStamp(ConvertAbstract):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
@@ -20,7 +14,7 @@ class Trim(ConvertAbstract):
         result = ''
         
         # check blank
-        if self._isBlank(data) :
+        if self._isBlank(data):
             return [result]
         
         try:
@@ -33,5 +27,5 @@ class Trim(ConvertAbstract):
 
 
 if __name__ == "__main__":
-    str = "Hello World"
-    print(Trim().apply(str))
+    _str = "Hello World"
+    print(UnixTimeStamp().apply(_str))

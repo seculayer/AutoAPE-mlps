@@ -9,7 +9,7 @@ import re
 from mlps.core.data.cnvrtr.ConvertAbstract import ConvertAbstract
 
 
-class Tokenizer_1(ConvertAbstract):
+class Tokenizer(ConvertAbstract):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.max_len = int(self.arg_list[0])
@@ -64,5 +64,5 @@ class Tokenizer_1(ConvertAbstract):
 
 if __name__ == "__main__":
     payload = "GET /shop/ProdSearch.php?Ccode1=0&Ccode2=&Ccode3=&SrpriceS=&SrpriceE=&SearchType=All&word_blank=and&word=&width=5&height=16&orderType=high&BrandID=&page=14&Ccode4=%20AND%201=1 HTTP/1.1#CRLF#Host: 222.239.87.76#CRLF#"
-    tokenizer = Tokenizer_1(stat_dict=None, arg_list=[20])
+    tokenizer = Tokenizer(stat_dict=None, arg_list=[20])
     print(tokenizer.apply(payload))
