@@ -44,12 +44,24 @@ class RestManager(object, metaclass=Singleton):
         RestManager.post(url=url, data=obj)
 
     @staticmethod
-    def post_learn_result(job_key: str, task_idx: str, rst_type: str, rst: List[Union[list, dict, int, str]]):
+    def post_learn_result(job_key: str, task_idx: str, rst_type: str, global_sn: str, rst: List[Union[list, dict, int, str]]):
         url = Common.REST_URL_DICT.get("learn_result_return", "")
         obj = {
             "job_key": job_key,
             "task_idx": task_idx,
             "rst_type": rst_type,
+            "global_sn": global_sn,
+            "result": rst
+        }
+        RestManager.post(url=url, data=obj)
+
+    @staticmethod
+    def post_inference_result(job_key: str, task_idx: str, global_sn: str, rst: List[Union[list, dict, int, str]]):
+        url = Common.REST_URL_DICT.get("inference_result_return", "")
+        obj = {
+            "job_key": job_key,
+            "task_idx": task_idx,
+            "global_sn": global_sn,
             "result": rst
         }
         RestManager.post(url=url, data=obj)
