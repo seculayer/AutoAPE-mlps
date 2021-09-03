@@ -5,6 +5,8 @@
 
 from typing import Union, List, Tuple
 import numpy as np
+import os
+import json
 
 from mlps.common.Common import Common
 from mlps.common.Constants import Constants
@@ -17,9 +19,10 @@ from mlps.core.RestManager import RestManager
 class ModelInterface(object):
     LOGGER = Common.LOGGER.getLogger()
 
-    def __init__(self, method_type, param_dict_list, ext_data):
+    def __init__(self, method_type, param_dict_list, job_type, ext_data):
         self.method_type: str = method_type
         self.ext_data: Union[dict, list, None] = ext_data
+        self.job_type = job_type
         self.model_list = self._build(param_dict_list)
         self.param_dict_list = param_dict_list
         self.input_data = dict()
@@ -28,8 +31,14 @@ class ModelInterface(object):
     def _build(self, param_dict_list) -> List[Tuple[ModelAbstract, bool]]:
         model_list = list()
         for param_dict in param_dict_list:
+            learn_yn = StringUtil.get_boolean(param_dict["learning"])
+            if not learn_yn or self.job_type != "learn":
+                try:
+                    param_dict["dropout_prob"] = "0"
+                except:
+                    pass
             model: ModelAbstract = ModelBuilder.create(param_dict, self.ext_data)
-            val: Tuple = (model, StringUtil.get_boolean(param_dict["learning"]))
+            val: Tuple = (model, learn_yn)
             model_list.append(val)
         return model_list
 
@@ -63,14 +72,16 @@ class ModelInterface(object):
                 tp = (idx, model.eval(self._make_dataset()))
                 result_list.append(tp)
 
-        for idx, result in result_list:
-            RestManager.post_learn_result(
-                job_key=self.param_dict_list[idx]["job_key"],
-                task_idx=self.param_dict_list[idx]["task_idx"],
-                rst_type=Constants.RST_TYPE_EVAL,
-                global_sn=self.param_dict_list[idx]["global_sn"],
-                rst=result
-            )
+        # for idx, result in result_list:
+        #     RestManager.post_learn_result(
+        #         job_key=self.param_dict_list[idx]["job_key"],
+        #         task_idx=json.loads(os.environ["TF_CONFIG"])["task"]["index"],
+        #         rst_type=Constants.RST_TYPE_EVAL,
+        #         global_sn=self.param_dict_list[idx]["global_sn"],
+        #         rst=result
+        #     )
+        for idx, rst in result_list:
+            self.LOGGER.info("result {} : {}".format(idx, rst))
 
     def predict(self, is_rst_return=False) -> Union[List, None]:
         result_list = list()
@@ -88,17 +99,17 @@ class ModelInterface(object):
             for idx, result in enumerate(result_list):
                 RestManager.post_inference_result(
                     job_key=self.param_dict_list[idx]["job_key"],
-                    task_idx=self.param_dict_list[idx]["task_idx"],
+                    task_idx=json.loads(os.environ["TF_CONFIG"])["task"]["index"],
                     global_sn=self.param_dict_list[idx]["global_sn"],
                     rst=result
                 )
 
     def _make_dataset(self) -> dict:
         case = {
-            "Basic": "_make_basic_dataset",
-            "ModelAttach": "_make_model_attach_dataset",
-            "DataAttach": "_make_data_attach_dataset",
-            "Parallel": "_make_parallel_dataset"
+            "Basic": "self._make_basic_dataset",
+            "ModelAttach": "self._make_model_attach_dataset",
+            "DataAttach": "self._make_data_attach_dataset",
+            "Parallel": "self._make_parallel_dataset"
         }.get(self.method_type, None)
 
         if case is None:
