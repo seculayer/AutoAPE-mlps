@@ -18,7 +18,7 @@ def strategy_decorator(func):
         dist_runner: TFDistributeRunnerV2 = TFDistributeRunnerV2()
         with dist_runner.get_strategy().scope():
             func(*args, **kwargs)
-        return wrapper()
+    return wrapper()
 
 
 class TFModel(ModelAbstract):
