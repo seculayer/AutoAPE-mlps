@@ -51,6 +51,11 @@ class FileUtils(object):
     def file_pointer(filename, mode):
         return open(filename, mode, encoding='UTF-8', errors='ignore')
 
+    @classmethod
+    def move_dir(cls, src_dir, dst_dir):
+        if cls.is_exist(src_dir):
+            shutil.move(src=src_dir, dst=dst_dir)
+
 
 if __name__ == '__main__':
     pass
