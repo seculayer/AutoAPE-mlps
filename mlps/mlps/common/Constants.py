@@ -54,6 +54,7 @@ class Constants(object, metaclass=Singleton):
     DIR_LOAD_MODEL = DIR_PROCESSING + _CONFIG.get("dir_load_model", "/load_models")
     DIR_LEARN_FEAT = DIR_PROCESSING + _CONFIG.get("dir_learn_feat", "/features")
     DIR_RESULT = DIR_PROCESSING + _CONFIG.get("dir_result", "/results")
+    DIR_TEMP = DIR_PROCESSING + _CONFIG.get("dir_temp", "/temp")
     DIR_ML_TMP = DIR_PROCESSING + _CONFIG.get("dir_ml_tmp", "/temp")
     DIR_ERROR = DIR_PROCESSING + _CONFIG.get("dir_error", "/errors")
     DIR_RESOURCES = FileUtils.get_realpath(file=__file__) + "/.." + _CONFIG.get("dir_resources", "/resources")
