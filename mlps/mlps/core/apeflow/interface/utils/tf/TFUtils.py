@@ -67,13 +67,47 @@ class TFUtils(object):
 
                 # 메모리 제한
                 mem_limit = int(int(os.environ.get("NVIDIA_COM_GPU_MEM_CONTAINER", 1024)) * gpu_weight)
-                Common.LOGGER.info("GPU Memory Limit Size : {}".format(mem_limit))
+                Common.LOGGER.getLogger().info("GPU Memory Limit Size : {}".format(mem_limit))
                 tf.config.experimental.set_memory_growth(physical_devices[0], False)
                 tf.config.experimental.set_virtual_device_configuration(
                     physical_devices[0],
                     [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=mem_limit)])
             else:
                 Common.LOGGER.getLogger().debug("Physical Devices(GPU) are None")
+
+    @staticmethod
+    def get_units(input_units, hidden_units, output_units):
+        unit_list = list()
+        unit_list.append(input_units)
+
+        for unit in hidden_units:
+            unit_list.append(unit)
+
+        unit_list.append(output_units)
+        return unit_list
+
+    @staticmethod
+    def tf_keras_mlp_block_v2(model, units, activation, dropout_prob=1.0, name="mlp", alg_type="Classifier"):
+        for i in range(len(units) - 2):
+            layer_nm = "{}_{}".format(name, str(i + 1))
+
+            # initializer = tf.keras.initializers.RandomUniform(minval=-0.1, maxval=0.1, seed=None)
+            # initailizer rollback
+            initializer = tf.keras.initializers.RandomUniform(minval=-0.05, maxval=0.05, seed=None)
+            model.add(tf.keras.layers.Dense(
+                units[i + 1], activation=activation, name=layer_nm,
+                kernel_initializer=initializer
+            ))
+            model.add(tf.keras.layers.Dropout(dropout_prob))
+
+        final_act_fn = activation
+        if alg_type == "Classifier":
+            final_act_fn = tf.nn.softmax
+            if units[-1] == 1:
+                final_act_fn = tf.nn.sigmoid
+
+        model.add(tf.keras.layers.Dense(units[-1], activation=final_act_fn, name=name+"_predict", ))
+        return model
 
 
 if __name__ == '__main__':
