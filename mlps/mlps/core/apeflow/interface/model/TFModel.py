@@ -6,6 +6,7 @@ import os
 import json
 import tensorflow as tf
 from typing import List
+from functools import wraps
 
 from mlps.core.apeflow.interface.distribute.tf.TFDistributeRunnerV2 import TFDistributeRunnerV2
 from mlps.core.apeflow.interface.model.ModelAbstract import ModelAbstract
@@ -14,11 +15,14 @@ from mlps.core.apeflow.api.algorithms.AlgorithmFactory import AlgorithmFactory
 
 
 def strategy_decorator(func):
-    def wrapper(*args, **kwargs):
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
         dist_runner: TFDistributeRunnerV2 = TFDistributeRunnerV2()
         with dist_runner.get_strategy().scope():
-            func(*args, **kwargs)
-    return wrapper()
+            rst = func(self, *args, **kwargs)
+        return rst
+
+    return wrapper
 
 
 class TFModel(ModelAbstract):
@@ -103,5 +107,5 @@ if __name__ == '__main__':
     y = np.where(sum_x > 2.0, tmp, 0 * tmp)
     y = np.concatenate((y, 1 - y), axis=1)
     _x = tf.cast(_x, tf.float32)
-    data = {"x" : _x, "y" : y}
+    data = {"x": _x, "y": y}
     _model.learn(data)
