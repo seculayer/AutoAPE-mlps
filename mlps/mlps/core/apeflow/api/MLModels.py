@@ -18,11 +18,11 @@ from mlps.common.exceptions.GPUMemoryError import GPUMemoryError
 
 class MLModels(object):
     def __init__(self, param_dict_list, cluster, task_idx, **kwargs):
+        self.job_key: str = kwargs["job_key"]
         self.LIB_TYPE: List[str] = self._get_lib_types(param_dict_list)
         self.ALG_CODE_LIST: List = self._get_alg_code(param_dict_list)
         self.num_workers = len(cluster["worker"])
         self.param_dict_linked_list: dict = self._make_param_dict_linked_list(param_dict_list)
-        self.job_key: str = kwargs["job_key"]
         self.task_idx = task_idx
         self.AI_LOGGER = Common.LOGGER.getLogger()
         self.AI_LOGGER.debug(self.param_dict_linked_list)
@@ -38,13 +38,14 @@ class MLModels(object):
         temp = self.param_dict_linked_list
 
         while temp is not None:
-            temp["interface"]: ModelInterface = self._build(temp, self.ext_data)
+            temp["interface"]: ModelInterface = self._build(temp, self.job_type, self.ext_data)
             temp = temp["next"]
 
     @staticmethod
-    def _build(_param_dict_linked_list, ext_data) -> ModelInterface:
+    def _build(_param_dict_linked_list, job_type, ext_data) -> ModelInterface:
         return ModelInterface(_param_dict_linked_list["method_type"],
                               _param_dict_linked_list["param_dict_list"],
+                              job_type,
                               ext_data)
 
     # LEARNING
@@ -181,8 +182,7 @@ class MLModels(object):
 
     def _append_info(self, linked_list: dict, param_dict: dict):
         if AlgorithmFactory.get_lib_type(param_dict["algorithm_code"]) in Constants.TF_BACKEND_LIST:
-            param_dict["session"] = tf.concat.v1.Session(graph=tf.Graph())
-        param_dict["task_idx"] = self.task_idx
+            param_dict["session"] = tf.compat.v1.Session(graph=tf.Graph())
         param_dict["job_key"] = self.job_key
 
         linked_list["param_dict_list"].append(param_dict)
