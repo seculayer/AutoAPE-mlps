@@ -81,7 +81,7 @@ class TFSavedModel(object):
 
     @staticmethod
     def _save_model_keras(model, dir_model):
-        model.save_weights(dir_model + '/weights.h5', save_format='h5')
+        model.model.save_weights(dir_model + '/weights.h5', save_format='h5')
 
     @staticmethod
     def _save_model_json(model, dir_model):
@@ -181,7 +181,7 @@ class TFSavedModel(object):
     @staticmethod
     def _load_model_keras(model, dir_model):
         try:
-            model.load_weights(dir_model + '/weights.h5')
+            model.model.load_weights(dir_model + '/weights.h5')
         except Exception as e:
             Common.LOGGER.getLogger().error(e, exc_info=True)
 
