@@ -12,7 +12,7 @@ class ModelAbstract(object):
         self.LOGGER = Common.LOGGER.getLogger()
         self.param_dict = param_dict
         self.ext_data = ext_data
-        self.model = self._build()
+        self.model = None
 
     def _build(self) -> AlgorithmAbstract:
         model = AlgorithmFactory.create(param_dict=self.param_dict, ext_data=self.ext_data)

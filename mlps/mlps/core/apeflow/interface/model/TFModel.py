@@ -30,6 +30,7 @@ class TFModel(ModelAbstract):
         ModelAbstract.__init__(self, param_dict, ext_data)
         self.distribute_runner = TFDistributeRunnerV2()
         self.model = self._build()
+        self.Session: tf.compat.v1.Session = self.param_dict["session"]
 
     @strategy_decorator
     def _build(self) -> AlgorithmAbstract:
@@ -41,18 +42,20 @@ class TFModel(ModelAbstract):
     @strategy_decorator
     def learn(self, dataset):
         # learning
-        self.model.learn(dataset)
-        self.model.saved_model()
+        with self.Session.as_default():
+            self.model.learn(dataset)
+            self.model.saved_model()
 
     @strategy_decorator
     def eval(self, dataset):
-        # learning
-        result = self.model.eval(dataset)
+        with self.Session.as_default():
+            result = self.model.eval(dataset)
         return result
 
     @strategy_decorator
     def predict(self, x):
-        result: List = self.model.predict(x)
+        with self.Session.as_default():
+            result: List = self.model.predict(x)
         return result
 
 

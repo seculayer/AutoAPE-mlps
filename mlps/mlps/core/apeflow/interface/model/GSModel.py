@@ -9,3 +9,4 @@ from mlps.core.apeflow.interface.model.ModelAbstract import ModelAbstract
 class GSModel(ModelAbstract):
     def __init__(self, param_dict, ext_data=None):
         ModelAbstract.__init__(self, param_dict, ext_data)
+        self.model = self._build()
