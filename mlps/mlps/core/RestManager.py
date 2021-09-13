@@ -12,8 +12,6 @@ from mlps.common.Singleton import Singleton
 
 
 class RestManager(object, metaclass=Singleton):
-    def __init__(self, url):
-        self.url = url
 
     @staticmethod
     def get(url) -> str:
@@ -44,7 +42,7 @@ class RestManager(object, metaclass=Singleton):
         RestManager.post(url=url, data=obj)
 
     @staticmethod
-    def post_learn_result(job_key: str, task_idx: str, rst_type: str, global_sn: str, rst: List[Union[list, dict, int, str]]):
+    def post_learn_result(job_key: str, task_idx: str, rst_type: str, global_sn: str, rst: dict):
         url = Common.REST_URL_DICT.get("learn_result_return", "")
         obj = {
             "job_key": job_key,
