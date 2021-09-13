@@ -21,7 +21,7 @@ class AlgorithmAbstract(object):
         # 파라미터 체크
         self.LOGGER = Common.LOGGER.getLogger()
         _param_dict = dict(param_dict, **param_dict.get("params"))
-        self.ext_data = ext_data
+        self.ext_data = dict() if ext_data is None else ext_data
         self.param_dict = self._check_parameter(_param_dict)
         self.learn_params = self._check_learning_parameter(_param_dict)
         self.early_steps = 0
@@ -36,12 +36,10 @@ class AlgorithmAbstract(object):
         _param_dict["global_sn"] = str(param_dict["global_sn"])
         _param_dict["algorithm_type"] = str(param_dict["algorithm_type"])
         _param_dict["job_key"] = str(param_dict["job_key"])
-        _param_dict["task_idx"] = str(param_dict["task_idx"])
 
         return _param_dict
 
-    @staticmethod
-    def _check_learning_parameter(param_dict):
+    def _check_learning_parameter(self, param_dict):
         _param_dict = dict()
         # Parameter Setting
         try:
@@ -54,6 +52,7 @@ class AlgorithmAbstract(object):
                 _param_dict["early_key"] = param_dict["early_key"]
                 _param_dict["early_value"] = float(param_dict["early_value"])
         except Exception as e:
+            self.LOGGER.error(e, exc_info=True)
             raise ParameterError
         return _param_dict
 
