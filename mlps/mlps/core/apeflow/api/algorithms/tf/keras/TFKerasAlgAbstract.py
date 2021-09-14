@@ -43,7 +43,6 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
 
         # -- build model
         self._build()
-        self.model.built = True
 
     def _build(self):
         raise NotImplementedError

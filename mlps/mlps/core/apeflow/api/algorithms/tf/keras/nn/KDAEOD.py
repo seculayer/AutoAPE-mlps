@@ -135,10 +135,6 @@ class KDAEOD(TFKerasAlgAbstract):
 
         # Parameter Setting
         try:
-            _param_dict["input_units"] = int(param_dict["input_units"])
-            _param_dict["output_units"] = int(param_dict["output_units"])
-
-            # _param_dict["initial_weight"] = float(param_dict["initial_weight"])
             _param_dict["act_fn"] = str(param_dict["act_fn"])
             _param_dict["algorithm_type"] = str(param_dict["algorithm_type"])
 

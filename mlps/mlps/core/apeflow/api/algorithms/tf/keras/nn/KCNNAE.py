@@ -26,14 +26,10 @@ class KCNNAE(TFKerasAlgAbstract):
 
         # Parameter Setting
         try:
-            _param_dict["input_units"] = int(param_dict["input_units"])
-            _param_dict["output_units"] = int(param_dict["output_units"])
-
             _param_dict["algorithm_type"] = str(param_dict["algorithm_type"])
             _param_dict["filter_sizes"] = list(map(int, str(param_dict["filter_sizes"]).split(",")))
             _param_dict["pool_sizes"] = list(map(int, str(param_dict["pool_sizes"]).split(",")))
             _param_dict["num_filters"] = int(param_dict["num_filters"])
-
             _param_dict["pooling_fn"] = str(param_dict["pooling_fn"])
             _param_dict["conv_fn"] = str(param_dict["conv_fn"])
             _param_dict["optimizer_fn"] = str(param_dict["optimizer_fn"])

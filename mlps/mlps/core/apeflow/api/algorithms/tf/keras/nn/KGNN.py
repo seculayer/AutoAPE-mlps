@@ -29,9 +29,6 @@ class KGNN(TFKerasAlgAbstract):
         _param_dict = super(KGNN, self)._check_parameter(param_dict)
         # Parameter Setting
         try:
-            _param_dict["input_units"] = int(param_dict["input_units"])
-            _param_dict["output_units"] = int(param_dict["output_units"])
-
             _param_dict["act_fn"] = str(param_dict["act_fn"])
             _param_dict["dropout_prob"] = float(param_dict["dropout_prob"])
             _param_dict["layer_size"] = int(param_dict["layer_size"])

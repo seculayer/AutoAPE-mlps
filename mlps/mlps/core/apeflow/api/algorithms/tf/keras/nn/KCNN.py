@@ -26,8 +26,6 @@ class KCNN(TFKerasAlgAbstract):
 
         # Parameter Setting
         try:
-            _param_dict["input_units"] = int(param_dict["input_units"])
-            _param_dict["output_units"] = int(param_dict["output_units"])
             _param_dict["hidden_units"] = list(map(int, str(param_dict["hidden_units"]).split(",")))
             _param_dict["act_fn"] = str(param_dict["act_fn"])
             _param_dict["algorithm_type"] = str(param_dict["algorithm_type"])
