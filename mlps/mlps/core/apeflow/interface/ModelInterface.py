@@ -3,7 +3,7 @@
 # e-mail : jinkim@seculayer.co.kr
 # Powered by Seculayer © 2021 Service Model Team, R&D Center.
 
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, Callable
 import numpy as np
 import os
 import json
@@ -57,7 +57,7 @@ class ModelInterface(object):
 
     @staticmethod
     def _make_prev_data(prev_data) -> dict:
-        return {"x": prev_data}
+        return {"x": np.array(prev_data)}
 
     def learn(self) -> None:
         for model, is_learn in self.model_list:
@@ -105,18 +105,18 @@ class ModelInterface(object):
                 )
 
     def _make_dataset(self) -> dict:
-        case = {
-            "Basic": "self._make_basic_dataset",
-            "ModelAttach": "self._make_model_attach_dataset",
-            "DataAttach": "self._make_data_attach_dataset",
-            "Parallel": "self._make_parallel_dataset"
+        case: Callable = {
+            "Basic": self._make_basic_dataset,
+            "ModelAttach": self._make_model_attach_dataset,
+            "DataAttach": self._make_data_attach_dataset,
+            "Parallel": self._make_parallel_dataset
         }.get(self.method_type, None)
 
         if case is None:
             self.LOGGER.error("Method Type is None, Interface Not Found...")
             raise ModuleNotFoundError
 
-        return eval(case)()
+        return case()
 
     def _make_basic_dataset(self) -> dict:
         return self.input_data
