@@ -4,7 +4,7 @@
 # Powered by Seculayer © 2021 Service Model Team, R&D Center.
 
 import numpy as np
-
+from typing import Callable
 from mlps.common.Constants import Constants
 from mlps.common.Common import Common
 from mlps.common.exceptions.ParameterError import ParameterError
@@ -31,6 +31,8 @@ class AlgorithmAbstract(object):
     def _check_parameter(param_dict):
         _param_dict = dict()
 
+        _param_dict["input_units"] = int(param_dict["input_units"])
+        _param_dict["output_units"] = int(param_dict["output_units"])
         _param_dict["model_nm"] = str(param_dict["model_nm"])
         _param_dict["alg_sn"] = str(param_dict["alg_sn"])
         _param_dict["global_sn"] = str(param_dict["global_sn"])
@@ -100,15 +102,15 @@ class AlgorithmAbstract(object):
 
     def eval(self, dataset: dict):
         results = list()
-        fn_dict = {
-            "Classifier": "self.eval_classifier",
-            "Regressor": "self.eval_regressor",
-            "Clustering": "self.eval_clustering",
-            "FE": "self.eval_fe",
-            "OD": "self.eval_od"
-        }
+        case: Callable = {
+            "Classifier": self.eval_classifier,
+            "Regressor": self.eval_regressor,
+            "Clustering": self.eval_clustering,
+            "FE": self.eval_fe,
+            "OD": self.eval_od
+        }.get(self.param_dict["algorithm_type"], None)
         try:
-            results.append(eval(fn_dict[self.param_dict["algorithm_type"]])(dataset=dataset))
+            results.append(case(dataset=dataset))
         except Exception as e:
             self.LOGGER.error(e, exc_info=True)
 
@@ -147,3 +149,15 @@ class AlgorithmAbstract(object):
 
         self.LOGGER.debug(results)
         return results
+
+    def eval_regressor(self, dataset: dict):
+        raise NotImplementedError
+
+    def eval_clustering(self, dataset: dict):
+        raise NotImplementedError
+
+    def eval_fe(self, dataset: dict):
+        raise NotImplementedError
+
+    def eval_od(self, dataset: dict):
+        raise NotImplementedError
