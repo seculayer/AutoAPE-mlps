@@ -5,7 +5,7 @@
 
 import random
 import numpy as np
-from typing import List
+from typing import List, Callable
 
 from mlps.common.Common import Common
 from mlps.common.Constants import Constants
@@ -18,8 +18,6 @@ class DataSampler(object):
         self.LOGGER = Common.LOGGER.getLogger()
         self.job_info = job_info
 
-        self.LOGGER.info("Sampler Thread Start.")
-
         self.features = list()
         self.labels = list()
         self.origin_data = list()
@@ -30,24 +28,26 @@ class DataSampler(object):
         except:
             self.cnt_label_lines: dict = {}
 
-        self.LOGGER.info("Sampler Thread end.")
-
     def set_data(self, data_list):
         self.features = data_list[0]
         self.labels = data_list[1]
         self.origin_data = data_list[2]
 
     def sampling(self):
+        self.LOGGER.info("Data Sampler Start ...")
         sample_type_code = self.job_info.get_sampling_type()
 
-        fn_string = {
-            Constants.SAMPLE_TYPE_NONE: "self._none_sampling",
-            Constants.SAMPLE_TYPE_RANDOM: "self._random_sampling",
-            Constants.SAMPLE_TYPE_OVER: "self._over_sampling",
-            Constants.SAMPLE_TYPE_UNDER: "self._under_sampling"
-        }.get(sample_type_code, "self._none_sampling")
+        case: Callable = {
+            Constants.SAMPLE_TYPE_NONE: self._none_sampling,
+            Constants.SAMPLE_TYPE_RANDOM: self._random_sampling,
+            Constants.SAMPLE_TYPE_OVER: self._over_sampling,
+            Constants.SAMPLE_TYPE_UNDER: self._under_sampling
+        }.get(sample_type_code, self._random_sampling)
 
-        return eval(fn_string)()
+        rst = case()
+        self.LOGGER.info("Data Sampler End ...")
+
+        return rst
 
     def _none_sampling(self) -> List[List[object]]:
         self.features = self.features[: self.min_lines]

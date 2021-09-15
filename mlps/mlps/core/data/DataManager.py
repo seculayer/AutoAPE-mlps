@@ -8,7 +8,7 @@ import os
 from multiprocessing import Queue
 from queue import Queue as nQ
 from typing import List
-# import traceback
+import traceback
 
 from mlps.common.Singleton import Singleton
 from mlps.common.info.JobInfo import JobInfo
@@ -35,12 +35,12 @@ class DataManager(threading.Thread, metaclass=Singleton):
         self.dataset_info: DatasetInfo = self.job_info.get_dataset_info()
         self.dataset = {}
 
-    @CalTimeDecorator
+    @CalTimeDecorator("Data Manager")
     def run(self) -> None:
         try:
             self.LOGGER.info("DataManager Start.")
-            RestManager.update_status_cd(Constants.STATUS_DATA_CONVERTING, self.job_info.get_key(),
-                                         self.job_info.get_task_idx(), '-')
+            # RestManager.update_status_cd(Constants.STATUS_DATA_CONVERTING, self.job_info.get_key(),
+            #                              self.job_info.get_task_idx(), '-')
 
             # ---- data load
             data_list = self.read_files(Constants.DIR_LEARN_FEAT, self.dataset_info.get_fields())
