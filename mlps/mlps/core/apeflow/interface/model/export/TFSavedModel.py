@@ -19,7 +19,7 @@ class TFSavedModel(SavedModelAbstract):
     def save(cls, model):
         if model.task_idx != 0:
             return
-        SavedModelAbstract.save(model)
+        super(TFSavedModel, cls).save(model)
 
     @classmethod
     def _save_case_fn(cls, model) -> Callable:
