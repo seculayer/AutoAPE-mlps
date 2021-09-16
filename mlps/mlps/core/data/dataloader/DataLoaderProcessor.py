@@ -6,36 +6,48 @@
 import multiprocessing
 from multiprocessing import Queue
 from typing import List, Tuple, Union
+import traceback
 
 from mlps.core.data.cnvrtr.ConvertAbstract import ConvertAbstract
 from mlps.core.data.cnvrtr.ConvertFactory import ConvertFactory
 from mlps.common.Common import Common
+from mlps.common.Constants import Constants
 from mlps.common.info.FieldInfo import FieldInfo
 from mlps.common.utils.FileUtils import FileUtils
 from mlps.common.utils.JSONUtils import JSONUtils
+from mlps.core.RestManager import RestManager
 
 
 class DataLoaderProcessor(multiprocessing.Process):
     LOGGER = Common.LOGGER.getLogger()
 
-    def __init__(self, data_queue: Queue, file_name: str, fields: List[FieldInfo], idx):
+    def __init__(self, data_queue: Queue, file_name: str, fields: List[FieldInfo], idx, job_info):
         multiprocessing.Process.__init__(self)
         self.is_terminate = False
         self.data_queue = data_queue
         self.file_name = file_name
         self.idx = idx
+        self.job_info = job_info
         self.fields: List[FieldInfo] = fields
         self.functions: List[List[ConvertAbstract]] = self.build_functions(fields)
+        self.LOGGER.info("sub_proc_idx : {}, Convert Functions : {}".format(self.idx, self.functions))
 
     def run(self) -> None:
-        self.LOGGER.info("DataLoader Process[{}] is starting...".format(self.idx))
+        try:
+            self.LOGGER.info("DataLoader Process[{}] is starting...".format(self.idx))
 
-        if self.file_name is not None:
-            data = self._read()
-            self.data_queue.put(data)
+            if self.file_name is not None:
+                data = self._read()
+                self.data_queue.put(data)
 
-        self.LOGGER.info("DataLoader Process[{}] is terminate...".format(self.idx))
-        self.LOGGER.info("Data Queue Length : {}".format(self.data_queue.qsize()))
+            self.LOGGER.info("DataLoader Process[{}] is terminate...".format(self.idx))
+            self.LOGGER.info("Data Queue Length : {}".format(self.data_queue.qsize()))
+        except Exception as e:
+            self.LOGGER.error(e, exc_info=True)
+            curr_sttus_cd = RestManager.get_status_cd(self.job_info.get_key())
+            if int(curr_sttus_cd) < int(Constants.STATUS_ERROR):
+                RestManager.update_status_cd(Constants.STATUS_ERROR, self.job_info.get_key(),
+                                             self.job_info.get_task_idx(), traceback.format_exc())
 
     @staticmethod
     def build_functions(fields: List[FieldInfo]) -> List[List[ConvertAbstract]]:
@@ -96,6 +108,7 @@ class DataLoaderProcessorBuilder(object):
         self.file_name: str = ""
         self.fields = list()
         self.idx: int = 0
+        self.job_info = None
 
     def set_data_queue(self, queue):
         self.data_queue = queue
@@ -113,5 +126,9 @@ class DataLoaderProcessorBuilder(object):
         self.idx = idx
         return self
 
+    def set_job_info(self, job_info):
+        self.job_info = job_info
+        return self
+
     def build(self) -> DataLoaderProcessor:
-        return DataLoaderProcessor(self.data_queue, self.file_name, self.fields, self.idx)
+        return DataLoaderProcessor(self.data_queue, self.file_name, self.fields, self.idx, self.job_info)

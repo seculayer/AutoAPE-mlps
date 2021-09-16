@@ -46,13 +46,11 @@ class TFModel(ModelAbstract):
             self.model.learn(dataset)
             self.model.saved_model()
 
-    @strategy_decorator
     def eval(self, dataset):
         with self.Session.as_default():
             result = self.model.eval(dataset)
         return result
 
-    @strategy_decorator
     def predict(self, x):
         with self.Session.as_default():
             result: List = self.model.predict(x)

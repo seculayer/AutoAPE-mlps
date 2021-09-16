@@ -148,12 +148,17 @@
     <!-- rest url setting -->
     <property>
         <name>rest_server_ip</name>
-        <value>10.1.35.231</value>
+        <value>10.1.12.234</value>
         <description>None</description>
     </property>
     <property>
         <name>rest_server_port</name>
-        <value>5543</value>
+        <value>9200</value>
         <description>None</description>
+    </property>
+    <property>
+        <name>etls_wating_time</name>
+        <value>5</value>
+        <description>Seconds</description>
     </property>
 </configuration>

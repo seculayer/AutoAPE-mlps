@@ -39,8 +39,6 @@ class DataManager(threading.Thread, metaclass=Singleton):
     def run(self) -> None:
         try:
             self.LOGGER.info("DataManager Start.")
-            # RestManager.update_status_cd(Constants.STATUS_DATA_CONVERTING, self.job_info.get_key(),
-            #                              self.job_info.get_task_idx(), '-')
 
             # ---- data load
             data_list = self.read_files(Constants.DIR_LEARN_FEAT, self.dataset_info.get_fields())
@@ -51,8 +49,10 @@ class DataManager(threading.Thread, metaclass=Singleton):
             self.LOGGER.info("DataManager End.")
         except Exception as e:
             self.LOGGER.error(e, exc_info=True)
-            # RestManager.update_status_cd(Constants.STATUS_DATA_CONVERT_ERROR, self.job_info.get_key(),
-            #                              self.job_info.get_task_idx(), traceback.format_exc())
+            curr_sttus_cd = RestManager.get_status_cd(self.job_info.get_key())
+            if int(curr_sttus_cd) < int(Constants.STATUS_ERROR):
+                RestManager.update_status_cd(Constants.STATUS_ERROR, self.job_info.get_key(),
+                                             self.job_info.get_task_idx(), traceback.format_exc())
             raise e
 
     def read_files(self, features_dir: str, fields: List[FieldInfo]) \
@@ -108,6 +108,7 @@ class DataManager(threading.Thread, metaclass=Singleton):
             .set_filename(file_name) \
             .set_fields(fields) \
             .set_idx(idx) \
+            .set_job_info(self.job_info) \
             .build()
 
     def get_feature_files(self, directory="./", sep="_", info=None, ext=".done") -> List[str]:

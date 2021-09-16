@@ -31,37 +31,53 @@ class RestManager(object, metaclass=Singleton):
         return json.loads(RestManager.get(url))
 
     @staticmethod
-    def update_status_cd(status: str, job_key: str, task_idx: str, msg: str) -> None:
-        url = Common.REST_URL_DICT.get("learn_status_update", "")
+    def get_status_cd(job_key) -> str:
+        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("get_status_cd", "")
+        hist_no = job_key.split("_")[-1]
+        data = {
+            "hist_no": hist_no
+        }
+        return RestManager.post(url, data).text
+
+    @staticmethod
+    def update_status_cd(status: str, job_key: str, task_idx: str, msg: str) -> rq.Response:
+        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("learn_status_update", "")
+        hist_no = job_key.split("_")[-1]
         obj = {
             "status": status,
-            "job_key": job_key,
+            "hist_no": hist_no,
             "task_idx": task_idx,
             "message": msg
         }
-        RestManager.post(url=url, data=obj)
+        rst_sttus = RestManager.post(url=url, data=obj)
+
+        return rst_sttus
 
     @staticmethod
-    def post_learn_result(job_key: str, task_idx: str, rst_type: str, global_sn: str, rst: dict):
-        url = Common.REST_URL_DICT.get("learn_result_return", "")
+    def post_learn_result(job_key: str, task_idx: str, rst_type: str, global_sn: str, rst: Union[dict, list]) -> rq.Response:
+        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("learn_result_return", "")
+        hist_no = job_key.split("_")[-1]
         obj = {
-            "job_key": job_key,
+            "hist_no": hist_no,
             "task_idx": task_idx,
             "rst_type": rst_type,
             "global_sn": global_sn,
             "result": rst
         }
-        RestManager.post(url=url, data=obj)
+        rst_sttus = RestManager.post(url=url, data=obj)
+
+        return rst_sttus
 
     @staticmethod
-    def post_inference_result(job_key: str, task_idx: str, global_sn: str, rst: List[Union[list, dict, int, str]]):
-        url = Common.REST_URL_DICT.get("inference_result_return", "")
+    def post_inference_result(job_key: str, task_idx: str, global_sn: str, rst: List[Union[list, dict, int, str]]) -> rq.Response:
+        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("inference_result_return", "")
+        hist_no = job_key.split("_")[-1]
         obj = {
-            "job_key": job_key,
+            "hist_no": hist_no,
             "task_idx": task_idx,
             "global_sn": global_sn,
             "result": rst
         }
-        RestManager.post(url=url, data=obj)
+        rst_sttus = RestManager.post(url=url, data=obj)
 
-
+        return rst_sttus
