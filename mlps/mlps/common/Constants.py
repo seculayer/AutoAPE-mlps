@@ -70,6 +70,8 @@ class Constants(object, metaclass=Singleton):
     # JOB SETTING
     JOB_EXT = _CONFIG.get("job_ext", ".job")
 
+    ETLS_WAITING_TIME = int(_CONFIG.get("etls_wating_time", "5"))
+
     # REMOVE TEMP FOLDER
     try:
         REMOVE_TEMP_FOLDER = True if _CONFIG.get("remove_temp_folder", "true").lower() == "true" else False
@@ -89,9 +91,9 @@ class Constants(object, metaclass=Singleton):
     except:
         DATAPROCESS_CVT_DATA = False  # AS DEFAULT
 
-    REST_URL_ROOT = "https://{}:{}".format(
-        _CONFIG.get("rest_server_ip", "10.1.35.231"),
-        _CONFIG.get("rest_server_port", "5543"))
+    REST_URL_ROOT = "http://{}:{}".format(
+        _CONFIG.get("rest_server_ip", "10.1.12.234"),
+        _CONFIG.get("rest_server_port", "9200"))
 
     JOB_TYPE_LEARN = "learn"
     SAMPLE_TYPE_RANDOM = "1"
@@ -99,14 +101,9 @@ class Constants(object, metaclass=Singleton):
     SAMPLE_TYPE_UNDER = "3"
     SAMPLE_TYPE_NONE = "4"
 
-    STATUS_LEARNING = "5"
-    STATUS_LEARN_COMPLETE = "6"
-    STATUS_LEARN_ERROR = "7"
-    STATUS_EVALUATING = "8"
-    STATUS_EVALUATE_COMPLETE = "17"  # Model Distribution
-    STATUS_EVALUATE_ERROR = "10"
-    STATUS_DATA_CONVERTING = "18"
-    STATUS_DATA_CONVERT_ERROR = "19"
+    STATUS_RUNNING = "5"
+    STATUS_COMPLETE = "6"
+    STATUS_ERROR = "7"
 
     RST_TYPE_LEARN = "1"
     RST_TYPE_EVAL = "2"
@@ -142,6 +139,7 @@ class Constants(object, metaclass=Singleton):
     OUT_MODEL_PB = "pb"
     OUT_MODEL_TF = "tf"
     OUT_MODEL_JSON = "json"
+    OUT_MODEL_PKL = "pkl"
     OUT_MODEL_JAVA = "java"
     OUT_MODEL_FOLDER = "folder"
     OUT_MODEL_HYBRID = "hybrid"

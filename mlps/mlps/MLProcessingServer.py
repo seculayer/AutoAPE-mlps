@@ -21,7 +21,7 @@ class MLProcessingServer(object):
         self.LOGGER.info(Constants.VERSION_MANAGER.print_version())
 
         # waiting ETLS
-        time.sleep(3)
+        time.sleep(Constants.ETLS_WAITING_TIME)
 
         self.processor = MLPSProcessor(key, task_idx, job_type)
         
