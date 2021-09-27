@@ -26,6 +26,7 @@ class SKLRandomForest(SKLAlgAbstract):
 
     def learn(self, dataset):
         self.model.fit(dataset["x"], dataset["y"])
+        self.learn_result(dataset)
 
 
 if __name__ == '__main__':

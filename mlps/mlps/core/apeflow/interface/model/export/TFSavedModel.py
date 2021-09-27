@@ -46,6 +46,7 @@ class TFSavedModel(SavedModelAbstract):
             json.dump(model_dict, f, indent=4)
         except Exception as e:
             cls.LOGGER.error(e, exc_info=True)
+            raise e
         finally:
             f.close()
         os.rename("{}.tmp".format(model_nm), "{}.model".format(model_nm))
@@ -59,6 +60,7 @@ class TFSavedModel(SavedModelAbstract):
             f.write(model.model.to_json())
         except Exception as e:
             cls.LOGGER.error(e, exc_info=True)
+            raise e
         finally:
             f.close()
         os.rename("{}.tmp".format(model_nm), "{}.model".format(model_nm))
@@ -78,6 +80,7 @@ class TFSavedModel(SavedModelAbstract):
             json.dump(result_dict, f, indent=4)
         except Exception as e:
             cls.LOGGER.error(e, exc_info=True)
+            raise e
         finally:
             f.close()
         os.rename("{}.tmp".format(model_nm), "{}.json".format(model_nm))
@@ -97,6 +100,7 @@ class TFSavedModel(SavedModelAbstract):
             model.model.load_weights(dir_model + '/weights.h5')
         except Exception as e:
             cls.LOGGER.error(e, exc_info=True)
+            raise e
 
     @classmethod
     def _load_model_json(cls, model, dir_model):
@@ -106,6 +110,7 @@ class TFSavedModel(SavedModelAbstract):
             model.model = json.load(f)
         except Exception as e:
             cls.LOGGER.error(e, exc_info=True)
+            raise e
         finally:
             f.close()
 
@@ -118,6 +123,7 @@ class TFSavedModel(SavedModelAbstract):
             model.model = tokenizer_from_json(data)
         except Exception as e:
             cls.LOGGER.error(e, exc_info=True)
+            raise e
         finally:
             f.close()
 
@@ -132,5 +138,6 @@ class TFSavedModel(SavedModelAbstract):
             model.max_distances = json.load(f).get("max_distances")
         except Exception as e:
             cls.LOGGER.error(e, exc_info=True)
+            raise e
         finally:
             f.close()

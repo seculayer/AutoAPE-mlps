@@ -43,10 +43,8 @@ class SKLDBSCAN(SKLAlgAbstract):
             )
 
     def learn(self, dataset):
-        try:
-            self.model.fit(X=dataset["x"])
-        except Exception as e:
-            self.LOGGER.error(e, exc_info=True)
+        self.model.fit(X=dataset["x"])
+        self.learn_result(dataset)
 
     def predict(self, x):
         data_x = x

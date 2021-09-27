@@ -43,6 +43,7 @@ class SKLNuSVC(SKLAlgAbstract):
         y = self._arg_max(dataset['y'])
         # linear, poly, rbf, sigmoid, precomputed
         self.model.fit(dataset["x"], np.argmax(dataset["y"], axis=1))
+        self.learn_result(dataset)
 
     def learn_result_classifier(self, dataset):
         results = dict()

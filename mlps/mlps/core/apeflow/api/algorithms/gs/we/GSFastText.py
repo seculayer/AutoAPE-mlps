@@ -32,7 +32,6 @@ class GSFastText(GSAlgAbstract):
 
         if self.first:
             dataset["x"] = self.remove_padding(dataset["x"])
-
             # data["x"]가 1D일 경우, 리스트에 있는 캐릭터 하나하나씩 학습함
             self.model = FastText(dataset["x"], window=skip_window, min_count=min_char_num,
                                   sg=0, iter=global_step, size=output_units, sorted_vocab=True

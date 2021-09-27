@@ -26,6 +26,7 @@ class GSCBOW(GSAlgAbstract):
         self.first = True
 
     def learn(self, dataset):
+        super(GSCBOW, self).learn(dataset)
         skip_window = self.param_dict["skip_window"]
         min_char_num = self.param_dict["min_char_num"]
         output_units = self.param_dict["output_units"]

@@ -31,6 +31,7 @@ class SKLPCA(SKLAlgAbstract):
 
     def learn(self, dataset):
         self.model.fit(X=dataset["x"])
+        self.learn_result(dataset)
 
     def predict(self, x):
         predict_result = self.model.transform(x)

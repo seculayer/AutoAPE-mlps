@@ -50,5 +50,6 @@ class ConvertAbstract(object):
     def get_num_feat(self):
         return self.num_feat
 
-    def _isBlank(self, _str):
+    @staticmethod
+    def _isBlank(_str):
         return not (_str and _str.strip())

@@ -49,13 +49,13 @@ class SKLAlgAbstract(AlgorithmAbstract):
         else:
             raise NotImplementedError
 
-        # RestManager.post_learn_result(
-        #     job_key=self.param_dict["job_key"],
-        #     task_idx=json.loads(os.environ["TF_CONFIG"])["task"]["index"],
-        #     rst_type=Constants.RST_TYPE_LEARN,
-        #     global_sn=self.param_dict["global_sn"],
-        #     rst=results
-        # )
+        RestManager.post_learn_result(
+            job_key=self.param_dict["job_key"],
+            task_idx=json.loads(os.environ["TF_CONFIG"])["task"]["index"],
+            rst_type=Constants.RST_TYPE_LEARN,
+            global_sn=self.param_dict["global_sn"],
+            rst=results[-1]
+        )
 
         self.LOGGER.info(results)
         return results
@@ -66,10 +66,11 @@ class SKLAlgAbstract(AlgorithmAbstract):
         results["accuracy"] = self.model.score(X=dataset["x"], y=dataset["y"])
         loss = log_loss(dataset["y"], self.predict(dataset["x"]))
         results["loss"] = loss
-        results["step"] = 0
+        results["step"] = -1
 
         result_list = list()
         result_list.append(results)
+        self.LOGGER.info(result_list)
 
         return result_list
 
@@ -79,7 +80,7 @@ class SKLAlgAbstract(AlgorithmAbstract):
     def learn_result_clustering(self, dataset):
         results = dict()
         results["global_sn"] = self.param_dict["global_sn"]
-        results["step"] = 0
+        results["step"] = -1
         # loss = log_loss(data["y"], self.predict(dataset["x"]))
         # results["loss"] = loss
         # results["label"] = self._model.fit_predict(dataset["x"])
@@ -91,7 +92,7 @@ class SKLAlgAbstract(AlgorithmAbstract):
     def learn_result_fe(self, dataset):
         results = dict()
         results["global_sn"] = self.param_dict["global_sn"]
-        results["step"] = 0
+        results["step"] = -1
         # loss = log_loss(data["y"], self.predict(dataset["x"]))
         # results["loss"] = loss
 
@@ -103,7 +104,7 @@ class SKLAlgAbstract(AlgorithmAbstract):
     def learn_result_od(self, dataset):
         results = dict()
         results["global_sn"] = self.param_dict["global_sn"]
-        results["step"] = 0
+        results["step"] = -1
         # loss = log_loss(data["y"], self.predict(data))
         # results["loss"] = loss
         # results["label"] = self._model.fit_predict(data["x"])
@@ -127,11 +128,7 @@ class SKLAlgAbstract(AlgorithmAbstract):
 
     def eval_clustering(self, dataset):
         x = dataset["x"]
-        y = None
-        try:
-            y = dataset["y"]
-        except:
-            pass
+
         result_dict = dict()
         result_dict["global_sn"] = self.param_dict["global_sn"]
 

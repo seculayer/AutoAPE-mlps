@@ -45,6 +45,7 @@ class SKLODBKM(SKLAlgAbstract):
 
     def learn(self, dataset):
         self.model.fit(X=dataset["x"])
+        self.learn_result(dataset)
 
     def predict(self, x):
         distance = self.model.transform(x)  # return numpy array

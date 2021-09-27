@@ -43,6 +43,7 @@ class SKLKMeans(SKLAlgAbstract):
 
     def learn(self, dataset):
         self.model.fit(X=dataset["x"])
+        self.learn_result(dataset)
 
 
 if __name__ == '__main__':

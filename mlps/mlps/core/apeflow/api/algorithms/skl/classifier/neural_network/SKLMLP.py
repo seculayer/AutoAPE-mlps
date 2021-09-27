@@ -55,6 +55,7 @@ class SKLMLP(SKLAlgAbstract):
 
     def learn(self, dataset):
         self.model.fit(dataset["x"], dataset["y"])
+        self.learn_result(dataset)
 
     def learn_result_classifier(self, dataset):
         result_list = list()

@@ -24,6 +24,7 @@ class SavedModelAbstract(object):
                 FileUtils.mkdir('{}/{}/{}'.format(Constants.DIR_TEMP, param_dict["model_nm"], param_dict["alg_sn"]))
             except Exception as e:
                 Common.LOGGER.getLogger().error(str(e), exc_info=True)
+                raise e
         else:
             if not FileUtils.is_exist('{}/{}'.format(Constants.DIR_TEMP, param_dict["model_nm"])):
                 FileUtils.mkdir('{}/{}'.format(Constants.DIR_TEMP, param_dict["model_nm"]))
@@ -55,6 +56,7 @@ class SavedModelAbstract(object):
                 FileUtils.move_dir(dir_model + "_prev", dir_model)
             except Exception as e:
                 cls.LOGGER.error(str(e), exc_info=True)
+                raise e
 
     @classmethod
     def _save_case_fn(cls, model) -> Callable:
@@ -68,6 +70,7 @@ class SavedModelAbstract(object):
                 FileUtils.remove_dir(dir_model + "_prev")
         except Exception as e:
             cls.LOGGER.error(str(e), exc_info=True)
+            raise e
 
         cls.LOGGER.info("model saved ....")
         cls.LOGGER.info("model dir : {}".format(dir_model))
@@ -101,6 +104,7 @@ class SavedModelAbstract(object):
                 cls.LOGGER.info("model dir : {}".format(dir_model))
             except Exception as e:
                 cls.LOGGER.warn(str(e), exc_info=True)
+                raise e
         else:
             cls.LOGGER.warn("MODEL FILE IS NOT EXIST : [{}]".format(dir_model))
 

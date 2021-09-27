@@ -41,6 +41,7 @@ class SKLKNeighbors(SKLAlgAbstract):
     def learn(self, dataset):
         y = self._arg_max(dataset["y"])
         self.model.fit(dataset["x"], y)
+        self.learn_result(dataset)
 
     def learn_result_classifier(self, dataset):
         results = dict()

@@ -16,12 +16,15 @@ class RestManager(object, metaclass=Singleton):
     @staticmethod
     def get(url) -> str:
         response = rq.get(url)
+        Common.LOGGER.getLogger().info("GET {}".format(url))
 
         return response.text
 
     @staticmethod
     def post(url: str, data: dict) -> rq.Response:
         response = rq.post(url, json=data)
+        Common.LOGGER.getLogger().info("POST {}".format(url))
+        Common.LOGGER.getLogger().info("POST DATA: {}".format(data))
 
         return response
 
@@ -77,6 +80,45 @@ class RestManager(object, metaclass=Singleton):
             "task_idx": task_idx,
             "global_sn": global_sn,
             "result": rst
+        }
+        rst_sttus = RestManager.post(url=url, data=obj)
+
+        return rst_sttus
+
+    @staticmethod
+    def update_eps(job_key: str, eps: float):
+        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("eps_update", "")
+
+        hist_no = job_key.split("_")[-1]
+        obj = {
+            "eps": eps,
+            "hist_no": hist_no,
+        }
+        rst_sttus = RestManager.post(url=url, data=obj)
+
+        return rst_sttus
+
+    @staticmethod
+    def update_learn_result(job_key: str, rst: dict):
+        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("learn_result_update", "")
+
+        hist_no = job_key.split("_")[-1]
+        obj = {
+            "result": json.dumps(rst),
+            "hist_no": hist_no,
+        }
+        rst_sttus = RestManager.post(url=url, data=obj)
+
+        return rst_sttus
+
+    @staticmethod
+    def update_time(job_key: str, type: str):
+        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("time_update", "")
+
+        hist_no = job_key.split("_")[-1]
+        obj = {
+            "type": type,
+            "hist_no": hist_no
         }
         rst_sttus = RestManager.post(url=url, data=obj)
 

@@ -72,14 +72,15 @@ class ModelInterface(object):
                 tp = (idx, model.eval(self._make_dataset()))
                 result_list.append(tp)
 
-        # for idx, result in result_list:
-        #     RestManager.post_learn_result(
-        #         job_key=self.param_dict_list[idx]["job_key"],
-        #         task_idx=json.loads(os.environ["TF_CONFIG"])["task"]["index"],
-        #         rst_type=Constants.RST_TYPE_EVAL,
-        #         global_sn=self.param_dict_list[idx]["global_sn"],
-        #         rst=result
-        #     )
+        for idx, result in result_list:
+            RestManager.post_learn_result(
+                job_key=self.param_dict_list[idx]["job_key"],
+                task_idx=json.loads(os.environ["TF_CONFIG"])["task"]["index"],
+                rst_type=Constants.RST_TYPE_EVAL,
+                global_sn=self.param_dict_list[idx]["global_sn"],
+                rst=result
+            )
+
         for idx, rst in result_list:
             self.LOGGER.info("result {} : {}".format(idx, rst))
 
@@ -92,7 +93,7 @@ class ModelInterface(object):
         # self.method_type이 "Parallel"가 아닐경우, self.model_list의 길이는 1
         if is_rst_return and self.method_type != "Parallel":
             if len(result_list) >= 2:
-                self.LOGGER.error("Never Occur into this case !!! Trace why result_list is bigger 1")
+                self.LOGGER.error("Never Occur into this case !!! Trace why result_list is greater than 1")
                 raise TypeError
             return result_list[0]
         else:

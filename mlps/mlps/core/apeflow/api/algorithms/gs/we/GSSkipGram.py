@@ -29,6 +29,7 @@ class GSSkipGram(GSAlgAbstract):
         self.first = True
 
     def learn(self, dataset):
+        super(GSSkipGram, self).learn(dataset)
         skip_window = self.param_dict["skip_window"]
         min_char_num = self.param_dict["min_char_num"]
         output_units = self.param_dict["output_units"]
@@ -39,9 +40,9 @@ class GSSkipGram(GSAlgAbstract):
 
             # data["x"]가 1D일 경우, 리스트에 있는 캐릭터 하나하나씩 학습함
             self.model = Word2Vec(x, window=skip_window, min_count=min_char_num,
-                                   sg=1, iter=global_step, size=output_units, sorted_vocab=True,
-                                   compute_loss=True, callbacks=[self.learn_result_callback]
-                                   )
+                                  sg=1, iter=global_step, size=output_units, sorted_vocab=True,
+                                  compute_loss=True, callbacks=[self.learn_result_callback]
+                                  )
 
             self.word_vector = self.model.wv
             self.first = False

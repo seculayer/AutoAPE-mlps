@@ -13,6 +13,7 @@ from mlps.core.apeflow.interface.model.export.TFSavedModel import TFSavedModel
 from mlps.core.apeflow.api.algorithms.AlgorithmAbstract import AlgorithmAbstract
 from mlps.core.apeflow.interface.utils.tf.keras.LearnResultCallback import LearnResultCallback
 from mlps.core.apeflow.interface.utils.tf.keras.EarlyStopCallback import EarlyStopCallback
+from mlps.core.RestManager import RestManager
 
 
 class TFKerasAlgAbstract(AlgorithmAbstract):
@@ -107,17 +108,27 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
         global_sn = self.param_dict["global_sn"]
         result_callback = LearnResultCallback(
             global_sn=global_sn,
-            job_key=self.param_dict["job_key"]
+            job_key=self.param_dict["job_key"],
+            epochs=global_step,
+            task_idx=self.task_idx,
+            data_len=len(dataset["x"])
         )
 
         # early stop
-        early_stop_callback = EarlyStopCallback(self.learn_params)
+        early_stop_callback = EarlyStopCallback(
+            learn_params=self.learn_params
+        )
         self.model.fit(
             x=self._make_train_dataset(dataset),
             epochs=global_step,
             callbacks=[result_callback, early_stop_callback],
             verbose=1, steps_per_epoch=self.parallel_step
         )
+
+        if self.task_idx == 0:
+            RestManager.update_eps(self.param_dict["job_key"], result_callback.get_eps())
+            last_result = result_callback.get_learn_result()
+            RestManager.update_learn_result(self.param_dict["job_key"], last_result)
 
     def predict(self, x):
         batch_size = self.batch_size
@@ -144,25 +155,3 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
             start += batch_size
 
         return results
-
-    def eval_default_rst(self, dataset):
-        x = dataset["x"]
-
-        pred = self.predict(x)
-        try:
-            pred = pred.tolist()
-        except:
-            pass
-
-        return pred
-
-    def eval_regressor(self, dataset):
-        return self.eval_default_rst(dataset)
-
-    def eval_fe(self, dataset):
-        return self.eval_default_rst(dataset)
-
-    def eval_od(self, dataset):
-        result_list = list()
-
-        return result_list

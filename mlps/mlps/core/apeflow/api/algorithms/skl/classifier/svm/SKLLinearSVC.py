@@ -30,6 +30,7 @@ class SKLLinearSVC(SKLAlgAbstract):
         y = self._arg_max(dataset['y'])
         # linear, poly, rbf, sigmoid, precomputed
         self.model.fit(dataset["x"], y)
+        self.learn_result(dataset)
 
     def learn_result_classifier(self, dataset):
         results = dict()

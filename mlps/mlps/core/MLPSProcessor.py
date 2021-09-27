@@ -49,6 +49,8 @@ class MLPSProcessor(object):
 
     def run(self) -> None:
         try:
+            if self.task_idx == "0":
+                RestManager.update_time(self.job_key, "start")
             self.data_loader_init()
             self.data_loader_manager.start()
             self.model_init()
@@ -60,6 +62,9 @@ class MLPSProcessor(object):
             if int(curr_sttus_cd) < int(Constants.STATUS_COMPLETE):
                 RestManager.update_status_cd(Constants.STATUS_COMPLETE, self.job_key,
                                              self.task_idx, '-')
+
+            if self.task_idx == "0":
+                RestManager.update_time(self.job_key, "end")
         except Exception as e:
             self.LOGGER.error(e, exc_info=True)
             curr_sttus_cd = RestManager.get_status_cd(self.job_info.get_key())
@@ -103,7 +108,7 @@ class MLPSProcessor(object):
 
         self.model.eval(data=eval_data)
 
-        RestManager.post_learn_result(self.job_key, self.task_idx,
-                                      Constants.RST_TYPE_RAW, "0", json_data)
+        # RestManager.post_learn_result(self.job_key, self.task_idx,
+        #                               Constants.RST_TYPE_RAW, "0", json_data)
 
         self.LOGGER.info("-- MLModels eval end. [{}]".format(self.job_key))

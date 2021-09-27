@@ -52,13 +52,14 @@ class MLModels(object):
     def learn(self, data) -> None:
         if len(data["x"]) == 0:
             self.AI_LOGGER.error("Length of Learn Dataset is Zero!!!!!!!!!!!!")
+            raise NotImplementedError
         else:
             self.AI_LOGGER.info("Learn Dataset Length is [{}]".format(len(data['x'])))
 
         temp = self.param_dict_linked_list
         prev_data = None
         while temp is not None:
-            models = temp["interface"]
+            models: ModelInterface = temp["interface"]
 
             # SET DATSET
             models.set_dataset(input_data=data, prev_data=prev_data)
@@ -83,17 +84,42 @@ class MLModels(object):
     def eval(self, data) -> None:
         if len(data["x"]) == 0:
             self.AI_LOGGER.error("Length of Eval Dataset is Zero!!!!!!!!!!!!")
+            raise NotImplementedError
         else:
             self.AI_LOGGER.info("Eval Dataset Length is [{}]".format(len(data['x'])))
 
         temp = self.param_dict_linked_list
         prev_data = None
         while temp is not None:
-            models = temp["interface"]
+            models: ModelInterface = temp["interface"]
             # SET DATASET
             models.set_dataset(input_data=data, prev_data=prev_data)
             try:
                 models.eval()
+
+            except tf.errors.ResourceExhaustedError as e:
+                self.AI_LOGGER.error(e, exc_info=True)
+                raise GPUMemoryError
+
+            except Exception as e:
+                self.AI_LOGGER.error(e, exc_info=True)
+                raise EvaluationError
+
+            # NEXT
+            if temp["next"] is not None:
+                prev_data = models.predict(is_rst_return=True)
+
+            temp = temp["next"]
+
+    def predidct(self, data) -> None:
+        temp = self.param_dict_linked_list
+        prev_data = None
+        while temp is not None:
+            models: ModelInterface = temp["interface"]
+            # SET DATASET
+            models.set_dataset(input_data=data, prev_data=prev_data)
+            try:
+                models.predict()
 
             except tf.errors.ResourceExhaustedError as e:
                 self.AI_LOGGER.error(e, exc_info=True)

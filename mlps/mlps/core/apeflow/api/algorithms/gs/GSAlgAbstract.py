@@ -7,11 +7,9 @@ import os
 import json
 
 from mlps.common.Constants import Constants
-from mlps.common.Common import Common
 from mlps.core.apeflow.api.algorithms.AlgorithmAbstract import AlgorithmAbstract
 from mlps.common.exceptions.ParameterError import ParameterError
 from mlps.core.apeflow.interface.model.export.GSSavedModel import GSSavedModel
-from mlps.core.RestManager import RestManager
 from mlps.core.apeflow.interface.utils.gs.LearnResultCallback import LearnResultCallback
 
 
@@ -27,10 +25,7 @@ class GSAlgAbstract(AlgorithmAbstract):
 
     def __init__(self, param_dict, ext_data=None):
         AlgorithmAbstract.__init__(self, param_dict, ext_data)
-
-        self.learn_result_callback = LearnResultCallback(
-            job_key=self.param_dict["job_key"], global_sn=param_dict["global_sn"]
-        )
+        self.learn_result_callback = None
         try:
             self.task_idx = int(json.loads(os.environ["TF_CONFIG"])["task"]["index"])
         except:
@@ -64,7 +59,11 @@ class GSAlgAbstract(AlgorithmAbstract):
         raise NotImplementedError
 
     def learn(self, dataset):
-        raise NotImplementedError
+        self.learn_result_callback = LearnResultCallback(
+            job_key=self.param_dict["job_key"],
+            data_len=len(dataset['x']),
+            global_sn=self.param_dict["global_sn"]
+        )
 
     def predict(self, x):
         output_units = self.param_dict["output_units"]
@@ -82,7 +81,7 @@ class GSAlgAbstract(AlgorithmAbstract):
 
         return predict_result
 
-    def eval(self, dataset):
+    def eval_we(self, dataset):
         if self.task_idx == 0:
             results = list()
 

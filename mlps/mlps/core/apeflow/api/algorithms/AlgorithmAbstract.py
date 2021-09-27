@@ -101,20 +101,19 @@ class AlgorithmAbstract(object):
         raise NotImplementedError
 
     def eval(self, dataset: dict):
-        results = list()
         case: Callable = {
             "Classifier": self.eval_classifier,
             "Regressor": self.eval_regressor,
             "Clustering": self.eval_clustering,
+            "WE": self.eval_we,
             "FE": self.eval_fe,
             "OD": self.eval_od
         }.get(self.param_dict["algorithm_type"], None)
         try:
-            results.append(case(dataset=dataset))
+            return case(dataset=dataset)
         except Exception as e:
             self.LOGGER.error(e, exc_info=True)
-
-        return results
+            raise e
 
     def eval_classifier(self, dataset: dict):
         x = dataset["x"]
@@ -139,25 +138,39 @@ class AlgorithmAbstract(object):
         for c in range(int(num_classes)):
             result = {
                 "global_sn": self.param_dict["global_sn"],
-                "total": np.sum(np.equal(_y, c), dtype="int32"),
-                "TP": np.sum(np.take(np.equal(_y, c), np.where(np.equal(pred, c))))  # 정탐
+                "total": str(np.sum(np.equal(_y, c), dtype="int32")),
+                "TP": str(np.sum(np.take(np.equal(_y, c), np.where(np.equal(pred, c)))))  # 정탐
             }
-            result["FN"] = int(result["total"]) - int(result["TP"])  # 미탐
-            result["FP"] = np.sum(np.equal(pred, c)) - int(result["TP"])  # 오탐
+            result["FN"] = str(int(result["total"]) - int(result["TP"]))  # 미탐
+            result["FP"] = str(np.sum(np.equal(pred, c)) - int(result["TP"]))  # 오탐
             # self.AI_LOGGER.info(result)
             results.append(result)
 
         self.LOGGER.debug(results)
         return results
 
+    def eval_default_rst(self, dataset):
+        x = dataset["x"]
+
+        pred = self.predict(x)
+        try:
+            pred = pred.tolist()
+        except:
+            pass
+
+        return pred
+
     def eval_regressor(self, dataset: dict):
-        raise NotImplementedError
+        return self.eval_default_rst(dataset)
 
     def eval_clustering(self, dataset: dict):
-        raise NotImplementedError
+        return self.eval_default_rst(dataset)
+
+    def eval_we(self, dataset: dict):
+        return self.eval_default_rst(dataset)
 
     def eval_fe(self, dataset: dict):
-        raise NotImplementedError
+        return self.eval_default_rst(dataset)
 
     def eval_od(self, dataset: dict):
-        raise NotImplementedError
+        return self.eval_default_rst(dataset)
