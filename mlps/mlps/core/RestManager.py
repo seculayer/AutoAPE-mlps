@@ -47,7 +47,7 @@ class RestManager(object, metaclass=Singleton):
         url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("learn_status_update", "")
         hist_no = job_key.split("_")[-1]
         obj = {
-            "status": status,
+            "learn_sttus_cd": status,
             "hist_no": hist_no,
             "task_idx": task_idx,
             "message": msg
