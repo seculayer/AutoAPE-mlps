@@ -5,10 +5,11 @@
 
 from mlps.common.Constants import Constants
 from mlps.core.apeflow.api.algorithms.AlgorithmFactory import AlgorithmFactory
-from mlps.core.apeflow.interface.model.TFModel import TFModel
-from mlps.core.apeflow.interface.model.SKLModel import SKLModel
-from mlps.core.apeflow.interface.model.GSModel import GSModel
 from mlps.core.apeflow.interface.model.APEModel import APEModel
+from mlps.core.apeflow.interface.model.GSModel import GSModel
+from mlps.core.apeflow.interface.model.PyTorchModel import PyTorchModel
+from mlps.core.apeflow.interface.model.SKLModel import SKLModel
+from mlps.core.apeflow.interface.model.TFModel import TFModel
 
 
 class ModelBuilder(object):
@@ -24,3 +25,5 @@ class ModelBuilder(object):
             return GSModel(param_dict, ext_data)
         elif lib_type == Constants.APEFLOW:
             return APEModel(param_dict, ext_data)
+        elif lib_type == Constants.PYTORCH:
+            return PyTorchModel(param_dict, ext_data)

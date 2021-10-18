@@ -6,8 +6,8 @@
 import os
 
 from mlps.common.Singleton import Singleton
-from mlps.common.utils.FileUtils import FileUtils
 from mlps.common.utils.ConfUtils import ConfUtils
+from mlps.common.utils.FileUtils import FileUtils
 from mlps.tools.VersionManagement import VersionManagement
 
 
@@ -57,15 +57,23 @@ class Constants(object, metaclass=Singleton):
     DIR_TEMP = DIR_PROCESSING + _CONFIG.get("dir_temp", "/temp")
     DIR_ML_TMP = DIR_PROCESSING + _CONFIG.get("dir_ml_tmp", "/temp")
     DIR_ERROR = DIR_PROCESSING + _CONFIG.get("dir_error", "/errors")
-    DIR_RESOURCES = FileUtils.get_realpath(file=__file__) + "/.." + _CONFIG.get("dir_resources", "/resources")
-    DIR_USER_CUSTOM_ROOT = _CONFIG.get("user_custom_algorithm_package_root", "/eyeCloudAI/app/ape/custom")
+    DIR_RESOURCES = (
+        FileUtils.get_realpath(file=__file__)
+        + "/.."
+        + _CONFIG.get("dir_resources", "/resources")
+    )
+    DIR_USER_CUSTOM_ROOT = _CONFIG.get(
+        "user_custom_algorithm_package_root", "/eyeCloudAI/app/ape/custom"
+    )
     CUSTOM_PACK_NM = _CONFIG.get("user_custom_converter_package_nm", "cnvrtr")
     DIR_RESOURCES_CNVRTR = DIR_RESOURCES + "/cnvrtr"
 
     # LOG SETTING
     DIR_LOG = DIR_APP + _CONFIG.get("log_dir", "/logs")
     LOG_NAME = _CONFIG.get("log_name", "MLProcessingServer")
-    LOG_LEVEL = _CONFIG.get("log_level", "INFO")  # one of [INFO, DEBUG, WARN, ERROR, CRITICAL]
+    LOG_LEVEL = _CONFIG.get(
+        "log_level", "INFO"
+    )  # one of [INFO, DEBUG, WARN, ERROR, CRITICAL]
 
     # JOB SETTING
     JOB_EXT = _CONFIG.get("job_ext", ".job")
@@ -74,7 +82,11 @@ class Constants(object, metaclass=Singleton):
 
     # REMOVE TEMP FOLDER
     try:
-        REMOVE_TEMP_FOLDER = True if _CONFIG.get("remove_temp_folder", "true").lower() == "true" else False
+        REMOVE_TEMP_FOLDER = (
+            True
+            if _CONFIG.get("remove_temp_folder", "true").lower() == "true"
+            else False
+        )
     except:
         REMOVE_TEMP_FOLDER = False  # AS DEFAULT
 
@@ -87,13 +99,16 @@ class Constants(object, metaclass=Singleton):
 
     # DATA CVT
     try:
-        DATAPROCESS_CVT_DATA = True if _CONFIG.get("cvt_data", "True").lower() == "true" else False
+        DATAPROCESS_CVT_DATA = (
+            True if _CONFIG.get("cvt_data", "True").lower() == "true" else False
+        )
     except:
         DATAPROCESS_CVT_DATA = False  # AS DEFAULT
 
     REST_URL_ROOT = "http://{}:{}".format(
         _CONFIG.get("rest_server_ip", "10.1.12.234"),
-        _CONFIG.get("rest_server_port", "9200"))
+        _CONFIG.get("rest_server_port", "9200"),
+    )
 
     JOB_TYPE_LEARN = "learn"
     SAMPLE_TYPE_RANDOM = "1"
@@ -129,6 +144,7 @@ class Constants(object, metaclass=Singleton):
     GENSIM = "GS"
     SCIKIT_LEARN = "SKL"
     APEFLOW = "APE"
+    PYTORCH = "PyTorch"
 
     TF_DEVICE_CPU = "CPU"
     TF_DEVICE_GPU = "GPU"
@@ -146,7 +162,9 @@ class Constants(object, metaclass=Singleton):
     OUT_MODEL_HYBRID_TF = "hybridTF"
     OUT_MODEL_KERAS_TOKENIZER = "kToken"
     OUT_MODEL_APE_OUTLIER_DETCTION = "APE_OUTLIER_DETECTION"
+    OUT_MODEL_ONNX = "onnx"  # https://onnx.ai/
+    OUT_MODEL_PYTORCH = "PyTorch"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(Constants.__dict__)
