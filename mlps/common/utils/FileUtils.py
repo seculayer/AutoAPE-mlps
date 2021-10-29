@@ -10,6 +10,17 @@ import shutil
 
 class FileUtils(object):
     @staticmethod
+    def read_dir(directory="./", ext=".done"):
+        file_names = os.listdir(directory)
+
+        res_file_names = list()
+        for file_name in file_names:
+            if ext == os.path.splitext(file_name)[-1]:
+                res_file_names.append("%s/%s" % (directory, file_name))
+
+        return res_file_names
+
+    @staticmethod
     def mkdir(dir_name):
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)

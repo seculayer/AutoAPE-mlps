@@ -20,8 +20,8 @@ class VersionManagement(object):
                 app_path = os.getcwd()
 
             _VER_INFO = self._get_version(app_path)
-            self.MODULE_NM = _VER_INFO.get("module", "pycmmn")
-            self.VERSION = _VER_INFO.get("version", "1.0.0")
+            self.MODULE_NM = _VER_INFO.get("module", "mlps")
+            self.VERSION = _VER_INFO.get("version", "3.0.0")
             self.BUILD_DATE = _VER_INFO.get("build date", "999912312359")
             self.REVISION = _VER_INFO.get("revision", "1")
 
@@ -60,7 +60,7 @@ class VersionManagement(object):
         return results
 
     @staticmethod
-    def generate(version="1.0.0", app_path=None, module_nm="pycmmn"):
+    def generate(version="1.0.0", app_path=None, module_nm="mlps"):
         if app_path is None:
             app_path = os.getcwd()
 

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import Dict
 
-import torch
-from mlps.core.apeflow.api.algorithms.AlgorithmAbstract import AlgorithmAbstract
 from mlps.core.apeflow.api.algorithms.AlgorithmFactory import AlgorithmFactory
 from mlps.core.apeflow.api.algorithms.pytorch import PyTorchAlgAbstract
 from mlps.core.apeflow.interface.model.ModelAbstract import ModelAbstract
