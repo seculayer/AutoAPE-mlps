@@ -148,8 +148,14 @@
     <!-- rest url setting -->
     <property>
         <name>rest_server_ip</name>
-        <!--<value>10.2.2.121</value>-->
-        <value>10.1.12.234</value>
+        <value>mrms-svc</value>
+<!--        <value>10.1.12.234</value>-->
+        <description>None</description>
+    </property>
+    <property>
+        <name>mrms-sftp_port</name>
+        <value>10022</value>
+<!--        <value>22</value>-->
         <description>None</description>
     </property>
     <property>
