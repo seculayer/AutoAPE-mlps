@@ -1,8 +1,7 @@
-FROM registry.eyecloudai:31500/eyecloudai/python-base-gpu:3.1.0-py3.7
 FROM registry.seculayer.com:31500/ape/python-base:py3.7 as builder
 MAINTAINER jinkim "jinkim@seculayer.com"
 
-RG app="/opt/app"
+ARG app="/opt/app"
 
 RUN mkdir -p $app
 WORKDIR $app
@@ -34,12 +33,12 @@ COPY ./mlps.sh /eyeCloudAI/app/ape/mlps
 
 COPY --from=builder "$app/lib" /eyeCloudAI/app/ape/mlps/lib
 
-COPY --from=builder "$app/dist/mlps-1.0.0-py3-none-any.whl" \
-        /eyeCloudAI/app/ape/mlps/mlps-1.0.0-py3-none-any.whl
+COPY --from=builder "$app/dist/mlps-3.0.0-py3-none-any.whl" \
+        /eyeCloudAI/app/ape/mlps/mlps-3.0.0-py3-none-any.whl
 
-RUN pip3.7 install /eyeCloudAI/app/ape/mlps/mlps-1.0.0-py3-none-any.whl --no-dependencies  \
-    -t /eyeCloudAI/app/ape/mlps/lib \
-    && rm /eyeCloudAI/app/ape/mlps/mlps-1.0.0-py3-none-any.whl
+RUN pip3.7 install /eyeCloudAI/app/ape/mlps/mlps-3.0.0-py3-none-any.whl --no-dependencies  \
+    -t /eyeCloudAI/app/ape/mlps \
+    && rm /eyeCloudAI/app/ape/mlps/mlps-3.0.0-py3-none-any.whl
 
 RUN groupadd -g 1000 aiuser
 RUN useradd -r -u 1000 -g aiuser aiuser

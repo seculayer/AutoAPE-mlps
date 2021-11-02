@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 class APEPythonSetup(object):
     def __init__(self):
         self.module_nm = "mlps"
-        self.version = "1.0.0"
+        self.version = "3.0.0"
 
     @staticmethod
     def get_require_packages() -> List[str]:
