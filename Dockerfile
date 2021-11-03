@@ -19,12 +19,6 @@ FROM registry.seculayer.com:31500/ape/python-base:py3.7 as app
 ARG app="/opt/app"
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 
-
-RUN groupadd -g 1000 aiuser
-RUN useradd -r -u 1000 -g aiuser aiuser
-RUN chown -R aiuser:aiuser /eyeCloudAI
-USER aiuser
-
 RUN mkdir -p /eyeCloudAI/app/ape/mlps \
     && mkdir -p /eyeCloudAI/data/processing/ape/models
 WORKDIR /eyeCloudAI/app/ape/mlps
