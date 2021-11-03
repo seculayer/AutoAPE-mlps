@@ -10,22 +10,24 @@ from mlps.common.info.FieldInfo import FieldInfo
 
 
 class DatasetInfo(object):
-    def __init__(self, dataset_dict: dict):
+    def __init__(self, dataset_dict: dict, project_target_field: str):
         self.total_dist_file_cnt: int = int(dataset_dict.get("dist_file_cnt", "1"))
         self.metadata: List[Dict] = dataset_dict.get("metadata_json", {}).get("meta", [])
-        self.data_analysis_json: List[Dict] = json.loads(dataset_dict.get("fields", {}).get("data_analysis_json", "{}"))
+        self.data_analysis_json: List[Dict] = dataset_dict.get("fields", [])
         self.fields: List[FieldInfo] = self.set_fields(
             self.data_analysis_json,
-            self.metadata)
+            self.metadata,
+            project_target_field
+        )
         self.label_yn: str = dataset_dict.get("label_yn", "N")
         self.file_list: List[str] = dataset_dict.get("metadata_json", {}).get("file_list", [])
 
     @staticmethod
-    def set_fields(data_analysis_json, metadata):
+    def set_fields(data_analysis_json, metadata, project_target_field):
         fields = list()
         for field_dict in data_analysis_json:
             field_sn: int = int(field_dict.get("field_sn"))
-            field = FieldInfo(field_dict, metadata[field_sn])
+            field = FieldInfo(field_dict, metadata[field_sn], project_target_field)
             fields.append(field)
 
         return fields

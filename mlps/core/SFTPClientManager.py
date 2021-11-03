@@ -13,7 +13,7 @@ from mlps.common.Common import Common
 class SFTPClientManager(object):
     # class : SFTPClientManager
     def __init__(self, service: str, username: str, password: str):
-        self.logger = Common.LOGGER.get_logger()
+        self.logger = Common.LOGGER.getLogger()
         self.service: List[str] = service.split(":")
         self.username = username
         self.password = password
@@ -37,6 +37,18 @@ class SFTPClientManager(object):
         json_data = json.loads(f.read())
         f.close()
         return json_data
+
+    def load_json_oneline(self, filename):
+        f = self.get_client().open(filename, "r")
+        while True:
+            data = f.read()
+            if data is None or data == "":
+                yield "#file_end#"
+                break
+            else:
+                yield json.loads(data)
+
+        f.close()
 
 
 if __name__ == '__main__':

@@ -7,7 +7,7 @@ import threading
 import os
 from multiprocessing import Queue
 from queue import Queue as nQ
-from typing import List
+from typing import List, Tuple
 import traceback
 
 from mlps.common.Singleton import Singleton
@@ -21,11 +21,15 @@ from mlps.core.data.sampling.DataSampler import DataSampler
 from mlps.core.RestManager import RestManager
 from mlps.common.decorator.CalTimeDecorator import CalTimeDecorator
 from mlps.common.info.DatasetInfo import DatasetInfo
+from mlps.core.SFTPClientManager import SFTPClientManager
+from mlps.common.utils.JSONUtils import JSONUtils
+from mlps.core.data.cnvrtr.ConvertAbstract import ConvertAbstract
+from mlps.core.data.cnvrtr.ConvertFactory import ConvertFactory
 
 
 class DataManager(threading.Thread, metaclass=Singleton):
 
-    def __init__(self, job_info: JobInfo, sftp_client) -> None:
+    def __init__(self, job_info: JobInfo, sftp_client: SFTPClientManager) -> None:
         threading.Thread.__init__(self)
         self.LOGGER = Common.LOGGER.getLogger()
         self.job_info: JobInfo = job_info
@@ -59,12 +63,38 @@ class DataManager(threading.Thread, metaclass=Singleton):
     def read_files(self, features_dir: str, fields: List[FieldInfo]) \
             -> List:
         # ---- prepare
-        info = [self.job_info.get_hist_no(), self.job_info.get_task_idx()]
-        file_list = self.get_feature_files(directory=features_dir, info=info)
+        # 분산이 되면 워커마다 파일 1개씩, 아니면 워커1개가 모든 파일을 읽는다
+        file_list = list()
+        if self.job_info.get_dist_yn():
+            idx = int(self.job_info.get_task_idx())
+            file_list.append(self.job_info.get_file_list()[idx])
+        else:
+            file_list = self.job_info.get_file_list()
 
-        data_list = self.read_subproc(file_list, fields)
+        # data_list = self.read_subproc(file_list, fields)
+        data_list = self.read_sftp(file_list, fields)
 
         return data_list
+
+    def read_sftp(self, file_list: List[str], fields: List[FieldInfo]) -> List:
+
+        functions: List[List[ConvertAbstract]] = self.build_functions(fields)
+
+        features = list()
+        labels = list()
+        origin_data = list()
+
+        for file in file_list:
+            self.LOGGER.info("read file : {}".format(file))
+            generator = self.sftp_client.load_json_oneline(file)
+            while True:
+                line: str = next(generator)
+                if line == "#file_end#":
+                    break
+                feature, label, data = self._convert(line, fields, functions)
+                features.append(feature), labels.append(label), origin_data.append(data)
+
+        return [features, labels, origin_data]
 
     def read_subproc(self, file_list: List[str], fields: List[FieldInfo]) \
             -> List:
@@ -112,29 +142,6 @@ class DataManager(threading.Thread, metaclass=Singleton):
             .set_job_info(self.job_info) \
             .build()
 
-    def get_feature_files(self, directory="./", sep="_", info=None, ext=".done") -> List[str]:
-        file_list = os.listdir(directory)
-        result_list = list()
-
-        for filename in file_list:
-            filename_split = os.path.splitext(filename)
-            if ext == filename_split[-1]:
-                if self.match_feature_filename(filename_split[0], info, sep):
-                    full_filename = "%s/%s" % (directory, filename)
-                    result_list.append(full_filename)
-                else:
-                    continue
-        return result_list
-
-    @staticmethod
-    def match_feature_filename(filename, info=None, sep="_") -> bool:
-        data = filename.split(sep)
-        # hist_no, task_idx
-        if (data[0] == info[0]) and (data[1] == info[1]):
-            return True
-        else:
-            return False
-
     def get_learn_data(self) -> dict:
         return {"x": self.dataset[0][0], "y": self.dataset[0][1]}
 
@@ -144,6 +151,37 @@ class DataManager(threading.Thread, metaclass=Singleton):
     def get_json_data(self) -> list:
         return self.dataset[2]
 
+    def _convert(self, line, fields, functions) -> Tuple[list, list, dict]:
+        features = list()
+        labels = list()
+        data = JSONUtils.ujson_load(line)
+        for idx, field in enumerate(fields):
+            if True: #not field.multiple():
+                name = field.field_name
+                value = data.get(name, "")
+            else:
+                value = list()
+                for name in field.field_name.split("@COMMA@"):
+                    value.append(data.get(name, ""))
+            cvt_data = list()
+            # TODO : 한 필드에 2개의 함수가 있을 경우 잘 동작하는지 확인
+            for fn in functions[idx]:
+                cvt_data += fn.apply(value)
+            if field.label():
+                labels += cvt_data
+            else:
+                features += cvt_data
+        return features, labels, data
+
+    @staticmethod
+    def build_functions(fields: List[FieldInfo]) -> List[List[ConvertAbstract]]:
+        functions: List[List[ConvertAbstract]] = list()
+        for field in fields:
+            cvt_fn_list: List[ConvertAbstract] = list()
+            for fn_info in field.get_function():
+                cvt_fn_list.append(ConvertFactory.create_cvt_fn(fn_info))
+            functions.append(cvt_fn_list)
+        return functions
 
 # ---- builder Pattern
 class DataManagerBuilder(object):
@@ -157,6 +195,7 @@ class DataManagerBuilder(object):
 
     def set_sftp_client(self, sftp_client):
         self.sftp_client = sftp_client
+        return self
 
     def build(self) -> DataManager:
         return DataManager(job_info=self.job_info, sftp_client=self.sftp_client)

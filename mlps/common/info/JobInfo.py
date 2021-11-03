@@ -8,6 +8,7 @@ import logging
 from mlps.common.exceptions.JobFileLoadError import JobFileLoadError
 from mlps.common.info.DatasetInfo import DatasetInfo
 from mlps.core.SFTPClientManager import SFTPClientManager
+from mlps.common.utils.StringUtil import StringUtil
 
 
 class JobInfo(object):
@@ -41,7 +42,7 @@ class JobInfo(object):
         return job_dict
 
     def _create_dataset(self, dataset_dict) -> DatasetInfo:
-        dataset = DatasetInfo(dataset_dict)
+        dataset = DatasetInfo(dataset_dict, self.get_target_field())
         self.LOGGER.debug(str(dataset))
 
         return dataset
@@ -77,6 +78,32 @@ class JobInfo(object):
 
     def get_num_worker(self) -> int:
         return int(self.info_dict.get("num_worker", "1"))
+
+    def get_project_id(self) -> str:
+        return self.info_dict.get("project_id")
+
+    def get_target_field(self) -> str:
+        return self.info_dict.get("target_field")
+
+    def get_dataset_cnt_labels(self) -> dict:
+        meta_list: list = self.info_dict.get("datasets", {}).get("metadata_json", {}).get("meta")
+        target_field = self.get_target_field()
+        rst = None
+        for meta in meta_list:
+            if meta.get("field_nm") == target_field:
+                rst = meta.get("statistics").get("unique")
+                break
+
+        return rst
+
+    def get_file_list(self) -> list:
+        return self.info_dict.get("datasets", {}).get("metadata_json", {}).get("file_list")
+
+    def get_dataset_lines(self) -> list:
+        return self.info_dict.get("datasets", {}).get("metadata_json", {}).get("file_num_line")
+
+    def get_dist_yn(self) -> bool:
+        return StringUtil.get_boolean(self.info_dict.get("algorithms", {}).get("dist_yn", "").lower())
 
     # ----- rtdetect
     # def get_detect_type_cd(self) -> str:
@@ -126,6 +153,7 @@ class JobInfoBuilder(object):
 
     def set_sftp_client(self, sftp_client):
         self.sftp_client = sftp_client
+        return self
 
     def build(self) -> JobInfo:
         return JobInfo(
