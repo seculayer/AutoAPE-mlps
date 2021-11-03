@@ -5,3 +5,5 @@ torch==1.9.1
 numpy == 1.17.4
 ujson == 1.35
 setuptools == 20.7.0
+paramiko == 2.8.0
+pycrypto == 2.6.1

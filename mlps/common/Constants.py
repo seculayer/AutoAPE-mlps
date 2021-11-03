@@ -106,9 +106,16 @@ class Constants(object, metaclass=Singleton):
         DATAPROCESS_CVT_DATA = False  # AS DEFAULT
 
     REST_URL_ROOT = "http://{}:{}".format(
-        _CONFIG.get("rest_server_ip", "10.1.12.234"),
-        _CONFIG.get("rest_server_port", "9200"),
+        _CONFIG.get("mrms_svc", "mrms-svc"),
+        _CONFIG.get("mrms_rest_port", "9200"),
     )
+
+    # Hosts
+    MRMS_SVC = _CONFIG.get("mrms_svc", "mrms-svc")
+    MRMS_USER = _CONFIG.get("mrms_username", "HE12RmzKHQtH3bL7tTRqCg==")
+    MRMS_PASSWD = _CONFIG.get("mrms_password", "jTf6XrqcYX1SAhv9JUPq+w==")
+    MRMS_SFTP_PORT = int(_CONFIG.get("mrms_sftp_port", "10022"))
+    MRMS_REST_PORT = int(_CONFIG.get("mrms_rest_port", "9200"))
 
     JOB_TYPE_LEARN = "learn"
     SAMPLE_TYPE_RANDOM = "1"

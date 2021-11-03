@@ -17,18 +17,23 @@ from mlps.common.Common import Common
 from mlps.core.apeflow.api.MLModels import MLModels
 from mlps.common.decorator.CalTimeDecorator import CalTimeDecorator
 from mlps.core.RestManager import RestManager
+from mlps.core.SFTPClientManager import SFTPClientManager
 
 
 class MLPSProcessor(object):
     LOGGER = Common.LOGGER.getLogger()
 
     def __init__(self, hist_no: str, task_idx: str, job_type: str) -> None:
+        self.mrms_sftp_manager: SFTPClientManager = SFTPClientManager(
+            "{}:{}".format(Constants.MRMS_SVC, Constants.MRMS_SFTP_PORT), Constants.MRMS_USER, Constants.MRMS_PASSWD)
+
         self.job_info: JobInfo = JobInfoBuilder() \
             .set_hist_no(hist_no=hist_no) \
             .set_task_idx(task_idx) \
             .set_job_dir(Constants.DIR_LEARN_FEAT) \
             .set_job_type(job_type=job_type) \
             .set_logger(self.LOGGER) \
+            .set_sftp_client(self.mrms_sftp_manager) \
             .build()
 
         self.job_key: str = self.job_info.get_key()
@@ -45,6 +50,7 @@ class MLPSProcessor(object):
     def data_loader_init(self) -> None:
         self.data_loader_manager = DataManagerBuilder() \
             .set_job_info(job_info=self.job_info) \
+            .set_sftp_client(self.mrms_sftp_manager) \
             .build()
 
     def run(self) -> None:
@@ -92,10 +98,10 @@ class MLPSProcessor(object):
         self.model.learn(data=_data)
 
         if int(self.job_info.get_task_idx()) == 0:
-            if FileUtils.is_exist("{}/{}".format(Constants.DIR_MODEL, self.job_info.get_model_id())):
-                FileUtils.remove_dir("{}/{}".format(Constants.DIR_MODEL, self.job_info.get_model_id()))
-            shutil.copytree("{}/{}".format(Constants.DIR_ML_TMP, self.job_info.get_model_id()),
-                            "{}/{}".format(Constants.DIR_MODEL, self.job_info.get_model_id()))
+            if FileUtils.is_exist("{}/{}".format(Constants.DIR_MODEL, self.job_info.get_hist_no())):
+                FileUtils.remove_dir("{}/{}".format(Constants.DIR_MODEL, self.job_info.get_hist_no()))
+            shutil.copytree("{}/{}".format(Constants.DIR_ML_TMP, self.job_info.get_hist_no()),
+                            "{}/{}".format(Constants.DIR_MODEL, self.job_info.get_hist_no()))
 
         self.LOGGER.info("-- MLModels learning end. [{}]".format(self.job_key))
 

@@ -25,12 +25,13 @@ from mlps.common.info.DatasetInfo import DatasetInfo
 
 class DataManager(threading.Thread, metaclass=Singleton):
 
-    def __init__(self, job_info: JobInfo) -> None:
+    def __init__(self, job_info: JobInfo, sftp_client) -> None:
         threading.Thread.__init__(self)
         self.LOGGER = Common.LOGGER.getLogger()
         self.job_info: JobInfo = job_info
         self.data_queue: Queue = Queue()
         self.DataSampler = DataSampler(self.job_info)
+        self.sftp_client = sftp_client
 
         self.dataset_info: DatasetInfo = self.job_info.get_dataset_info()
         self.dataset = {}
@@ -148,10 +149,14 @@ class DataManager(threading.Thread, metaclass=Singleton):
 class DataManagerBuilder(object):
     def __init__(self):
         self.job_info = None
+        self.sftp_client = None
 
     def set_job_info(self, job_info):
         self.job_info = job_info
         return self
 
+    def set_sftp_client(self, sftp_client):
+        self.sftp_client = sftp_client
+
     def build(self) -> DataManager:
-        return DataManager(job_info=self.job_info)
+        return DataManager(job_info=self.job_info, sftp_client=self.sftp_client)
