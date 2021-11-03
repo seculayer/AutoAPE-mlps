@@ -58,9 +58,8 @@ class MLPSProcessor(object):
             if self.task_idx == "0":
                 RestManager.update_time(self.job_key, "start")
             self.data_loader_init()
-            self.data_loader_manager.start()
+            self.data_loader_manager.run()
             self.model_init()
-            self.data_loader_manager.join()
             self.learn()
             self.eval()
 

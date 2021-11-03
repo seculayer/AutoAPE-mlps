@@ -4,7 +4,7 @@
 # Powered by Seculayer © 2021 Service Model Team, R&D Center.
 
 import threading
-import os
+import numpy as np
 from multiprocessing import Queue
 from queue import Queue as nQ
 from typing import List, Tuple
@@ -27,10 +27,10 @@ from mlps.core.data.cnvrtr.ConvertAbstract import ConvertAbstract
 from mlps.core.data.cnvrtr.ConvertFactory import ConvertFactory
 
 
-class DataManager(threading.Thread, metaclass=Singleton):
+class DataManager(object, metaclass=Singleton):
 
     def __init__(self, job_info: JobInfo, sftp_client: SFTPClientManager) -> None:
-        threading.Thread.__init__(self)
+        # threading.Thread.__init__(self)
         self.LOGGER = Common.LOGGER.getLogger()
         self.job_info: JobInfo = job_info
         self.data_queue: Queue = Queue()
@@ -94,6 +94,7 @@ class DataManager(threading.Thread, metaclass=Singleton):
                 feature, label, data = self._convert(line, fields, functions)
                 features.append(feature), labels.append(label), origin_data.append(data)
 
+        self.make_inout_units(features, labels)
         return [features, labels, origin_data]
 
     def read_subproc(self, file_list: List[str], fields: List[FieldInfo]) \
@@ -151,18 +152,19 @@ class DataManager(threading.Thread, metaclass=Singleton):
     def get_json_data(self) -> list:
         return self.dataset[2]
 
-    def _convert(self, line, fields, functions) -> Tuple[list, list, dict]:
+    @staticmethod
+    def _convert(line, fields, functions) -> Tuple[list, list, dict]:
         features = list()
         labels = list()
-        data = JSONUtils.ujson_load(line)
+
         for idx, field in enumerate(fields):
-            if True: #not field.multiple():
+            if True:  # not field.multiple():
                 name = field.field_name
-                value = data.get(name, "")
+                value = line.get(name, "")
             else:
                 value = list()
                 for name in field.field_name.split("@COMMA@"):
-                    value.append(data.get(name, ""))
+                    value.append(line.get(name, ""))
             cvt_data = list()
             # TODO : 한 필드에 2개의 함수가 있을 경우 잘 동작하는지 확인
             for fn in functions[idx]:
@@ -171,7 +173,7 @@ class DataManager(threading.Thread, metaclass=Singleton):
                 labels += cvt_data
             else:
                 features += cvt_data
-        return features, labels, data
+        return features, labels, line
 
     @staticmethod
     def build_functions(fields: List[FieldInfo]) -> List[List[ConvertAbstract]]:
@@ -182,6 +184,11 @@ class DataManager(threading.Thread, metaclass=Singleton):
                 cvt_fn_list.append(ConvertFactory.create_cvt_fn(fn_info))
             functions.append(cvt_fn_list)
         return functions
+
+    def make_inout_units(self, features, labels):
+        self.job_info.set_input_units(np.shape(features)[-1])
+        self.job_info.set_output_units(np.shape(labels)[-1])
+
 
 # ---- builder Pattern
 class DataManagerBuilder(object):

@@ -40,13 +40,17 @@ class SFTPClientManager(object):
 
     def load_json_oneline(self, filename):
         f = self.get_client().open(filename, "r")
+        data = None
         while True:
-            data = f.read()
-            if data is None or data == "":
-                yield "#file_end#"
-                break
-            else:
-                yield json.loads(data)
+            try:
+                data = f.readline()
+                if data is None or data == "":
+                    yield "#file_end#"
+                    break
+                else:
+                    yield json.loads(data)
+            except Exception as e:
+                self.logger.error(data)
 
         f.close()
 

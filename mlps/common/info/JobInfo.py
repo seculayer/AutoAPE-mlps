@@ -5,13 +5,14 @@
 
 import logging
 
+from mlps.common.Singleton import Singleton
 from mlps.common.exceptions.JobFileLoadError import JobFileLoadError
 from mlps.common.info.DatasetInfo import DatasetInfo
 from mlps.core.SFTPClientManager import SFTPClientManager
 from mlps.common.utils.StringUtil import StringUtil
 
 
-class JobInfo(object):
+class JobInfo(object, metaclass=Singleton):
     def __init__(self, hist_no, task_idx, job_type, job_dir, logger, sftp_client):
         self.job_type: str = job_type
         self.hist_no: str = hist_no
@@ -75,6 +76,14 @@ class JobInfo(object):
 
     def get_param_dict_list(self) -> list:
         return [self.info_dict.get("algorithms", dict())]
+
+    def set_input_units(self, input_units):
+        for param_dict in self.get_param_dict_list():
+            param_dict["params"]["input_units"] = input_units
+
+    def set_output_units(self, output_units):
+        for param_dict in self.get_param_dict_list():
+            param_dict["params"]["output_units"] = output_units
 
     def get_num_worker(self) -> int:
         return int(self.info_dict.get("num_worker", "1"))

@@ -15,7 +15,7 @@ COPY ./setup.py ./setup.py
 RUN pip3.7 install wheel
 RUN python3.7 setup.py bdist_wheel
 
-FROM registry.seculayer.com:31500/ape/python-base:py3.7 as app
+FROM registry.seculayer.com:31500/ape/python-base-gpu:py3.7 as app
 ARG app="/opt/app"
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 

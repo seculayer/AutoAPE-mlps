@@ -84,8 +84,8 @@ class KDNN(TFKerasAlgAbstract):
                 loss="mse",
                 optimizer=eval(Common.OPTIMIZER_FN_CODE_DICT[optimizer_fn])(learning_rate),
             )
-        if self.param_dict["job_type"] is not "predict":
-            self.model.summary(print_fn=self.LOGGER.info)
+
+        self.model.summary(print_fn=self.LOGGER.info)
 
 
 if __name__ == '__main__':
