@@ -56,4 +56,8 @@ class SFTPClientManager(object):
 
 
 if __name__ == '__main__':
-    SFTPClientManager(Constants.MRMS_SVC, Constants.MRMS_USER, Constants.MRMS_PASSWD)
+    sm = SFTPClientManager("10.1.35.118:22", "Kmw/y3YWiiO7gJ/zqMvCuw==", "jTf6XrqcYX1SAhv9JUPq+w==")
+    gee = sm.load_json_oneline("/eyeCloudAI/data/processing/ape/division/99429867778487988_0.done")
+
+    while True:
+        print(next(gee))

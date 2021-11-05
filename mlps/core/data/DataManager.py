@@ -5,6 +5,7 @@
 
 import threading
 import numpy as np
+import json
 from multiprocessing import Queue
 from queue import Queue as nQ
 from typing import List, Tuple
@@ -22,7 +23,6 @@ from mlps.core.RestManager import RestManager
 from mlps.common.decorator.CalTimeDecorator import CalTimeDecorator
 from mlps.common.info.DatasetInfo import DatasetInfo
 from mlps.core.SFTPClientManager import SFTPClientManager
-from mlps.common.utils.JSONUtils import JSONUtils
 from mlps.core.data.cnvrtr.ConvertAbstract import ConvertAbstract
 from mlps.core.data.cnvrtr.ConvertFactory import ConvertFactory
 
@@ -65,7 +65,8 @@ class DataManager(object, metaclass=Singleton):
         # ---- prepare
         # 분산이 되면 워커마다 파일 1개씩, 아니면 워커1개가 모든 파일을 읽는다
         file_list = list()
-        if self.job_info.get_dist_yn():
+        if self.job_info.get_dist_yn() \
+                and (len(self.job_info.get_file_list()) == self.job_info.get_num_worker()):
             idx = int(self.job_info.get_task_idx())
             file_list.append(self.job_info.get_file_list()[idx])
         else:
@@ -79,6 +80,7 @@ class DataManager(object, metaclass=Singleton):
     def read_sftp(self, file_list: List[str], fields: List[FieldInfo]) -> List:
 
         functions: List[List[ConvertAbstract]] = self.build_functions(fields)
+        self.LOGGER.info(functions)
 
         features = list()
         labels = list()
@@ -92,7 +94,11 @@ class DataManager(object, metaclass=Singleton):
                 if line == "#file_end#":
                     break
                 feature, label, data = self._convert(line, fields, functions)
+
                 features.append(feature), labels.append(label), origin_data.append(data)
+
+        if Constants.DATAPROCESS_CVT_DATA:
+            self.write_dp_result(features, labels)
 
         self.make_inout_units(features, labels)
         return [features, labels, origin_data]
@@ -186,8 +192,34 @@ class DataManager(object, metaclass=Singleton):
         return functions
 
     def make_inout_units(self, features, labels):
-        self.job_info.set_input_units(np.shape(features)[-1])
-        self.job_info.set_output_units(np.shape(labels)[-1])
+        input_units = np.shape(features)[-1]
+        output_units = np.shape(labels)[-1]
+        self.job_info.set_input_units(input_units)
+        self.job_info.set_output_units(output_units)
+        self.LOGGER.info("input_units : {}".format(input_units))
+        self.LOGGER.info("output_units : {}".format(output_units))
+
+    def write_dp_result(self, features, labels):
+        rst_dict = dict()
+
+        self.LOGGER.info("features[0]: {}".format(features[0]))
+        self.LOGGER.info("labels[0]: {}".format(labels[0]))
+
+        rst_dict['features'] = features
+        rst_dict['targets'] = labels
+
+        f = self.sftp_client.get_client().open(
+            Constants.DIR_LEARN_FEAT + "/{}_{}.dp".format(
+                self.job_info.get_hist_no(), self.job_info.get_task_idx()),
+            'w'
+        )
+
+        try:
+            f.write(json.dumps(rst_dict, indent=2))
+        except Exception as e:
+            self.LOGGER.error(e, exc_info=True)
+        finally:
+            f.close()
 
 
 # ---- builder Pattern

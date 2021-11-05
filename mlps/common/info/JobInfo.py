@@ -22,7 +22,7 @@ class JobInfo(object, metaclass=Singleton):
         self.sftp_client: SFTPClientManager = sftp_client
 
         self.info_dict: dict = self._load()
-        self.LOGGER.info(self.info_dict)
+        self.LOGGER.debug(self.info_dict)
 
         self.dataset_info: DatasetInfo = self._create_dataset(self.info_dict.get("datasets"))
 
@@ -92,7 +92,7 @@ class JobInfo(object, metaclass=Singleton):
         return self.info_dict.get("project_id")
 
     def get_target_field(self) -> str:
-        return self.info_dict.get("target_field")
+        return self.info_dict.get("project_target_field")
 
     def get_dataset_cnt_labels(self) -> dict:
         meta_list: list = self.info_dict.get("datasets", {}).get("metadata_json", {}).get("meta")

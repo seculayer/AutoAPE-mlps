@@ -18,19 +18,19 @@ from mlps.common.exceptions.GPUMemoryError import GPUMemoryError
 
 class MLModels(object):
     def __init__(self, param_dict_list, cluster, task_idx, **kwargs):
+        self.AI_LOGGER = Common.LOGGER.getLogger()
         self.job_key: str = kwargs["job_key"]
         self.LIB_TYPE: List[str] = self._get_lib_types(param_dict_list)
         self.ALG_CODE_LIST: List = self._get_alg_code(param_dict_list)
         self.num_workers = len(cluster["worker"])
+        # INITIALIZING
+        self._set_backend(task_idx)
+
         self.param_dict_linked_list: dict = self._make_param_dict_linked_list(param_dict_list)
         self.task_idx = task_idx
-        self.AI_LOGGER = Common.LOGGER.getLogger()
         self.AI_LOGGER.debug(self.param_dict_linked_list)
         self.ext_data: dict = dict()
         self.job_type: Union[str, None] = kwargs.get("job_type", None)
-
-        # INITIALIZING
-        self._set_backend(task_idx)
 
         self.AI_LOGGER.info("APEFlow v.{} MLModels initialized complete. [{}]".format(Constants.VERSION, self.job_key))
 

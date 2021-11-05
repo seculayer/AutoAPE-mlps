@@ -35,6 +35,7 @@ class LearnResultCallback(tf.keras.callbacks.Callback):
         result = logs
         result["step"] = epoch + 1
         self.LOGGER.info(result)
+        result = {k: float(v) for k, v in result.items()}
         self.learn_result = result
 
         if json.loads(os.environ["TF_CONFIG"])["task"]["index"] == "0":
