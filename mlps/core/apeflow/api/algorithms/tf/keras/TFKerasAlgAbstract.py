@@ -127,8 +127,6 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
 
         if self.task_idx == 0:
             RestManager.update_eps(self.param_dict["job_key"], result_callback.get_eps())
-            last_result = result_callback.get_learn_result()
-            RestManager.update_learn_result(self.param_dict["job_key"], last_result)
 
     def predict(self, x):
         batch_size = self.batch_size

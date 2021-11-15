@@ -99,7 +99,7 @@ class RestManager(object, metaclass=Singleton):
         return rst_sttus
 
     @staticmethod
-    def update_learn_result(job_key: str, rst: dict):
+    def update_learn_result(job_key: str, rst: list):
         url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("learn_result_update", "")
 
         hist_no = job_key.split("_")[-1]
@@ -112,12 +112,12 @@ class RestManager(object, metaclass=Singleton):
         return rst_sttus
 
     @staticmethod
-    def update_time(job_key: str, type: str):
+    def update_time(job_key: str, _type: str):
         url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("time_update", "")
 
         hist_no = job_key.split("_")[-1]
         obj = {
-            "type": type,
+            "type": _type,
             "hist_no": hist_no
         }
         rst_sttus = RestManager.post(url=url, data=obj)

@@ -19,7 +19,7 @@ class LearnResultCallback(tf.keras.callbacks.Callback):
         self.global_sn = kwargs["global_sn"]
         self.data_len = kwargs["data_len"]
         self.LOGGER = Common.LOGGER.getLogger()
-        self.learn_result = None
+        self.learn_result = list()
         self.start_time = None
         self.end_time = None
         self.total_time = 0
@@ -36,15 +36,12 @@ class LearnResultCallback(tf.keras.callbacks.Callback):
         result["step"] = epoch + 1
         self.LOGGER.info(result)
         result = {k: float(v) for k, v in result.items()}
-        self.learn_result = result
+        self.learn_result.append(result)
 
         if json.loads(os.environ["TF_CONFIG"])["task"]["index"] == "0":
-            RestManager.post_learn_result(
+            RestManager.update_learn_result(
                 job_key=self.job_key,
-                task_idx=json.loads(os.environ["TF_CONFIG"])["task"]["index"],
-                rst_type=Constants.RST_TYPE_LEARN,
-                global_sn=self.global_sn,
-                rst=result
+                rst=self.learn_result
             )
 
     def get_learn_result(self):

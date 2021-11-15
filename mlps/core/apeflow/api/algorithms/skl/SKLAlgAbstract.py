@@ -49,12 +49,9 @@ class SKLAlgAbstract(AlgorithmAbstract):
         else:
             raise NotImplementedError
 
-        RestManager.post_learn_result(
+        RestManager.update_learn_result(
             job_key=self.param_dict["job_key"],
-            task_idx=json.loads(os.environ["TF_CONFIG"])["task"]["index"],
-            rst_type=Constants.RST_TYPE_LEARN,
-            global_sn=self.param_dict["global_sn"],
-            rst=results[-1]
+            rst=results
         )
 
         self.LOGGER.info(results)
@@ -66,7 +63,7 @@ class SKLAlgAbstract(AlgorithmAbstract):
         results["accuracy"] = self.model.score(X=dataset["x"], y=dataset["y"])
         loss = log_loss(dataset["y"], self.predict(dataset["x"]))
         results["loss"] = loss
-        results["step"] = -1
+        results["step"] = self.learn_params.get("global_step", 1)
 
         result_list = list()
         result_list.append(results)

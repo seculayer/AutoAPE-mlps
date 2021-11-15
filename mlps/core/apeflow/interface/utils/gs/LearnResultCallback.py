@@ -26,7 +26,7 @@ class LearnResultCallback(CallbackAny2Vec):
         self.end_time = None
         self.total_time = 0
         self.eps = 0
-        self.learn_result = None
+        self.learn_result = list()
 
     def on_epoch_begin(self, model):
         self.start_time = datetime.now()
@@ -38,15 +38,12 @@ class LearnResultCallback(CallbackAny2Vec):
         self.total_time += (self.end_time - self.start_time).total_seconds()
         self.eps = self.data_len / self.total_time
         _result = {"global_sn": self.global_sn, "step": self.epoch, "loss": loss}
-        self.learn_result = _result
+        self.learn_result.append(_result)
 
         if json.loads(os.environ["TF_CONFIG"])["task"]["index"] == "0":
-            RestManager.post_learn_result(
+            RestManager.update_learn_result(
                 job_key=self.job_key,
-                task_idx=json.loads(os.environ["TF_CONFIG"])["task"]["index"],
-                rst_type=Constants.RST_TYPE_LEARN,
-                global_sn=self.global_sn,
-                rst=_result
+                rst=self.learn_result
             )
 
         self.LOGGER.info(_result)
