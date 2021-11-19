@@ -8,7 +8,6 @@ import json
 from datetime import datetime
 
 from mlps.common.Common import Common
-from mlps.common.Constants import Constants
 from gensim.models.callbacks import CallbackAny2Vec
 from mlps.core.RestManager import RestManager
 

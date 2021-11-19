@@ -8,6 +8,7 @@ import json
 import shutil
 import traceback
 from typing import Union
+from threading import Timer
 
 from mlps.common.utils.FileUtils import FileUtils
 from mlps.common.info.JobInfo import JobInfoBuilder, JobInfo
@@ -45,7 +46,15 @@ class MLPSProcessor(object):
         curr_sttus_cd = RestManager.get_status_cd(self.job_info.get_key())
         if int(curr_sttus_cd) < int(Constants.STATUS_RUNNING):
             RestManager.update_status_cd(Constants.STATUS_RUNNING, self.job_key,
-                                         self.task_idx, '-')
+                                         self.task_idx, '-')\
+
+        self.timer = None
+        self.send_resource_usage(self.job_key)
+
+    def send_resource_usage(self, job_key):
+        RestManager.send_resource_usage(job_key)
+        self.timer = Timer(2, RestManager.send_resource_usage, [job_key])
+        self.timer.start()
 
     def data_loader_init(self) -> None:
         self.data_loader_manager = DataManagerBuilder() \
@@ -76,6 +85,8 @@ class MLPSProcessor(object):
             if int(curr_sttus_cd) < int(Constants.STATUS_ERROR):
                 RestManager.update_status_cd(Constants.STATUS_ERROR, self.job_key,
                                              self.task_idx, traceback.format_exc())
+        finally:
+            self.timer.join()
 
     def model_init(self) -> None:
         cluster_info = json.loads(os.environ["TF_CONFIG"])

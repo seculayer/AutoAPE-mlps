@@ -123,6 +123,8 @@ class Constants(object, metaclass=Singleton):
     SAMPLE_TYPE_UNDER = "3"
     SAMPLE_TYPE_NONE = "4"
 
+    STATUS_REQ = "1"
+    STATUS_START = "2"
     STATUS_RUNNING = "5"
     STATUS_COMPLETE = "6"
     STATUS_ERROR = "7"

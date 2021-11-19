@@ -5,6 +5,9 @@
 
 import requests as rq
 import json
+import psutil
+import GPUtil
+
 from typing import List, Union
 from mlps.common.Common import Common
 from mlps.common.Constants import Constants
@@ -120,6 +123,38 @@ class RestManager(object, metaclass=Singleton):
             "type": _type,
             "hist_no": hist_no
         }
+        rst_sttus = RestManager.post(url=url, data=obj)
+
+        return rst_sttus
+
+    @staticmethod
+    def send_resource_usage(job_key: str):
+        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("model_resources", "")
+
+        hist_no = job_key.split("_")[-1]
+        memory_dict = dict(psutil.virtual_memory()._asdict())
+        for key in memory_dict.keys():
+            if key == 'percent':
+                continue
+            memory_dict[key] = memory_dict[key] / (1024 * 1024 * 1024)
+
+        obj = {
+            "learn_hist_no": hist_no,
+            "memory": memory_dict,
+            "cpu": {
+                "count": psutil.cpu_count(),
+                "percent": psutil.cpu_percent()
+            },
+            "gpu": {}
+        }
+
+        gpu_list = GPUtil.getGPUs()
+        for gpu in gpu_list:
+            obj["gpu"][gpu.id] = {}
+            obj["gpu"][gpu.id]["memory"] = gpu.memoryUtil * 100
+            obj["gpu"][gpu.id]["percent"] = gpu.load * 100
+            obj["gpu"][gpu.id]["temperature"] = gpu.temperature
+
         rst_sttus = RestManager.post(url=url, data=obj)
 
         return rst_sttus
