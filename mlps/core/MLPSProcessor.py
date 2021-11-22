@@ -9,6 +9,7 @@ import shutil
 import traceback
 from typing import Union
 from threading import Timer
+from datetime import datetime
 
 from mlps.common.utils.FileUtils import FileUtils
 from mlps.common.info.JobInfo import JobInfoBuilder, JobInfo
@@ -105,9 +106,17 @@ class MLPSProcessor(object):
         self.LOGGER.info("-- MLModels learning start. [{}]".format(self.job_key))
 
         _data = self.data_loader_manager.get_learn_data()
+        len_data = len(_data['x'])
+        start = datetime.now()
         self.model.learn(data=_data)
+        end_time = datetime.now()
 
         if int(self.job_info.get_task_idx()) == 0:
+            # update eps
+            model_eps = len_data / (end_time - start).total_seconds() * \
+                            int(self.job_info.get_param_dict_list()[-1].get("global_step"))
+            RestManager.update_eps(self.job_info.get_key(), model_eps)
+            # move model folder
             if FileUtils.is_exist("{}/{}".format(Constants.DIR_MODEL, self.job_info.get_hist_no())):
                 FileUtils.remove_dir("{}/{}".format(Constants.DIR_MODEL, self.job_info.get_hist_no()))
             shutil.copytree("{}/{}".format(Constants.DIR_ML_TMP, self.job_info.get_hist_no()),

@@ -11,7 +11,6 @@ from mlps.core.apeflow.api.algorithms.AlgorithmAbstract import AlgorithmAbstract
 from mlps.common.exceptions.ParameterError import ParameterError
 from mlps.core.apeflow.interface.model.export.GSSavedModel import GSSavedModel
 from mlps.core.apeflow.interface.utils.gs.LearnResultCallback import LearnResultCallback
-from mlps.core.RestManager import RestManager
 
 
 class GSAlgAbstract(AlgorithmAbstract):
@@ -65,15 +64,6 @@ class GSAlgAbstract(AlgorithmAbstract):
             data_len=len(dataset['x']),
             global_sn=self.param_dict["global_sn"]
         )
-
-    def learn_result(self, len_data: int, learn_sec: float):
-        if json.loads(os.environ["TF_CONFIG"])["task"]["index"] == "0":
-            if self.model.learn_result_callback is None:
-                eps = len_data / learn_sec
-            else:
-                eps = self.model.learn_result_callback.get_eps()
-
-            RestManager.update_eps(self.param_dict['job_key'], eps)
 
     def predict(self, x):
         output_units = self.param_dict["output_units"]

@@ -14,7 +14,6 @@ from mlps.core.apeflow.interface.model.export.TFSavedModel import TFSavedModel
 from mlps.core.apeflow.api.algorithms.AlgorithmAbstract import AlgorithmAbstract
 from mlps.core.apeflow.interface.utils.tf.keras.LearnResultCallback import LearnResultCallback
 from mlps.core.apeflow.interface.utils.tf.keras.EarlyStopCallback import EarlyStopCallback
-from mlps.core.RestManager import RestManager
 
 
 class TFKerasAlgAbstract(AlgorithmAbstract):
@@ -135,9 +134,6 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
             callbacks=[result_callback, early_stop_callback],
             verbose=1,
         )
-
-        if self.task_idx == 0:
-            RestManager.update_eps(self.param_dict["job_key"], result_callback.get_eps())
 
     def predict(self, x):
         batch_size = self.batch_size
