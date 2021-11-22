@@ -7,6 +7,7 @@ import json
 import os
 import numpy as np
 import tensorflow as tf
+from typing import Tuple
 
 from mlps.common.Constants import Constants
 from mlps.core.apeflow.interface.model.export.TFSavedModel import TFSavedModel
@@ -58,10 +59,10 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
 
         # if buffer_size % global_batch_size != 0 :
         if buffer_size % self.batch_size != 0:
-            self.parallel_step = buffer_size // self.batch_size + 1
+            parallel_step = buffer_size // self.batch_size + 1
             # self.parallel_step += int(self.task_idx)
         else:
-            self.parallel_step = buffer_size // self.batch_size
+            parallel_step = buffer_size // self.batch_size
             # self.parallel_step += int(self.task_idx)
 
         if "y" in data.keys():
@@ -94,7 +95,7 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
         options = tf.data.Options()
         options.experimental_distribute.auto_shard_policy = tf.data.experimental.AutoShardPolicy.OFF
         dataset = dataset.with_options(options)
-        return dataset
+        return dataset, parallel_step
 
     def saved_model(self):
         TFSavedModel.save(self)
@@ -106,23 +107,33 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
         # learn result
         global_step = self.learn_params["global_step"]
         global_sn = self.param_dict["global_sn"]
+
+        l_dataset, v_dataset = self.split_data(dataset)
+
         result_callback = LearnResultCallback(
             global_sn=global_sn,
             job_key=self.param_dict["job_key"],
             epochs=global_step,
             task_idx=self.task_idx,
-            data_len=len(dataset["x"])
+            data_len=len(l_dataset["x"])
         )
+
+        v_dataset, v_parallel_step = self._make_train_dataset(v_dataset)
+        l_dataset, l_parallel_step = self._make_train_dataset(l_dataset)
 
         # early stop
         early_stop_callback = EarlyStopCallback(
             learn_params=self.learn_params
         )
         self.model.fit(
-            x=self._make_train_dataset(dataset),
+            # x=l_dataset['x'], y=l_dataset['y'],
+            x=l_dataset,
+            steps_per_epoch=l_parallel_step,
             epochs=global_step,
+            validation_data=v_dataset,
+            validation_steps=v_parallel_step,
             callbacks=[result_callback, early_stop_callback],
-            verbose=1, steps_per_epoch=self.parallel_step
+            verbose=1,
         )
 
         if self.task_idx == 0:
@@ -153,3 +164,20 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
             start += batch_size
 
         return results
+
+    @staticmethod
+    def split_data(dataset, l_ratio=80) -> Tuple[dict, dict]:
+        l_dataset = dict()
+        v_dataset = dict()
+        len_data = len(dataset['x'])
+
+        l_dataset['x'] = dataset['x'][: int(len_data * (l_ratio / 100))]
+        v_dataset['x'] = dataset['x'][int(len_data * (l_ratio / 100)):]
+        try:
+            l_dataset['y'] = dataset['y'][: int(len_data * (l_ratio / 100))]
+            v_dataset['y'] = dataset['y'][int(len_data * (l_ratio / 100)):]
+        except Exception as e:
+            l_dataset['y'] = None
+            v_dataset['y'] = None
+
+        return l_dataset, v_dataset
