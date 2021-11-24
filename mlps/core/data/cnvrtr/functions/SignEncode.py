@@ -15,7 +15,7 @@ class SignEncode(ConvertAbstract):
     def apply(self, data):
         if data != self.min and data !=self.max:
             self.LOGGER.error("invalid input value")
-            return None
+            return [None]
 
         if data == 0:
             result = -1

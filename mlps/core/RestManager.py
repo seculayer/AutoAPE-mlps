@@ -19,15 +19,15 @@ class RestManager(object, metaclass=Singleton):
     @staticmethod
     def get(url) -> str:
         response = rq.get(url)
-        Common.LOGGER.getLogger().info("GET {}".format(url))
+        Common.LOGGER.getLogger().debug("GET {}".format(url))
 
         return response.text
 
     @staticmethod
     def post(url: str, data: dict) -> rq.Response:
         response = rq.post(url, json=data)
-        Common.LOGGER.getLogger().info("POST {}".format(url))
-        Common.LOGGER.getLogger().info("POST DATA: {}".format(data))
+        Common.LOGGER.getLogger().debug("POST {}".format(url))
+        Common.LOGGER.getLogger().debug("POST DATA: {}".format(data))
 
         return response
 
