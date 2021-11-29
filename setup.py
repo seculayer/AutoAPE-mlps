@@ -2,6 +2,11 @@
 # Author : Jin Kim
 # e-mail : jin.kim@seculayer.com
 # Powered by Seculayer © 2021 AI Service Model Team, R&D Center.
+
+# ----------------------------------------------------------------------------------------------
+# AutoML - MLPS(Machine Learning Processing Server) Setup Script
+# ----------------------------------------------------------------------------------------------
+
 from typing import List
 
 from setuptools import setup, find_packages
@@ -31,7 +36,8 @@ class APEPythonSetup(object):
         setup(
             name=self.module_nm,
             version=self.version,
-            description="",
+            description="SecuLayer Inc. AutoML Project \n"
+                        "Module : MLPS(Machine Learning Processing Server)",
             author="Jin Kim",
             author_email="jin.kim@seculayer.com",
             packages=self.get_packages(),
@@ -49,4 +55,10 @@ class APEPythonSetup(object):
 
 
 if __name__ == '__main__':
+    print("    __  _____    ____  _____")
+    print("   /  |/  / /   / __ \/ ___/")
+    print("  / /|_/ / /   / /_/ /\__ \ ")
+    print(" / /  / / /___/ ____/___/ / ")
+    print("/_/  /_/_____/_/    /____/  ")
+    print("                            ")
     APEPythonSetup().setup()
