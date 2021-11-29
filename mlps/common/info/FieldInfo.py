@@ -12,17 +12,18 @@ from mlps.common.info.ConvertFunctionInfo import ConvertFunctionInfoBuilder
 
 
 class FieldInfo(object):
-    def __init__(self, field_dict: dict, stat_dict: dict):
+    def __init__(self, field_dict: dict, metadata_dict: dict, project_target_field: str):
         self.field_sn = StringUtil.get_int(field_dict.get("field_sn", 0))
         self.field_name = field_dict.get("name", "")
-        self.stat_dict = stat_dict.get(self.field_name, dict())
+        self.target_field = project_target_field
+        self.stat_dict = metadata_dict.get("statistics", dict())
 
-        self.statistic = StringUtil.get_boolean(field_dict.get("stt_label", "N"))
-        self.variance = StringUtil.get_boolean(field_dict.get("dispersion", "N"))
-        self.unique = StringUtil.get_boolean(field_dict.get("unique_yn", "N"))
-        self.max_length = StringUtil.get_boolean(field_dict.get("max_length", "N"))
-        self.is_label = StringUtil.get_boolean(field_dict.get("is_label", "N"))
-        self.is_multiple = StringUtil.get_boolean(field_dict.get("is_multiple", "N"))
+        # self.is_label = StringUtil.get_boolean(field_dict.get("is_label", "N"))
+        if self.target_field == self.field_name:
+            self.is_label = True
+        else:
+            self.is_label = False
+        # self.is_multiple = StringUtil.get_boolean(field_dict.get("is_multiple", "N"))
         self.function: List[ConvertFunctionInfo] = self._create_functions(field_dict.get("functions", ""))
 
     def __str__(self) -> str:
@@ -31,8 +32,8 @@ class FieldInfo(object):
     def label(self) -> bool:
         return self.is_label
 
-    def multiple(self) -> bool:
-        return self.is_multiple
+    # def multiple(self) -> bool:
+    #     return self.is_multiple
 
     # --- static variables
     _REGEX_FN_STR = "(\\[\\[@[\\w\\d_]+\\([^\\]]*\\)\\]\\])"

@@ -58,7 +58,7 @@
     </property>
     <property>
         <name>dir_learn_feat</name>
-        <value>/features</value>
+        <value>/division</value>
         <description>None</description>
     </property>
     <property>
@@ -147,7 +147,7 @@
     </property>
     <!-- rest url setting -->
     <property>
-        <name>rest_server_ip</name>
+        <name>mrms_svc</name>
         <value>mrms-svc</value>
 <!--        <value>10.1.12.234</value>-->
         <description>None</description>
@@ -159,9 +159,17 @@
         <description>None</description>
     </property>
     <property>
-        <name>rest_server_port</name>
+        <name>mrms_rest_port</name>
         <value>9200</value>
         <description>None</description>
+    </property>
+    <property>
+        <name>mrms_username</name>
+        <value>HE12RmzKHQtH3bL7tTRqCg==</value>
+    </property>
+    <property>
+        <name>mrms_password</name>
+        <value>jTf6XrqcYX1SAhv9JUPq+w==</value>
     </property>
     <property>
         <name>etls_wating_time</name>

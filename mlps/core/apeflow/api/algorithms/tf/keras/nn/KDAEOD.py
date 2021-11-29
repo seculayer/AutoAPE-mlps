@@ -229,12 +229,15 @@ class KDAEOD(TFKerasAlgAbstract):
         dataset["x"] = preproc_x
         dataset["y"] = preproc_x
 
+        dataset, parallel_step = self._make_train_dataset(dataset)
+
         # early stop
         early_stop_callback = EarlyStopCallback(self.learn_params)
         self.model.fit(
-            x=self._make_train_dataset(dataset), epochs=global_step,
+            x=dataset, epochs=global_step,
+            steps_per_epoch=parallel_step,
             callbacks=[result_callback, early_stop_callback],
-            verbose=1, steps_per_epoch=self.parallel_step
+            verbose=1
         )
         self.stopped_epoch = early_stop_callback.get_stopped_epoch()
 

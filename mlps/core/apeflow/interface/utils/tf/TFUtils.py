@@ -55,23 +55,31 @@ class TFUtils(object):
 
             if len(physical_devices) != 0:
                 # allow growth GPU memory
+                tf.config.experimental.set_visible_devices(physical_devices[0], 'GPU')
 
-                Common.LOGGER.getLogger().debug("gpu_no : {}, task_idx : {}, physical devices: {}".format(
-                    os.environ["CUDA_VISIBLE_DEVICES"], task_idx, physical_devices
+                Common.LOGGER.getLogger().info("gpu_no : {}, task_idx : {}, \
+                            physical devices: {}, NVIDIA_COM_GPU_MEM_IDX : {}".format(
+                    os.environ["CUDA_VISIBLE_DEVICES"], task_idx, physical_devices,
+                    os.environ.get("NVIDIA_COM_GPU_MEM_IDX", "no variable!")
                 ))
 
                 if "KDAEOD" in alg_code_list:
                     gpu_weight = 0.7
                 else:
-                    gpu_weight = 0.25
+                    gpu_weight = 0.35
 
                 # 메모리 제한
-                mem_limit = int(int(os.environ.get("NVIDIA_COM_GPU_MEM_CONTAINER", 1024)) * gpu_weight)
+                os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "false"
+                mem_limit = int(int(os.environ.get("NVIDIA_COM_GPU_MEM_POD", 1024)) * gpu_weight)
                 Common.LOGGER.getLogger().info("GPU Memory Limit Size : {}".format(mem_limit))
                 tf.config.experimental.set_memory_growth(physical_devices[0], False)
                 tf.config.experimental.set_virtual_device_configuration(
                     physical_devices[0],
                     [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=mem_limit)])
+                # tf.config.set_logical_device_configuration(
+                #     physical_devices[0],
+                #     [tf.config.LogicalDeviceConfiguration(memory_limit=mem_limit)])
+            #
             else:
                 Common.LOGGER.getLogger().debug("Physical Devices(GPU) are None")
 

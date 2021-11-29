@@ -5,6 +5,9 @@
 
 import requests as rq
 import json
+import psutil
+import GPUtil
+
 from typing import List, Union
 from mlps.common.Common import Common
 from mlps.common.Constants import Constants
@@ -16,15 +19,15 @@ class RestManager(object, metaclass=Singleton):
     @staticmethod
     def get(url) -> str:
         response = rq.get(url)
-        Common.LOGGER.getLogger().info("GET {}".format(url))
+        Common.LOGGER.getLogger().debug("GET {}".format(url))
 
         return response.text
 
     @staticmethod
     def post(url: str, data: dict) -> rq.Response:
         response = rq.post(url, json=data)
-        Common.LOGGER.getLogger().info("POST {}".format(url))
-        Common.LOGGER.getLogger().info("POST DATA: {}".format(data))
+        Common.LOGGER.getLogger().debug("POST {}".format(url))
+        Common.LOGGER.getLogger().debug("POST DATA: {}".format(data))
 
         return response
 
@@ -99,7 +102,7 @@ class RestManager(object, metaclass=Singleton):
         return rst_sttus
 
     @staticmethod
-    def update_learn_result(job_key: str, rst: dict):
+    def update_learn_result(job_key: str, rst: list):
         url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("learn_result_update", "")
 
         hist_no = job_key.split("_")[-1]
@@ -112,14 +115,46 @@ class RestManager(object, metaclass=Singleton):
         return rst_sttus
 
     @staticmethod
-    def update_time(job_key: str, type: str):
+    def update_time(job_key: str, _type: str):
         url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("time_update", "")
 
         hist_no = job_key.split("_")[-1]
         obj = {
-            "type": type,
+            "type": _type,
             "hist_no": hist_no
         }
+        rst_sttus = RestManager.post(url=url, data=obj)
+
+        return rst_sttus
+
+    @staticmethod
+    def send_resource_usage(job_key: str):
+        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("model_resources", "")
+
+        hist_no = job_key.split("_")[-1]
+        memory_dict = dict(psutil.virtual_memory()._asdict())
+        for key in memory_dict.keys():
+            if key == 'percent':
+                continue
+            memory_dict[key] = memory_dict[key] / (1024 * 1024 * 1024)
+
+        obj = {
+            "learn_hist_no": hist_no,
+            "memory": memory_dict,
+            "cpu": {
+                "count": psutil.cpu_count(),
+                "percent": psutil.cpu_percent()
+            },
+            "gpu": {}
+        }
+
+        gpu_list = GPUtil.getGPUs()
+        for gpu in gpu_list:
+            obj["gpu"][gpu.id] = {}
+            obj["gpu"][gpu.id]["memory"] = gpu.memoryUtil * 100
+            obj["gpu"][gpu.id]["percent"] = gpu.load * 100
+            obj["gpu"][gpu.id]["temperature"] = gpu.temperature
+
         rst_sttus = RestManager.post(url=url, data=obj)
 
         return rst_sttus

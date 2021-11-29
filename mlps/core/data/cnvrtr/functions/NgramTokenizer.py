@@ -19,7 +19,7 @@ class NgramTokenizer(ConvertAbstract):
         except:
             dec_data = data
 
-        temp = dec_data.replace('#CRLF#','').replace(' ','') # CRLF가 붙어 올 경우 삭제
+        temp = dec_data.replace('#CRLF#', '').replace(' ', '')  # CRLF가 붙어 올 경우 삭제
         lpFind = set(re.findall(r'\W', temp))  # 정규화를 통한 특수문자 검색
         for token in lpFind:  # 찾은 특수문자를 치환 해서 토크나이징 하는곳
             temp = temp.replace(str(token), ' ' + str(token) + ' ').replace("  ", " ")

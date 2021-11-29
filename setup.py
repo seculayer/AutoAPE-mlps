@@ -10,6 +10,7 @@
 from typing import List
 
 from setuptools import setup, find_packages
+from mlps.common.utils.FileUtils import FileUtils
 
 
 class APEPythonSetup(object):
@@ -32,6 +33,13 @@ class APEPythonSetup(object):
             ],
         )
 
+    def get_additional_file(self) -> List[str]:
+        file_list = FileUtils.read_dir(
+                directory=FileUtils.get_realpath(file=__file__) + "/" + self.module_nm + "/resources", ext=".json"
+        )
+
+        return file_list
+
     def setup(self) -> None:
         setup(
             name=self.module_nm,
@@ -47,7 +55,7 @@ class APEPythonSetup(object):
             },
             python_requires='>3.7',
             package_data={
-                # self.module_nm: FILE_LIST
+                self.module_nm: self.get_additional_file()
             },
             install_requires=self.get_require_packages(),
             zip_safe=False,
