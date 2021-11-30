@@ -1,4 +1,4 @@
-FROM registry.seculayer.com:31500/ape/python-base-gpu:py3.7-cuda11.0 as builder
+FROM registry.seculayer.com:31500/ape/python-base-gpu:py3.7-cuda11.2 as builder
 MAINTAINER jinkim "jinkim@seculayer.com"
 
 ARG app="/opt/app"
