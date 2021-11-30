@@ -29,7 +29,6 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
     def __init__(self, param_dict, ext_data=None):
         AlgorithmAbstract.__init__(self, param_dict, ext_data=ext_data)
 
-        self.parallel_step = None
         self.num_workers = param_dict["num_workers"]
 
         self.input_name = "{}_{}_inputs".format(param_dict["model_nm"], param_dict["alg_sn"])
@@ -56,13 +55,10 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
             pass
         buffer_size = len_data
 
-        # if buffer_size % global_batch_size != 0 :
         if buffer_size % self.batch_size != 0:
             parallel_step = buffer_size // self.batch_size + 1
-            # self.parallel_step += int(self.task_idx)
         else:
             parallel_step = buffer_size // self.batch_size
-            # self.parallel_step += int(self.task_idx)
 
         if "y" in data.keys():
             try:

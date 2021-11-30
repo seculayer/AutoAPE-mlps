@@ -142,25 +142,29 @@
     <!-- mlps.core.cnvrtr setting -->
     <property>
         <name>cvt_data</name>
-        <value>True</value>
+        <value>False</value>
         <description>None</description>
     </property>
     <!-- rest url setting -->
     <property>
         <name>mrms_svc</name>
         <value>mrms-svc</value>
+<!--        <value>10.1.35.118</value>-->
 <!--        <value>10.1.12.234</value>-->
         <description>None</description>
     </property>
     <property>
-        <name>mrms-sftp_port</name>
+        <name>mrms_sftp_port</name>
         <value>10022</value>
+<!--        <value>30022</value>-->
 <!--        <value>22</value>-->
         <description>None</description>
     </property>
     <property>
         <name>mrms_rest_port</name>
         <value>9200</value>
+<!--        <value>31920</value>-->
+<!--        <value>9200</value>-->
         <description>None</description>
     </property>
     <property>
