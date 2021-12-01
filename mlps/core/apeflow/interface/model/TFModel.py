@@ -8,6 +8,7 @@ import tensorflow as tf
 from typing import List
 from functools import wraps
 
+from mlps.core.apeflow.api.algorithms.tf.keras.TFKerasAlgAbstract import TFKerasAlgAbstract
 from mlps.core.apeflow.interface.distribute.tf.TFDistributeRunnerV2 import TFDistributeRunnerV2
 from mlps.core.apeflow.interface.model.ModelAbstract import ModelAbstract
 from mlps.core.apeflow.api.algorithms.AlgorithmAbstract import AlgorithmAbstract
@@ -29,11 +30,11 @@ class TFModel(ModelAbstract):
     def __init__(self, param_dict: dict, ext_data=None):
         ModelAbstract.__init__(self, param_dict, ext_data)
         self.distribute_runner = TFDistributeRunnerV2()
-        self.model = self._build()
+        self.model: TFKerasAlgAbstract = self._build()
         self.Session: tf.compat.v1.Session = self.param_dict["session"]
 
     @strategy_decorator
-    def _build(self) -> AlgorithmAbstract:
+    def _build(self) -> TFKerasAlgAbstract:
         model = AlgorithmFactory.create(param_dict=self.param_dict, ext_data=self.ext_data)
         model.load_model()
 

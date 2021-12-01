@@ -976,7 +976,7 @@ class KDAEOD(TFKerasAlgAbstract):
     @staticmethod
     def _check_dir_model(dir_model):
         return os.path.exists(dir_model)
-    
+
     @staticmethod
     def _save_model_keras(model, dir_model):
         model.save_weights(dir_model + '/weights.h5', save_format='h5')
@@ -1141,7 +1141,7 @@ if __name__ == '__main__':
 
         return _dataset
 
-    physical_devices = tf.config.experimental.list_physical_devices('GPU')
+    physical_devices = tf.config.list_physical_devices('GPU')
     print("physical devices: ", physical_devices)
     for gpu_no in range(4):
         tf.config.experimental.set_memory_growth(physical_devices[gpu_no], True)

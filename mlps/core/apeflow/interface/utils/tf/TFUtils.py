@@ -48,14 +48,14 @@ class TFUtils(object):
             Common.LOGGER.getLogger().info("Running CPU MODE")
 
         else:
-            physical_devices = tf.config.experimental.list_physical_devices('GPU')
+            physical_devices = tf.config.list_physical_devices('GPU')
 
             if os.environ.get("CUDA_VISIBLE_DEVICES", None) is None:
                 os.environ["CUDA_VISIBLE_DEVICES"] = os.environ.get("NVIDIA_COM_GPU_MEM_IDX", "0")
 
             if len(physical_devices) != 0:
                 # allow growth GPU memory
-                tf.config.experimental.set_visible_devices(physical_devices[0], 'GPU')
+                tf.config.set_visible_devices(physical_devices[0], 'GPU')
 
                 Common.LOGGER.getLogger().info("gpu_no : {}, task_idx : {}, \
                             physical devices: {}, NVIDIA_COM_GPU_MEM_IDX : {}".format(
@@ -73,9 +73,9 @@ class TFUtils(object):
                 mem_limit = int(int(os.environ.get("NVIDIA_COM_GPU_MEM_POD", 1024)) * gpu_weight)
                 Common.LOGGER.getLogger().info("GPU Memory Limit Size : {}".format(mem_limit))
                 tf.config.experimental.set_memory_growth(physical_devices[0], False)
-                tf.config.experimental.set_virtual_device_configuration(
+                tf.config.set_logical_device_configuration(
                     physical_devices[0],
-                    [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=mem_limit)])
+                    [tf.config.LogicalDeviceConfiguration(memory_limit=mem_limit)])
                 # tf.config.set_logical_device_configuration(
                 #     physical_devices[0],
                 #     [tf.config.LogicalDeviceConfiguration(memory_limit=mem_limit)])

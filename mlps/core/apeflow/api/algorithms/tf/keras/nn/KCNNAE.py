@@ -185,7 +185,7 @@ class KCNNAE(TFKerasAlgAbstract):
 if __name__ == '__main__':
     # CLASSIFIER
 
-    physical_devices = tf.config.experimental.list_physical_devices('GPU')
+    physical_devices = tf.config.list_physical_devices('GPU')
     print("physical devices: ", physical_devices)
     for gpu_no in range(4):
         tf.config.experimental.set_memory_growth(physical_devices[gpu_no], True)
@@ -286,7 +286,7 @@ if __name__ == '__main__':
     model_ = KCNNAE(param_dict=__param_dict)
     # model_._build()
     model_.learn({"x": x})
-    
+
     pred_x = np.array([[16, 17, 18, 19, 20],
                        [11, 12, 13, 14, 15],
                        [6, 7, 8, 9, 10],

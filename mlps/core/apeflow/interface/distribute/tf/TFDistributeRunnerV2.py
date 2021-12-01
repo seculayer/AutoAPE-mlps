@@ -13,7 +13,7 @@ class TFDistributeRunnerV2(metaclass=Singleton):
     # for tf.keras.model and tf.Module
     def __init__(self):
         self.strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy(
-            communication=tf.distribute.experimental.CollectiveCommunication.RING
+            communication=tf.distribute.experimental.CommunicationImplementation.RING
         )
         # self.strategy=tf.distribute.experimental.CentralStorageStrategy()
 

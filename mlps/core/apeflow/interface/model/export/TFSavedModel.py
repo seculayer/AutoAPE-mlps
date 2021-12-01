@@ -7,7 +7,7 @@ import json
 import joblib
 from typing import Callable
 
-from keras_preprocessing.text import tokenizer_from_json
+from tensorflow.keras.preprocessing.text import tokenizer_from_json
 from mlps.common.utils.FileUtils import FileUtils
 from mlps.common.Constants import Constants
 from mlps.core.apeflow.interface.model.export.SavedModelAbstract import SavedModelAbstract
