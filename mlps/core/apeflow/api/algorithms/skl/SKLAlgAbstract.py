@@ -3,7 +3,7 @@
 # e-mail : manki.baek@seculayer.com
 # Powered by Seculayer © 2021 Service Model Team, R&D Center.
 
-from sklearn.metrics.classification import log_loss
+from sklearn.metrics import log_loss
 import numpy as np
 
 from mlps.common.Constants import Constants

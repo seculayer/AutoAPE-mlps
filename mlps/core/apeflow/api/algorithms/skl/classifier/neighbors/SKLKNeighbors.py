@@ -5,7 +5,7 @@
 
 import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics.classification import log_loss
+from sklearn.metrics import log_loss
 
 from mlps.common.Constants import Constants
 from mlps.common.exceptions.ParameterError import ParameterError

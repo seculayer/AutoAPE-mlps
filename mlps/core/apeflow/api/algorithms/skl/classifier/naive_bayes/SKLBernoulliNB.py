@@ -5,7 +5,7 @@
 import numpy as np
 
 from sklearn.naive_bayes import BernoulliNB
-from sklearn.metrics.classification import log_loss
+from sklearn.metrics import log_loss
 from mlps.common.Constants import Constants
 from mlps.core.apeflow.api.algorithms.skl.SKLAlgAbstract import SKLAlgAbstract
 
