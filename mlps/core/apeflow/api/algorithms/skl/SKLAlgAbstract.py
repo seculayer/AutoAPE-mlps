@@ -57,7 +57,7 @@ class SKLAlgAbstract(AlgorithmAbstract):
 
     def learn_result_classifier(self, dataset):
         results = dict()
-        results["global_sn"] = self.param_dict["global_sn"]
+        # results["global_sn"] = self.param_dict["global_sn"]
         results["accuracy"] = self.model.score(X=dataset["x"], y=dataset["y"])
         loss = log_loss(dataset["y"], self.predict(dataset["x"]))
         results["loss"] = loss
@@ -65,7 +65,6 @@ class SKLAlgAbstract(AlgorithmAbstract):
 
         result_list = list()
         result_list.append(results)
-        self.LOGGER.info(result_list)
 
         return result_list
 

@@ -50,7 +50,7 @@ class SKLKNeighbors(SKLAlgAbstract):
         results["accuracy"] = self.model.score(X=dataset["x"], y=y)
         loss = log_loss(y, self.predict(dataset["x"]))
         results["loss"] = loss
-        results["step"] = 0
+        results["step"] = self.learn_params.get("global_step", 1)
 
         result_list = list()
         result_list.append(results)

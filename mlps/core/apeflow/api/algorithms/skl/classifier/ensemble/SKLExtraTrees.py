@@ -26,6 +26,7 @@ class SKLExtraTrees(SKLAlgAbstract):
 
     def learn(self, dataset):
         self.model.fit(dataset["x"], dataset["y"])
+        self.learn_result(dataset)
 
 
 if __name__ == '__main__':
@@ -59,7 +60,6 @@ if __name__ == '__main__':
     GSSG._build()
 
     GSSG.learn(dataset=__dataset)
-    GSSG.learn_result(__dataset)
 
     GSSG.saved_model()
 
