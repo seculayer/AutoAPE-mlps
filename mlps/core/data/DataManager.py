@@ -46,7 +46,7 @@ class DataManager(object, metaclass=Singleton):
             self.LOGGER.info("DataManager Start.")
 
             # ---- data load
-            data_list = self.read_files(Constants.DIR_LEARN_FEAT, self.dataset_info.get_fields())
+            data_list = self.read_files(self.dataset_info.get_fields())
 
             self.DataSampler.set_data(data_list)
             self.dataset = self.DataSampler.sampling()
@@ -60,7 +60,7 @@ class DataManager(object, metaclass=Singleton):
                                              self.job_info.get_task_idx(), traceback.format_exc())
             raise e
 
-    def read_files(self, features_dir: str, fields: List[FieldInfo]) \
+    def read_files(self, fields: List[FieldInfo]) \
             -> List:
         # ---- prepare
         # 분산이 되면 워커마다 파일 1개씩, 아니면 워커1개가 모든 파일을 읽는다
@@ -98,7 +98,7 @@ class DataManager(object, metaclass=Singleton):
                 features.append(feature), labels.append(label), origin_data.append(data)
 
         if Constants.DATAPROCESS_CVT_DATA:
-            self.write_dp_result(features, labels)
+            self.write_dp_result(features, labels, file_list[0])  # file_list[0] : for dataset path
 
         self.make_inout_units(features, labels)
         return [features, labels, origin_data]
@@ -199,8 +199,9 @@ class DataManager(object, metaclass=Singleton):
         self.LOGGER.info("input_units : {}".format(input_units))
         self.LOGGER.info("output_units : {}".format(output_units))
 
-    def write_dp_result(self, features, labels):
+    def write_dp_result(self, features, labels, file_path):
         rst_dict = dict()
+        save_path = file_path.rsplit('/', 2)[0]
 
         self.LOGGER.info("features[0]: {}".format(features[0]))
         self.LOGGER.info("labels[0]: {}".format(labels[0]))
@@ -209,8 +210,7 @@ class DataManager(object, metaclass=Singleton):
         rst_dict['targets'] = labels
 
         f = self.sftp_client.get_client().open(
-            Constants.DIR_LEARN_FEAT + "/{}_{}.dp".format(
-                self.job_info.get_hist_no(), self.job_info.get_task_idx()),
+            f"{save_path}/{self.job_info.get_hist_no()}_{self.job_info.get_task_idx()}.dp",
             'w'
         )
 

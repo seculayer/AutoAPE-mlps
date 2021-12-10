@@ -38,7 +38,7 @@
     </property>
     <property>
         <name>dir_job</name>
-        <value>/models</value>
+        <value>/jobs</value>
         <description>None</description>
     </property>
     <property>
@@ -58,7 +58,7 @@
     </property>
     <property>
         <name>dir_learn_feat</name>
-        <value>/division</value>
+        <value>/da</value>
         <description>None</description>
     </property>
     <property>

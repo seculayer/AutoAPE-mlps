@@ -33,9 +33,16 @@ class SFTPClientManager(object):
         self.sftp_client.close()
 
     def load_json_data(self, filename):
-        f = self.get_client().open(filename, "r")
-        json_data = json.loads(f.read())
-        f.close()
+        json_data = None
+        f = None
+        try:
+            f = self.get_client().open(filename, "r")
+            json_data = json.loads(f.read())
+        except Exception as e:
+            self.logger.error(e, exc_info=True)
+            self.logger.error(f"file path : {filename}")
+        finally:
+            f.close()
         return json_data
 
     def load_json_oneline(self, filename):

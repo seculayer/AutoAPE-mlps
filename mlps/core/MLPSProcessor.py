@@ -32,7 +32,7 @@ class MLPSProcessor(object):
         self.job_info: JobInfo = JobInfoBuilder() \
             .set_hist_no(hist_no=hist_no) \
             .set_task_idx(task_idx) \
-            .set_job_dir(Constants.DIR_LEARN_FEAT) \
+            .set_job_dir(Constants.DIR_JOB) \
             .set_job_type(job_type=job_type) \
             .set_logger(self.LOGGER) \
             .set_sftp_client(self.mrms_sftp_manager) \

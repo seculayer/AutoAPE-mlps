@@ -7,6 +7,7 @@ import logging
 
 from mlps.common.Singleton import Singleton
 from mlps.common.exceptions.JobFileLoadError import JobFileLoadError
+from mlps.core.RestManager import RestManager
 from mlps.common.info.DatasetInfo import DatasetInfo
 from mlps.core.SFTPClientManager import SFTPClientManager
 from mlps.common.utils.StringUtil import StringUtil
@@ -33,7 +34,7 @@ class JobInfo(object, metaclass=Singleton):
     def _load(self) -> dict:
         filename = self._create_job_filename()
         try:
-            path = self.job_dir + "/" + filename
+            path = f"{self.job_dir}/{RestManager.get_project_id(self.hist_no)}/{filename}"
             job_dict = self.sftp_client.load_json_data(path)
 
         except Exception as e:

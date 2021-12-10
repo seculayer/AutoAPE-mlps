@@ -46,6 +46,12 @@ class RestManager(object, metaclass=Singleton):
         return RestManager.post(url, data).text
 
     @staticmethod
+    def get_project_id(job_key) -> str:
+        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("get_project_id", "")
+        hist_no = job_key.split("_")[-1]
+        return RestManager.get(f"{url}?hist_no={hist_no}")
+
+    @staticmethod
     def update_status_cd(status: str, job_key: str, task_idx: str, msg: str) -> rq.Response:
         url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("learn_status_update", "")
         hist_no = job_key.split("_")[-1]
