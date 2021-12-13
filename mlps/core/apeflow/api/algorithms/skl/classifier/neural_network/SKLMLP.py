@@ -64,7 +64,7 @@ class SKLMLP(SKLAlgAbstract):
             results["global_sn"] = self.param_dict["global_sn"]
             results["accuracy"] = self.model.score(X=dataset["x"], y=dataset["y"])
             results["loss"] = loss
-            results["step"] = idx
+            results["step"] = idx + 1
 
             result_list.append(results)
 
