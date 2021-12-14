@@ -48,7 +48,7 @@ class KDNNAE(TFKerasAlgAbstract):
 
         # Generate to Keras Model
         self.model = tf.keras.Sequential()
-        self.inputs = tf.keras.Input(shape=(input_units,), name="{}_{}_X".format(model_nm, alg_sn))
+        self.inputs = tf.keras.Input(shape=input_units, name="{}_{}_X".format(model_nm, alg_sn))
         self.model.add(self.inputs)
 
         #####################################################################################
@@ -74,7 +74,7 @@ class KDNNAE(TFKerasAlgAbstract):
             )
             # self.model.add(tf.keras.layers.Dropout(dropout_prob))
 
-        self.model.add(tf.keras.layers.Dense(input_units,
+        self.model.add(tf.keras.layers.Dense(input_units[0],
                                              name="{}_{}_decoded_x".format(model_nm, alg_sn)
                                              ))
         self.model.compile(
@@ -93,7 +93,7 @@ if __name__ == '__main__':
       "algorithm_type": "FE",
       "data_type": "Single",
       "method_type": "Basic",
-      "input_units": "5",
+      "input_units": (5,),
       "output_units": "2",
 
       "dropout_prob": "0.3",

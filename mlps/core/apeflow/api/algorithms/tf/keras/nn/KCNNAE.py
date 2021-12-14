@@ -56,7 +56,7 @@ class KCNNAE(TFKerasAlgAbstract):
 
         # Generate to Keras Model
         self.model = tf.keras.Sequential()
-        self.inputs = tf.keras.Input(shape=(input_units,), name="{}_{}_X".format(model_nm, alg_sn))
+        self.inputs = tf.keras.Input(shape=input_units, name="{}_{}_X".format(model_nm, alg_sn))
         self.model.add(self.inputs)
 
         conv_stride, pooling_stride, model_reshaped = self.model_setting(conv_fn, input_units, model_nm, alg_sn)
@@ -140,7 +140,7 @@ class KCNNAE(TFKerasAlgAbstract):
             self.model.add(pooled_cls)
 
         self.model.add(tf.keras.layers.Flatten())
-        self.model.add(tf.keras.layers.Dense(input_units,
+        self.model.add(tf.keras.layers.Dense(input_units[0],
                                              # activation=activation,
                                              kernel_initializer=initializer,
                                              activation=act_fn
@@ -195,7 +195,7 @@ if __name__ == '__main__':
       "algorithm_type": "FE",
       "data_type": "Single",
       "method_type": "Basic",
-      "input_units": "5",
+      "input_units": (5,),
       "output_units": "2",
 
       "dropout_prob": "0.3",

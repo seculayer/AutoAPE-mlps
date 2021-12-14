@@ -69,7 +69,7 @@ if __name__ == '__main__':
         "algorithm_type": "Classifier",
         "data_type": "Single",
         "method_type": "Basic",
-        "input_units": "5",
+        "input_units": (5,),
         "output_units": "2",
         "hidden_units": "5,4,3",
         "global_step": "10",
@@ -102,7 +102,7 @@ if __name__ == '__main__':
 
     import numpy as np
     num_samples = 1000
-    input_units = int(_param_dict["input_units"])
+    input_units = int(_param_dict["input_units"][0])
     _x = np.random.random((num_samples, input_units))
     tmp = np.array([[1] for i in range(num_samples)])
     sum_x = np.sum(_x, axis=1).reshape((-1, 1))

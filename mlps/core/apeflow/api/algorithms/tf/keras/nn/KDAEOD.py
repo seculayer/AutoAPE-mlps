@@ -1152,7 +1152,7 @@ if __name__ == '__main__':
         "algorithm_type": "OD",
         "data_type": "Single",
         "method_type": "Basic",
-        "input_units": "23",
+        "input_units": (23,),
         "output_units": "23",
 
         "dropout_prob": "0.3",

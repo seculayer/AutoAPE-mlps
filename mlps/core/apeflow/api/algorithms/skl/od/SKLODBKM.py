@@ -24,7 +24,7 @@ class SKLODBKM(SKLAlgAbstract):
         super(SKLODBKM, self).__init__(param_dict, ext_data)
 
         input_units = self.param_dict["input_units"]
-        self.r = self.get_euclidean_distance([0.] * input_units, [1.] * input_units)
+        self.r = self.get_euclidean_distance([0.] * input_units[0], [1.] * input_units)
 
     def _check_parameter(self, param_dict):
         _param_dict = super(SKLODBKM, self)._check_parameter(param_dict)
@@ -87,7 +87,7 @@ if __name__ == '__main__':
         "algorithm_type": "OD",
         "data_type": "Single",
         "method_type": "Basic",
-        "input_units": "2",
+        "input_units": (2,),
         "output_units": "1",
         "global_step": "100",
         "model_nm": "SKLKMeans_224",

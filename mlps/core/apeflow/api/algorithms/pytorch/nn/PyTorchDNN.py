@@ -39,7 +39,7 @@ class PyTorchDNN(PyTorchAlgAbstract):
 
     def _build(self):
         self.model: nn.Module = _DNN(
-            input_unit=self.param_dict["input_units"],
+            input_unit=self.param_dict["input_units"][0],
             output_unit=self.param_dict["output_units"],
             hidden_units=self.param_dict["hidden_units"],
             activation_name=self.param_dict["act_fn"],
@@ -118,7 +118,7 @@ if __name__ == "__main__":
         "algorithm_type": "Classifier",
         "data_type": "Single",
         "method_type": "Basic",
-        "input_units": "2",
+        "input_units": (2,),
         "output_units": "2",
         "hidden_units": "5,4,3,2",
         "global_step": "10",

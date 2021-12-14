@@ -46,7 +46,7 @@ if __name__ == '__main__':
         "algorithm_type": "Classifier",
         "data_type": "Single",
         "method_type": "Basic",
-        "input_units": "5",
+        "input_units": (5,),
         "output_units": "2",
         "hidden_units": "5,4,3",
         "optimizer_fn": "Adam",

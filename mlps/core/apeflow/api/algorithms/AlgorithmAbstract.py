@@ -31,7 +31,7 @@ class AlgorithmAbstract(object):
     def _check_parameter(param_dict):
         _param_dict = dict()
 
-        _param_dict["input_units"] = int(param_dict["input_units"])
+        _param_dict["input_units"] = tuple(map(int, param_dict["input_units"]))
         _param_dict["output_units"] = int(param_dict["output_units"])
         _param_dict["model_nm"] = str(param_dict["model_nm"])
         _param_dict["alg_sn"] = str(param_dict["alg_sn"])

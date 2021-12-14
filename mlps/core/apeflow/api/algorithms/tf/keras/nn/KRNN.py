@@ -60,7 +60,7 @@ class KRNN(TFKerasAlgAbstract):
 
         # Generate to Keras Model
         self.model = tf.keras.Sequential()
-        self.inputs = tf.keras.Input(shape=(seq_length, input_units,), name="{}_{}_X".format(model_nm, alg_sn))
+        self.inputs = tf.keras.Input(shape=input_units, name="{}_{}_X".format(model_nm, alg_sn))
         self.model.add(self.inputs)
 
         cell = None
@@ -136,7 +136,7 @@ if __name__ == '__main__':
         "algorithm_type": "Classifier",
         "data_type": "Single",
         "method_type": "Basic",
-        "input_units": "2",
+        "input_units": (2,),
         "output_units": "2",
         "hidden_units": "64,32,4",
         "global_step": "100",

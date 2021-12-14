@@ -79,7 +79,7 @@ if __name__ == '__main__':
         "algorithm_type": "Clustering",
         "data_type": "Single",
         "method_type": "Basic",
-        "input_units": "2",
+        "input_units": (2,),
         "output_units": "1",
         "global_step": "1000",
         "model_nm": "SKLDBSCAN_2",

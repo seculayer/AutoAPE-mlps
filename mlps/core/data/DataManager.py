@@ -3,12 +3,9 @@
 # e-mail : jinkim@seculayer.com
 # Powered by Seculayer © 2021 Service Model Team, R&D Center.
 
-import threading
-import numpy as np
-import json
 from multiprocessing import Queue
 from queue import Queue as nQ
-from typing import List, Tuple
+from typing import List
 import traceback
 
 from mlps.common.Singleton import Singleton
@@ -23,8 +20,7 @@ from mlps.core.RestManager import RestManager
 from mlps.common.decorator.CalTimeDecorator import CalTimeDecorator
 from mlps.common.info.DatasetInfo import DatasetInfo
 from mlps.core.SFTPClientManager import SFTPClientManager
-from mlps.core.data.cnvrtr.ConvertAbstract import ConvertAbstract
-from mlps.core.data.cnvrtr.ConvertFactory import ConvertFactory
+from mlps.core.data.DataLoaderFactory import DataloaderFactory
 
 
 class DataManager(object, metaclass=Singleton):
@@ -73,35 +69,13 @@ class DataManager(object, metaclass=Singleton):
             file_list = self.job_info.get_file_list()
 
         # data_list = self.read_subproc(file_list, fields)
-        data_list = self.read_sftp(file_list, fields)
+        data_list = DataloaderFactory.create(
+                        dataset_format=self.job_info.get_dataset_format(),
+                        job_info=self.job_info,
+                        sftp_client=self.sftp_client
+                    ).read(file_list, fields)
 
         return data_list
-
-    def read_sftp(self, file_list: List[str], fields: List[FieldInfo]) -> List:
-
-        functions: List[List[ConvertAbstract]] = self.build_functions(fields)
-        self.LOGGER.info(functions)
-
-        features = list()
-        labels = list()
-        origin_data = list()
-
-        for file in file_list:
-            self.LOGGER.info("read file : {}".format(file))
-            generator = self.sftp_client.load_json_oneline(file)
-            while True:
-                line: str = next(generator)
-                if line == "#file_end#":
-                    break
-                feature, label, data = self._convert(line, fields, functions)
-
-                features.append(feature), labels.append(label), origin_data.append(data)
-
-        if Constants.DATAPROCESS_CVT_DATA:
-            self.write_dp_result(features, labels, file_list[0])  # file_list[0] : for dataset path
-
-        self.make_inout_units(features, labels)
-        return [features, labels, origin_data]
 
     def read_subproc(self, file_list: List[str], fields: List[FieldInfo]) \
             -> List:
@@ -157,69 +131,6 @@ class DataManager(object, metaclass=Singleton):
 
     def get_json_data(self) -> list:
         return self.dataset[2]
-
-    @staticmethod
-    def _convert(line, fields, functions) -> Tuple[list, list, dict]:
-        features = list()
-        labels = list()
-
-        for idx, field in enumerate(fields):
-            if True:  # not field.multiple():
-                name = field.field_name
-                value = line.get(name, "")
-            else:
-                value = list()
-                for name in field.field_name.split("@COMMA@"):
-                    value.append(line.get(name, ""))
-            cvt_data = list()
-            # TODO : 한 필드에 2개의 함수가 있을 경우 잘 동작하는지 확인
-            for fn in functions[idx]:
-                cvt_data += fn.apply(value)
-            if field.label():
-                labels += cvt_data
-            else:
-                features += cvt_data
-        return features, labels, line
-
-    @staticmethod
-    def build_functions(fields: List[FieldInfo]) -> List[List[ConvertAbstract]]:
-        functions: List[List[ConvertAbstract]] = list()
-        for field in fields:
-            cvt_fn_list: List[ConvertAbstract] = list()
-            for fn_info in field.get_function():
-                cvt_fn_list.append(ConvertFactory.create_cvt_fn(fn_info))
-            functions.append(cvt_fn_list)
-        return functions
-
-    def make_inout_units(self, features, labels):
-        input_units = np.shape(features)[-1]
-        output_units = np.shape(labels)[-1]
-        self.job_info.set_input_units(input_units)
-        self.job_info.set_output_units(output_units)
-        self.LOGGER.info("input_units : {}".format(input_units))
-        self.LOGGER.info("output_units : {}".format(output_units))
-
-    def write_dp_result(self, features, labels, file_path):
-        rst_dict = dict()
-        save_path = file_path.rsplit('/', 2)[0]
-
-        self.LOGGER.info("features[0]: {}".format(features[0]))
-        self.LOGGER.info("labels[0]: {}".format(labels[0]))
-
-        rst_dict['features'] = features
-        rst_dict['targets'] = labels
-
-        f = self.sftp_client.get_client().open(
-            f"{save_path}/{self.job_info.get_hist_no()}_{self.job_info.get_task_idx()}.dp",
-            'w'
-        )
-
-        try:
-            f.write(json.dumps(rst_dict, indent=2))
-        except Exception as e:
-            self.LOGGER.error(e, exc_info=True)
-        finally:
-            f.close()
 
 
 # ---- builder Pattern

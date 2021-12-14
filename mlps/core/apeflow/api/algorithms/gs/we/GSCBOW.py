@@ -54,7 +54,7 @@ if __name__ == '__main__':
         "algorithm_type": "WE",
         "data_type": "Single",
         "method_type": "Basic",
-        "input_units": "2",
+        "input_units": (2,),
         "output_units": "3",
         "global_step": "10",
         "model_nm": "GSCBOW__1",

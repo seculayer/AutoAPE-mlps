@@ -12,8 +12,13 @@ class TFDistributeRunnerV2(metaclass=Singleton):
     # TensorFlow 2.0 분산처리 Wrapper Class
     # for tf.keras.model and tf.Module
     def __init__(self):
-        self.strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy(
-            communication=tf.distribute.experimental.CommunicationImplementation.RING
+        options = tf.distribute.experimental.CommunicationOptions(
+            bytes_per_pack=0, timeout_seconds=None,
+            implementation=tf.distribute.experimental.CommunicationImplementation.RING
+        )
+        self.strategy = tf.distribute.MultiWorkerMirroredStrategy(
+            cluster_resolver=None,
+            communication_options=options
         )
         # self.strategy=tf.distribute.experimental.CentralStorageStrategy()
 

@@ -62,39 +62,18 @@ class KCNN(TFKerasAlgAbstract):
 
         # Generate to Keras Model
         self.model = tf.keras.Sequential()
-        self.inputs = tf.keras.Input(shape=(input_units,), name="{}_{}_X".format(model_nm, alg_sn))
+        self.inputs = tf.keras.Input(shape=input_units, name="{}_{}_X".format(model_nm, alg_sn))
         self.model.add(self.inputs)
 
         if "1D" in conv_fn:
             conv_stride = 1
             pooling_stride = 2
-            self.model.add(
-                tf.keras.layers.Reshape(
-                    (input_units, 1),
-                    name="{}_{}_input_reshape".format(model_nm, alg_sn)
-                )
-
-            )
         elif "2D" in conv_fn:
             conv_stride = [1, 1]
             pooling_stride = [2, 2]
-            self.model.add(
-                tf.keras.layers.Reshape(
-                    (1, input_units, 1),
-                    name="{}_{}_input_reshape".format(model_nm, alg_sn)
-                )
-
-            )
         else:
             conv_stride = [1, 1, 1]
             pooling_stride = [2, 2, 2]
-            self.model.add(
-                tf.keras.layers.Reshape(
-                    (-1, 1, input_units, 1),
-                    name="{}_{}_input_reshape".format(model_nm, alg_sn)
-                )
-
-            )
 
         for i, filter_size in enumerate(filter_sizes):
             # Convolution Layer
@@ -163,7 +142,7 @@ if __name__ == '__main__':
         "algorithm_type": "Regressor",
         "data_type": "Single",
         "method_type": "Basic",
-        "input_units": "2",
+        "input_units": (2,),
         "output_units": "2",
         "hidden_units": "64,32,4",
         "global_step": "100",

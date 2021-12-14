@@ -3,11 +3,13 @@
 # e-mail : jin.kim@seculayer.com
 # Powered by Seculayer © 2021 Service Model Team, R&D Center.
 import json
-from typing import List
+from typing import List, Dict
+import numpy as np
 
 from mlps.common.sftp.PySFTPClient import PySFTPClient
-from mlps.common.Constants import Constants
+from mlps.common.utils.ImageUtils import ImageUtils
 from mlps.common.Common import Common
+from mlps.common.Constants import Constants
 
 
 class SFTPClientManager(object):
@@ -45,7 +47,7 @@ class SFTPClientManager(object):
             f.close()
         return json_data
 
-    def load_json_oneline(self, filename):
+    def load_json_oneline(self, filename: str, dataset_format: str):
         f = self.get_client().open(filename, "r")
         data = None
         while True:
@@ -55,12 +57,30 @@ class SFTPClientManager(object):
                     yield "#file_end#"
                     break
                 else:
-                    yield json.loads(data)
+                    if dataset_format == Constants.DATASET_FORMAT_TEXT:
+                        yield json.loads(data)
+                    elif dataset_format == Constants.DATASET_FORMAT_IMAGE:
+                        file_path = filename.rsplit('/', 1)[0]
+                        json_data: Dict = json.loads(data)
+                        img_byte: bytes = self._read_image_binary(file_path, json_data)
+                        img_data: np.array = ImageUtils.load(img_byte)
+                        img_data = img_data.tolist()
+
+                        json_data["image"] = img_data
+                        yield json_data
             except Exception as e:
                 self.logger.error(data)
+                self.logger.error(e, exc_info=True)
+                break
 
         f.close()
 
+    def _read_image_binary(self, file_path: str, annotation_data: Dict) -> bytes:
+        filename = annotation_data.get("file_conv_nm")
+        img_f = self.sftp_client.open("{}/{}".format(file_path, filename, "rb"))
+        img_array = img_f.read()
+        img_f.close()
+        return img_array
 
 if __name__ == '__main__':
     sm = SFTPClientManager("10.1.35.118:22", "Kmw/y3YWiiO7gJ/zqMvCuw==", "jTf6XrqcYX1SAhv9JUPq+w==")
