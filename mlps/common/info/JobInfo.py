@@ -115,6 +115,9 @@ class JobInfo(object, metaclass=Singleton):
     def get_dist_yn(self) -> bool:
         return StringUtil.get_boolean(self.info_dict.get("algorithms", {}).get("dist_yn", "").lower())
 
+    def get_dataset_format(self) -> str:
+        return self.info_dict.get("dataset_format")
+
     # ----- rtdetect
     # def get_detect_type_cd(self) -> str:
     #     return self.info_dict.get("detect_type_cd", "1")

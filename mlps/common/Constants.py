@@ -174,6 +174,9 @@ class Constants(object, metaclass=Singleton):
     OUT_MODEL_ONNX = "onnx"  # https://onnx.ai/
     OUT_MODEL_PYTORCH = "PyTorch"
 
+    DATASET_FORMAT_TEXT = "1"
+    DATASET_FORMAT_IMAGE = "2"
+
 
 if __name__ == "__main__":
     print(Constants.__dict__)
