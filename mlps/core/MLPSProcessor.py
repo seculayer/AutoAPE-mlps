@@ -54,7 +54,7 @@ class MLPSProcessor(object):
 
     def send_resource_usage(self, job_key):
         RestManager.send_resource_usage(job_key)
-        self.timer = Timer(2, RestManager.send_resource_usage, [job_key])
+        self.timer = Timer(1, self.send_resource_usage, [job_key])
         self.timer.start()
 
     def data_loader_init(self) -> None:

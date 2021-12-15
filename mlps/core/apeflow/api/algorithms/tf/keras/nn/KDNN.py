@@ -51,7 +51,7 @@ class KDNN(TFKerasAlgAbstract):
         learning_rate = self.param_dict["learning_rate"]
 
         activation = eval(Common.ACTIVATE_FN_CODE_DICT[act_fn])
-        units = TFUtils.get_units(input_units[0], hidden_units, output_units)
+        units = TFUtils.get_units(input_units, hidden_units, output_units)
 
         model_nm = "{}_{}".format(self.param_dict["model_nm"], self.param_dict["alg_sn"])
 

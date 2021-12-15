@@ -40,7 +40,7 @@ class KCNNAE(TFKerasAlgAbstract):
 
     def _build(self):
         # Parameter Setting
-        input_units = self.param_dict["input_units"]
+        input_units = self.param_dict["input_units"][0]
         output_units = self.param_dict["output_units"]
 
         # act_fn = self.param_dict["act_fn"]
@@ -140,7 +140,7 @@ class KCNNAE(TFKerasAlgAbstract):
             self.model.add(pooled_cls)
 
         self.model.add(tf.keras.layers.Flatten())
-        self.model.add(tf.keras.layers.Dense(input_units[0],
+        self.model.add(tf.keras.layers.Dense(input_units,
                                              # activation=activation,
                                              kernel_initializer=initializer,
                                              activation=act_fn

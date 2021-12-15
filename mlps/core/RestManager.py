@@ -59,7 +59,6 @@ class RestManager(object, metaclass=Singleton):
             "learn_sttus_cd": status,
             "hist_no": hist_no,
             "task_idx": task_idx,
-            "message": msg
         }
         rst_sttus = RestManager.post(url=url, data=obj)
 

@@ -23,8 +23,8 @@ class SKLODBKM(SKLAlgAbstract):
     def __init__(self, param_dict, ext_data):
         super(SKLODBKM, self).__init__(param_dict, ext_data)
 
-        input_units = self.param_dict["input_units"]
-        self.r = self.get_euclidean_distance([0.] * input_units[0], [1.] * input_units)
+        input_units = self.param_dict["input_units"][0]
+        self.r = self.get_euclidean_distance([0.] * input_units, [1.] * input_units)
 
     def _check_parameter(self, param_dict):
         _param_dict = super(SKLODBKM, self)._check_parameter(param_dict)

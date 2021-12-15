@@ -36,7 +36,7 @@ class KDNNAE(TFKerasAlgAbstract):
 
     def _build(self):
         # Parameter Setting
-        input_units = self.param_dict["input_units"]
+        input_units = self.param_dict["input_units"][0]
         output_units = self.param_dict["output_units"]
 
         # act_fn = self.param_dict["act_fn"]
@@ -74,7 +74,7 @@ class KDNNAE(TFKerasAlgAbstract):
             )
             # self.model.add(tf.keras.layers.Dropout(dropout_prob))
 
-        self.model.add(tf.keras.layers.Dense(input_units[0],
+        self.model.add(tf.keras.layers.Dense(input_units,
                                              name="{}_{}_decoded_x".format(model_nm, alg_sn)
                                              ))
         self.model.compile(
