@@ -55,11 +55,9 @@ class MLPSProcessor(object):
     def start_resource_usage(self, job_key):
         RestManager.send_resource_usage(job_key)
         self.timer: Timer = Timer(1, self.start_resource_usage, [job_key])
+        # if daemon set true, when parents are terminated it is killed immediately
+        self.timer.daemon = True
         self.timer.start()
-
-    def end_resource_usage(self):
-        self.timer.cancel()
-        self.timer.join()
 
     def data_loader_init(self) -> None:
         self.data_loader_manager = DataManagerBuilder() \
@@ -84,8 +82,6 @@ class MLPSProcessor(object):
 
             if self.task_idx == "0":
                 RestManager.update_time(self.job_key, "end")
-
-            self.end_resource_usage()
 
         except Exception as e:
             self.LOGGER.error(e, exc_info=True)
