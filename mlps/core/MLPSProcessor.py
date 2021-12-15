@@ -50,12 +50,16 @@ class MLPSProcessor(object):
                                          self.task_idx, '-')\
 
         self.timer = None
-        self.send_resource_usage(self.job_key)
+        self.start_resource_usage(self.job_key)
 
-    def send_resource_usage(self, job_key):
+    def start_resource_usage(self, job_key):
         RestManager.send_resource_usage(job_key)
-        self.timer = Timer(1, self.send_resource_usage, [job_key])
+        self.timer: Timer = Timer(1, self.start_resource_usage, [job_key])
         self.timer.start()
+
+    def end_resource_usage(self):
+        self.timer.cancel()
+        self.timer.join()
 
     def data_loader_init(self) -> None:
         self.data_loader_manager = DataManagerBuilder() \
@@ -80,14 +84,15 @@ class MLPSProcessor(object):
 
             if self.task_idx == "0":
                 RestManager.update_time(self.job_key, "end")
+
+            self.end_resource_usage()
+
         except Exception as e:
             self.LOGGER.error(e, exc_info=True)
             curr_sttus_cd = RestManager.get_status_cd(self.job_info.get_key())
             if int(curr_sttus_cd) < int(Constants.STATUS_ERROR):
                 RestManager.update_status_cd(Constants.STATUS_ERROR, self.job_key,
                                              self.task_idx, traceback.format_exc())
-        finally:
-            self.timer.join()
 
     def model_init(self) -> None:
         cluster_info = json.loads(os.environ["TF_CONFIG"])
