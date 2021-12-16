@@ -34,7 +34,6 @@ class DataLoaderImage(DataLoaderAbstract):
                 if line == "#file_end#":
                     break
                 feature, label, data = self._convert(line, fields, functions)
-
                 features.append(feature), labels.append(label), origin_data.append(data)
 
         if Constants.DATAPROCESS_CVT_DATA:

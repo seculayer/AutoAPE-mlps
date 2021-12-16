@@ -3,6 +3,8 @@
 # e-mail : jinkim@seculayer.co.kr
 # Powered by Seculayer © 2021 Service Model Team, Intelligence R&D Center.
 
+import numpy as np
+
 from mlps.core.data.cnvrtr.ConvertAbstract import ConvertAbstract
 
 
@@ -12,28 +14,37 @@ class MinMaxNormal(ConvertAbstract):
         try:
             self.max = float(self.stat_dict["max"])
             self.min = float(self.stat_dict["min"])
-        except:
+        except Exception as e:
+            if not self.error_log_flag:
+                self.LOGGER.error(e, exc_info=True)
             self.max = 0
             self.min = 0
 
     def apply(self, data):
         norm = self.max - self.min
-        temp_result = -1.0
+        normalized = None
         # zero-division protection
         if norm == 0:
             # self.LOGGER.warn("Min val is same Max val (Min val == Max val)")
             norm = 1
+
         try:
+            temp_result = np.array(data, dtype=np.float)
             # temp_result = float(data) / 255
             # temp_result = (float(data) - self.min) / (self.max - self.min)
-            temp_result = (float(data) - self.min) / (norm)
+            temp_result: np.array = (temp_result - self.min) / norm
+            normalized = temp_result.tolist()
         except Exception as e:
-            # print log for error
-            self.LOGGER.error("[MinMaxNormal] Convert error !!! self.min : {}, self.max : {}, data : {}".format(self.min, self.max, data))
-            self.LOGGER.error(str(e))
+            if not self.error_log_flag:
+                # print log for error
+                self.LOGGER.error("[MinMaxNormal] Convert error !!! self.min : {}, self.max : {}, data : {}".format(self.min, self.max, data))
+                self.LOGGER.error(e, exc_info=True)
+                self.error_log_flag = True
+
         # List return
         result = list()
-        result.append(temp_result)
+        result.append(normalized)
+
         return result
 
 

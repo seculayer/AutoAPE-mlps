@@ -18,6 +18,7 @@ class ConvertAbstract(object):
         self.split_separator = ","
         self.max_len = 50
         self.padding_val = 255
+        self.error_log_flag = False
 
     def processConvert(self, data):
         raise NotImplementedError
