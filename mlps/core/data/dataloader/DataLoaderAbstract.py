@@ -41,7 +41,7 @@ class DataLoaderAbstract(object):
                 labels += value
             else:
                 if name == "image":
-                    features = value
+                    features = value[0]
                 else:
                     features += value
         return features, labels, line
