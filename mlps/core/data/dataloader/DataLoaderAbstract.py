@@ -36,11 +36,14 @@ class DataLoaderAbstract(object):
             cvt_data = list()
             # TODO : 한 필드에 2개의 함수가 있을 경우 잘 동작하는지 확인
             for fn in functions[idx]:
-                cvt_data += fn.apply(value)
+                value = fn.apply(value)
             if field.label():
-                labels += cvt_data
+                labels += value
             else:
-                features += cvt_data
+                if name == "image":
+                    features = value
+                else:
+                    features += value
         return features, labels, line
 
     @staticmethod
