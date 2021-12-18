@@ -40,7 +40,7 @@ class KCNNAE(TFKerasAlgAbstract):
 
     def _build(self):
         # Parameter Setting
-        input_units = self.param_dict["input_units"][0]
+        input_units = self.param_dict["input_units"]
         output_units = self.param_dict["output_units"]
 
         # act_fn = self.param_dict["act_fn"]
@@ -56,10 +56,10 @@ class KCNNAE(TFKerasAlgAbstract):
 
         # Generate to Keras Model
         self.model = tf.keras.Sequential()
-        self.inputs = tf.keras.Input(shape=input_units, name="{}_{}_X".format(model_nm, alg_sn))
+        self.inputs = tf.keras.Input(shape=input_units[0], name="{}_{}_X".format(model_nm, alg_sn))
         self.model.add(self.inputs)
 
-        conv_stride, pooling_stride, model_reshaped = self.model_setting(conv_fn, input_units, model_nm, alg_sn)
+        conv_stride, pooling_stride, model_reshaped = self.model_setting(conv_fn, input_units[0], model_nm, alg_sn)
         self.model.add(model_reshaped)
 
         for i, filter_size in enumerate(filter_sizes):
@@ -140,7 +140,7 @@ class KCNNAE(TFKerasAlgAbstract):
             self.model.add(pooled_cls)
 
         self.model.add(tf.keras.layers.Flatten())
-        self.model.add(tf.keras.layers.Dense(input_units,
+        self.model.add(tf.keras.layers.Dense(input_units[0],
                                              # activation=activation,
                                              kernel_initializer=initializer,
                                              activation=act_fn
@@ -159,7 +159,7 @@ class KCNNAE(TFKerasAlgAbstract):
             conv_stride = 2
             pooling_stride = 2
             rst = tf.keras.layers.Reshape(
-                    (input_units, 1),
+                    input_units + (1,),
                     name="{}_{}_input_reshape".format(model_nm, alg_sn)
                 )
 

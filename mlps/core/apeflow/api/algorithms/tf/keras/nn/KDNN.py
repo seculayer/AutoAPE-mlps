@@ -41,7 +41,7 @@ class KDNN(TFKerasAlgAbstract):
     def _build(self):
         # KERAS GRAPH
         # Parameter Setting
-        input_units = self.param_dict["input_units"][0]
+        input_units = self.param_dict["input_units"]
         output_units = self.param_dict["output_units"]
         hidden_units = self.param_dict["hidden_units"]
         # initial_weight = self.param_dict["initial_weight"]
@@ -51,15 +51,21 @@ class KDNN(TFKerasAlgAbstract):
         learning_rate = self.param_dict["learning_rate"]
 
         activation = eval(Common.ACTIVATE_FN_CODE_DICT[act_fn])
-        units = TFUtils.get_units(input_units, hidden_units, output_units)
+        flatten_units = 1
+        for ele in input_units:
+            flatten_units *= ele
+        units = TFUtils.get_units(flatten_units, hidden_units, output_units)
 
         model_nm = "{}_{}".format(self.param_dict["model_nm"], self.param_dict["alg_sn"])
 
         self.model = tf.keras.Sequential()
 
         # MAKE INPUT LAYER
-        self.inputs = tf.keras.Input(shape=(units[0],), name=model_nm + '_X')
+        self.inputs = tf.keras.Input(shape=input_units, name=model_nm + '_X')
         self.model.add(self.inputs)
+
+        if len(input_units) > 1:
+            self.model.add(tf.keras.layers.Flatten())
 
         # MAKE MLP LAYERS
         TFUtils.tf_keras_mlp_block_v2(

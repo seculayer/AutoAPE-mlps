@@ -5,6 +5,7 @@
 
 import requests as rq
 import json
+import os
 import psutil
 import GPUtil
 
@@ -137,19 +138,19 @@ class RestManager(object, metaclass=Singleton):
         url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("model_resources", "")
 
         hist_no = job_key.split("_")[-1]
+        pid = os.getpid()
+        py = psutil.Process(pid)
+
+        cpu_usage = os.popen("ps aux | grep MLProcessingServer | grep -v grep | awk '{print $3}'").read()
+        cpu_usage = cpu_usage.replace("\n", "")
+
         memory_dict = dict(psutil.virtual_memory()._asdict())
-        for key in memory_dict.keys():
-            if key == 'percent':
-                continue
-            memory_dict[key] = memory_dict[key] / (1024 * 1024 * 1024)
+        memory_usage = round(py.memory_info()[0] / memory_dict['total'], 5)
 
         obj = {
             "learn_hist_no": hist_no,
-            "memory": memory_dict,
-            "cpu": {
-                "count": psutil.cpu_count(),
-                "percent": psutil.cpu_percent()
-            },
+            "memory": {"percent": memory_usage},
+            "cpu": {"percent": cpu_usage},
             "gpu": {}
         }
 
