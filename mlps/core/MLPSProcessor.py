@@ -54,7 +54,7 @@ class MLPSProcessor(object):
 
     def start_resource_usage(self, job_key):
         RestManager.send_resource_usage(job_key)
-        self.timer: Timer = Timer(1, self.start_resource_usage, [job_key])
+        self.timer: Timer = Timer(2, self.start_resource_usage, [job_key])
         # if daemon set true, when parents are terminated it is killed immediately
         self.timer.daemon = True
         self.timer.start()
