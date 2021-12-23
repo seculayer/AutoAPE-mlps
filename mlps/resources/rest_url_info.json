@@ -1,6 +1,7 @@
 {
     "cnvr_list": "/mrms/get_cvt_fn",
     "learn_status_update": "/mrms/status_update/learn",
+    "eval_result_update": "/mrms/eval_result_update",
     "get_status_cd": "/mrms/get_sttus_cd",
     "inference_status_update": "/mrms/status_update/inference",
     "learn_result_return": "/mrms/results/learn",

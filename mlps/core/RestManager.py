@@ -66,14 +66,12 @@ class RestManager(object, metaclass=Singleton):
         return rst_sttus
 
     @staticmethod
-    def post_learn_result(job_key: str, task_idx: str, rst_type: str, global_sn: str, rst: Union[dict, list]) -> rq.Response:
-        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("learn_result_return", "")
+    def update_eval_result(job_key: str, task_idx: str, rst: Union[dict, list]) -> rq.Response:
+        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("eval_result_update", "")
         hist_no = job_key.split("_")[-1]
         obj = {
             "hist_no": hist_no,
             "task_idx": task_idx,
-            "rst_type": rst_type,
-            "global_sn": global_sn,
             "result": rst
         }
         rst_sttus = RestManager.post(url=url, data=obj)

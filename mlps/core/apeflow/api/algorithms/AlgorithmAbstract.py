@@ -137,16 +137,19 @@ class AlgorithmAbstract(object):
         results = list()
         for c in range(int(num_classes)):
             result = {
-                "global_sn": self.param_dict["global_sn"],
                 "total": str(np.sum(np.equal(_y, c), dtype="int32")),
-                "TP": str(np.sum(np.take(np.equal(_y, c), np.where(np.equal(pred, c)))))  # 정탐
+                # "TP": str(np.sum(np.take(np.equal(_y, c), np.where(np.equal(pred, c)))))  # 정탐
             }
-            result["FN"] = str(int(result["total"]) - int(result["TP"]))  # 미탐
-            result["FP"] = str(np.sum(np.equal(pred, c)) - int(result["TP"]))  # 오탐
+            #####################
+            for p in range(int(num_classes)):
+                # actual: c, inference: p
+                # if c = p, value is TP
+                result[str(p)] = str(np.sum(np.take(np.equal(_y, c), np.where(np.equal(pred, p)))))
+            #####################
+            result["FN"] = str(int(result["total"]) - int(result[str(c)]))  # 미탐
             # self.AI_LOGGER.info(result)
             results.append(result)
 
-        self.LOGGER.debug(results)
         return results
 
     def eval_default_rst(self, dataset):

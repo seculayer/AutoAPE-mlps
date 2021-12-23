@@ -73,11 +73,9 @@ class ModelInterface(object):
                 result_list.append(tp)
 
         for idx, result in result_list:
-            RestManager.post_learn_result(
+            RestManager.update_eval_result(
                 job_key=self.param_dict_list[idx]["job_key"],
                 task_idx=json.loads(os.environ["TF_CONFIG"])["task"]["index"],
-                rst_type=Constants.RST_TYPE_EVAL,
-                global_sn=self.param_dict_list[idx]["global_sn"],
                 rst=result
             )
 
