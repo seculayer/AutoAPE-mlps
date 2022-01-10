@@ -139,7 +139,7 @@ class RestManager(object, metaclass=Singleton):
         pid = os.getpid()
         py = psutil.Process(pid)
 
-        cpu_usage = os.popen("ps aux | grep MLProcessingServer | grep -v grep | awk '{print $3}'").read()
+        cpu_usage = os.popen(f"ps aux | grep {pid} | grep MLProcessingServer | grep -v grep | awk '{{print $3}}'").read()
         cpu_usage = cpu_usage.replace("\n", "")
 
         memory_dict = dict(psutil.virtual_memory()._asdict())

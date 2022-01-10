@@ -111,7 +111,7 @@ class MLModels(object):
 
             temp = temp["next"]
 
-    def predidct(self, data) -> None:
+    def predict(self, data) -> None:
         temp = self.param_dict_linked_list
         prev_data = None
         while temp is not None:
