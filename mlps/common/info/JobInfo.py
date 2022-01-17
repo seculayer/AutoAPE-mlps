@@ -35,7 +35,11 @@ class JobInfo(object, metaclass=Singleton):
     def _load(self) -> dict:
         filename = self._create_job_filename()
         try:
-            path = f"{self.job_dir}/{RestManager.get_project_id(self.hist_no)}/{filename}"
+            if self.job_type == Constants.JOB_TYPE_LEARN:
+                case = f"{RestManager.get_project_id(self.hist_no)}"
+            else:  # self.job_type == Constants.JOB_TYPE_INFERENCE:
+                case = "inference"
+            path = f"{self.job_dir}/{case}/{filename}"
             job_dict = self.sftp_client.load_json_data(path)
 
         except Exception as e:

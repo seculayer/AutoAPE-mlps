@@ -38,8 +38,11 @@ class RestManager(object, metaclass=Singleton):
         return json.loads(RestManager.get(url))
 
     @staticmethod
-    def get_status_cd(job_key) -> str:
-        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("get_status_cd", "")
+    def get_status_cd(job_type: str, job_key: str) -> str:
+        if job_type == Constants.JOB_TYPE_LEARN:
+            url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("get_status_cd", "")
+        else:  # job_type == Constants.JOB_TYPE_INFERENCE:
+            url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("get_infr_status_cd", "")
         hist_no = job_key.split("_")[-1]
         data = {
             "hist_no": hist_no
@@ -53,11 +56,14 @@ class RestManager(object, metaclass=Singleton):
         return RestManager.get(f"{url}?hist_no={hist_no}")
 
     @staticmethod
-    def update_status_cd(status: str, job_key: str, task_idx: str, msg: str) -> rq.Response:
-        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("learn_status_update", "")
+    def update_status_cd(job_type: str, status: str, job_key: str, task_idx: str, msg: str) -> rq.Response:
+        if job_type == Constants.JOB_TYPE_LEARN:
+            url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("learn_status_update", "")
+        else:  # job_type == Constants.JOB_TYPE_INFERENCE:
+            url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("infr_status_update", "")
         hist_no = job_key.split("_")[-1]
         obj = {
-            "learn_sttus_cd": status,
+            "sttus_cd": status,
             "hist_no": hist_no,
             "task_idx": task_idx,
         }
@@ -119,8 +125,11 @@ class RestManager(object, metaclass=Singleton):
         return rst_sttus
 
     @staticmethod
-    def update_time(job_key: str, _type: str):
-        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("time_update", "")
+    def update_time(job_type: str, job_key: str, _type: str):
+        if job_type == Constants.JOB_TYPE_LEARN:
+            url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("time_update", "")
+        else:  # job_type == Constants.JOB_TYPE_INFEREN:
+            url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("infr_time_update", "")
 
         hist_no = job_key.split("_")[-1]
         obj = {
@@ -162,3 +171,15 @@ class RestManager(object, metaclass=Singleton):
         rst_sttus = RestManager.post(url=url, data=obj)
 
         return rst_sttus
+
+    @staticmethod
+    def set_status(job_type, job_key, task_idx, status, message):
+        curr_sttus_cd = RestManager.get_status_cd(job_type, job_key)
+        if int(curr_sttus_cd) < int(status):
+            RestManager.update_status_cd(job_type, status, job_key,
+                                         task_idx, message)
+
+    @staticmethod
+    def set_time(job_type, job_key, task_idx, start_or_end):
+        if task_idx == "0":
+            RestManager.update_time(job_type, job_key, start_or_end)

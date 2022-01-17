@@ -118,6 +118,7 @@ class Constants(object, metaclass=Singleton):
     MRMS_REST_PORT = int(_CONFIG.get("mrms_rest_port", "9200"))
 
     JOB_TYPE_LEARN = "learn"
+    JOB_TYPE_INFERENCE = "inference"
     SAMPLE_TYPE_RANDOM = "1"
     SAMPLE_TYPE_OVER = "2"
     SAMPLE_TYPE_UNDER = "3"

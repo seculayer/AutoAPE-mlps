@@ -44,10 +44,9 @@ class DataLoaderProcessor(multiprocessing.Process):
             self.LOGGER.info("Data Queue Length : {}".format(self.data_queue.qsize()))
         except Exception as e:
             self.LOGGER.error(e, exc_info=True)
-            curr_sttus_cd = RestManager.get_status_cd(self.job_info.get_key())
-            if int(curr_sttus_cd) < int(Constants.STATUS_ERROR):
-                RestManager.update_status_cd(Constants.STATUS_ERROR, self.job_info.get_key(),
-                                             self.job_info.get_task_idx(), traceback.format_exc())
+            RestManager.set_status(self.job_info.get_job_type(), self.job_info.get_key(),
+                                   self.job_info.get_task_idx(), Constants.STATUS_ERROR,
+                                   traceback.format_exc())
 
     @staticmethod
     def build_functions(fields: List[FieldInfo]) -> List[List[ConvertAbstract]]:

@@ -44,13 +44,12 @@ class MLPSProcessor(object):
         self.model: Union[None, MLModels] = None
         self.data_loader_manager: Union[None, DataManager] = None
 
-        curr_sttus_cd = RestManager.get_status_cd(self.job_info.get_key())
-        if int(curr_sttus_cd) < int(Constants.STATUS_RUNNING):
-            RestManager.update_status_cd(Constants.STATUS_RUNNING, self.job_key,
-                                         self.task_idx, '-')\
+        RestManager.set_status(self.job_type, self.job_key, self.task_idx,
+                               Constants.STATUS_RUNNING, '-')
 
         self.timer = None
-        self.start_resource_usage(self.job_key)
+        if self.job_type == Constants.JOB_TYPE_LEARN:
+            self.start_resource_usage(self.job_key)
 
     def start_resource_usage(self, job_key):
         RestManager.send_resource_usage(job_key)
@@ -67,28 +66,25 @@ class MLPSProcessor(object):
 
     def run(self) -> None:
         try:
-            if self.task_idx == "0":
-                RestManager.update_time(self.job_key, "start")
+            RestManager.set_time(self.job_type, self.job_key, self.task_idx, "start")
+
             self.data_loader_init()
             self.data_loader_manager.run()
             self.model_init()
-            self.learn()
-            self.eval()
+            if self.job_type == Constants.JOB_TYPE_LEARN:
+                self.learn()
+                self.eval()
+            if self.job_type == Constants.JOB_TYPE_INFERENCE:
+                self.LOGGER.info("Inference Start !!!!!!!!!!!!!!!!!!!!!")
 
-            curr_sttus_cd = RestManager.get_status_cd(self.job_info.get_key())
-            if int(curr_sttus_cd) < int(Constants.STATUS_COMPLETE):
-                RestManager.update_status_cd(Constants.STATUS_COMPLETE, self.job_key,
-                                             self.task_idx, '-')
-
-            if self.task_idx == "0":
-                RestManager.update_time(self.job_key, "end")
+            RestManager.set_status(self.job_type, self.job_key, self.task_idx,
+                                   Constants.STATUS_COMPLETE, '-')
+            RestManager.set_time(self.job_type, self.job_key, self.task_idx, "end")
 
         except Exception as e:
             self.LOGGER.error(e, exc_info=True)
-            curr_sttus_cd = RestManager.get_status_cd(self.job_info.get_key())
-            if int(curr_sttus_cd) < int(Constants.STATUS_ERROR):
-                RestManager.update_status_cd(Constants.STATUS_ERROR, self.job_key,
-                                             self.task_idx, traceback.format_exc())
+            RestManager.set_status(self.job_type, self.job_key, self.task_idx,
+                                   Constants.STATUS_ERROR, traceback.format_exc())
 
     def model_init(self) -> None:
         cluster_info = json.loads(os.environ["TF_CONFIG"])
