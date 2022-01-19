@@ -82,26 +82,27 @@ class ModelInterface(object):
         for idx, rst in result_list:
             self.LOGGER.info("result {} : {}".format(idx, rst))
 
-    def predict(self, is_rst_return=False) -> Union[List, None]:
+    def predict(self) -> Union[List, None]:
         result_list = list()
 
         for model, is_learn in self.model_list:
             result_list.append(model.predict(self._make_dataset()['x']))
 
-        # self.method_type이 "Parallel"가 아닐경우, self.model_list의 길이는 1
-        if is_rst_return and self.method_type != "Parallel":
-            if len(result_list) >= 2:
-                self.LOGGER.error("Never Occur into this case !!! Trace why result_list is greater than 1")
-                raise TypeError
-            return result_list[0]
-        else:
-            for idx, result in enumerate(result_list):
-                RestManager.post_inference_result(
-                    job_key=self.param_dict_list[idx]["job_key"],
-                    task_idx=json.loads(os.environ["TF_CONFIG"])["task"]["index"],
-                    global_sn=self.param_dict_list[idx]["global_sn"],
-                    rst=result
-                )
+        return result_list
+        # # self.method_type이 "Parallel"가 아닐경우, self.model_list의 길이는 1
+        # if is_rst_return and self.method_type != "Parallel":
+        #     if len(result_list) >= 2:
+        #         self.LOGGER.error("Never Occur into this case !!! Trace why result_list is greater than 1")
+        #         raise TypeError
+        #     return result_list[0]
+        # else:
+        #     for idx, result in enumerate(result_list):
+        #         RestManager.post_inference_result(
+        #             job_key=self.param_dict_list[idx]["job_key"],
+        #             task_idx=json.loads(os.environ["TF_CONFIG"])["task"]["index"],
+        #             global_sn=self.param_dict_list[idx]["global_sn"],
+        #             rst=result
+        #         )
 
     def _make_dataset(self) -> dict:
         case: Callable = {

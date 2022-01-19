@@ -20,6 +20,7 @@ from mlps.core.apeflow.api.MLModels import MLModels
 from mlps.common.decorator.CalTimeDecorator import CalTimeDecorator
 from mlps.core.RestManager import RestManager
 from mlps.core.SFTPClientManager import SFTPClientManager
+from mlps.core.data.datawriter.ResultWriter import ResultWriter
 
 
 class MLPSProcessor(object):
@@ -74,8 +75,8 @@ class MLPSProcessor(object):
             if self.job_type == Constants.JOB_TYPE_LEARN:
                 self.learn()
                 self.eval()
-            if self.job_type == Constants.JOB_TYPE_INFERENCE:
-                self.LOGGER.info("Inference Start !!!!!!!!!!!!!!!!!!!!!")
+            else:  # self.job_type == Constants.JOB_TYPE_INFERENCE:
+                self.inference()
 
             RestManager.set_status(self.job_type, self.job_key, self.task_idx,
                                    Constants.STATUS_COMPLETE, '-')
@@ -134,3 +135,43 @@ class MLPSProcessor(object):
         #                               Constants.RST_TYPE_RAW, "0", json_data)
 
         self.LOGGER.info("-- MLModels eval end. [{}]".format(self.job_key))
+
+    @CalTimeDecorator("MLPS Inference")
+    def inference(self) -> None:
+        self.LOGGER.info(f"-- MLModels inference start. [{self.job_key}]")
+
+        inferenece_data: dict = self.data_loader_manager.get_inference_data()
+
+        result_list = self.model.predict(inferenece_data)
+        self.result_write(result_list)
+
+        self.LOGGER.info("-- MLModels inference end. [{}]".format(self.job_key))
+
+    @CalTimeDecorator("MLPS Result Write")
+    def result_write(self, result_list):
+        json_data = self.data_loader_manager.get_json_data()
+        json_data = self._insert_info(json_data, result_list)
+
+        ResultWriter.result_file_write(
+            result_path=Constants.DIR_RESULT,
+            results=json_data,
+            result_type="inference"
+        )
+
+    def _insert_info(self, json_data, result_list):
+        curr_time = datetime.now().strftime('%Y%m%d%H%M%S')
+        is_ensemble = True if len(result_list) > 1 else False
+
+        for line_idx, jsonline in enumerate(json_data):
+            for alg_idx, result in enumerate(result_list):
+                # predict result
+                key_name = f"{alg_idx}_result" if is_ensemble else "total_result"
+                if isinstance(result[line_idx], list) and len(result[line_idx]) > 1:
+                    jsonline[key_name] = int(result[line_idx].argmax(axis=1))
+                else:
+                    jsonline[key_name] = int(result[line_idx])
+            jsonline["eqp_dt"] = curr_time
+            jsonline["hist_no"] = self.job_key
+            json_data[line_idx] = jsonline
+
+        return json_data

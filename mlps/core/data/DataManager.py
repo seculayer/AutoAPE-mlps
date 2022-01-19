@@ -36,6 +36,8 @@ class DataManager(object, metaclass=Singleton):
         self.dataset_info: DatasetInfo = self.job_info.get_dataset_info()
         self.dataset = {}
 
+        self.job_type = self.job_info.get_job_type()
+
     @CalTimeDecorator("Data Manager")
     def run(self) -> None:
         try:
@@ -45,7 +47,10 @@ class DataManager(object, metaclass=Singleton):
             data_list = self.read_files(self.dataset_info.get_fields())
 
             self.DataSampler.set_data(data_list)
-            self.dataset = self.DataSampler.sampling()
+            if self.job_type == Constants.JOB_TYPE_LEARN:
+                self.dataset = self.DataSampler.sampling()
+            else:  # self.job_type == Constants.JOB_TYPE_INFERENCE:
+                self.dataset = data_list
 
             self.LOGGER.info("DataManager End.")
         except Exception as e:
@@ -130,6 +135,9 @@ class DataManager(object, metaclass=Singleton):
 
     def get_json_data(self) -> list:
         return self.dataset[2]
+
+    def get_inference_data(self) -> dict:
+        return {"x": self.dataset[0], "y": self.dataset[1]}
 
 
 # ---- builder Pattern

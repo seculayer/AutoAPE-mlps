@@ -77,7 +77,7 @@ class MLModels(object):
 
             # NEXT
             if temp["next"] is not None:
-                prev_data = models.predict(is_rst_return=True)
+                prev_data = models.predict()[0]
             temp = temp["next"]
 
     # EVALUATION
@@ -107,19 +107,21 @@ class MLModels(object):
 
             # NEXT
             if temp["next"] is not None:
-                prev_data = models.predict(is_rst_return=True)
+                prev_data = models.predict()[0]
 
             temp = temp["next"]
 
-    def predict(self, data) -> None:
+    def predict(self, data) -> list:
         temp = self.param_dict_linked_list
         prev_data = None
+        result_list = None
+
         while temp is not None:
             models: ModelInterface = temp["interface"]
             # SET DATASET
             models.set_dataset(input_data=data, prev_data=prev_data)
             try:
-                models.predict()
+                result_list = models.predict()
 
             except tf.errors.ResourceExhaustedError as e:
                 self.AI_LOGGER.error(e, exc_info=True)
@@ -131,9 +133,11 @@ class MLModels(object):
 
             # NEXT
             if temp["next"] is not None:
-                prev_data = models.predict(is_rst_return=True)
+                prev_data = result_list[0]
 
             temp = temp["next"]
+
+        return result_list
 
     @staticmethod
     def _get_lib_types(param_dict_list):
