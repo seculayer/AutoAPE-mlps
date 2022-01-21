@@ -6,13 +6,14 @@ import json
 from typing import List, Dict
 import numpy as np
 
+from mlps.common.Singleton import Singleton
 from mlps.common.sftp.PySFTPClient import PySFTPClient
 from mlps.common.utils.ImageUtils import ImageUtils
 from mlps.common.Common import Common
 from mlps.common.Constants import Constants
 
 
-class SFTPClientManager(object):
+class SFTPClientManager(object, metaclass=Singleton):
     # class : SFTPClientManager
     def __init__(self, service: str, username: str, password: str):
         self.logger = Common.LOGGER.getLogger()
@@ -81,6 +82,18 @@ class SFTPClientManager(object):
         img_array = img_f.read()
         img_f.close()
         return img_array
+
+    def mkdirs(self, dir_path):
+        return self.sftp_client.mkdirs(dir_path)
+
+    def is_exist(self, filename) -> bool:
+        return self.sftp_client.is_exist(filename)
+
+    def scp_to_storage(self, local_path, remote_path):
+        self.sftp_client.scp_to_storage(local_path, remote_path)
+
+    def scp_from_storage(self, remote_path, local_path):
+        self.sftp_client.scp_from_storage(remote_path, local_path)
 
 
 if __name__ == '__main__':

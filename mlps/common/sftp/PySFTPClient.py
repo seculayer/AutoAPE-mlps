@@ -4,6 +4,7 @@
 # Powered by Seculayer © 2021 Service Model Team, R&D Center.
 
 import paramiko
+from scp import SCPClient, SCPException
 from mlps.common.crypto.AES256 import AES256
 from mlps.common.sftp.PySFTPAuthException import PySFTPAuthException
 
@@ -27,6 +28,30 @@ class PySFTPClient(object):
 
     def rename(self, src, dst):
         self.sftp.rename(src, dst)
+
+    def is_exist(self, filename) -> bool:
+        try:
+            self.sftp.stat(filename)
+            return True
+        except FileNotFoundError:
+            return False
+
+    def mkdirs(self, dir_path):
+        self.sftp.mkdir(dir_path)
+
+    def scp_to_storage(self, local_path, remote_path):
+        try:
+            with SCPClient(self.transport) as scp:
+                scp.put(local_path, remote_path, recursive=True, preserve_times=True)
+        except SCPException:
+            raise SCPException
+
+    def scp_from_storage(self, remote_path, local_path):
+        try:
+            with SCPClient(self.transport) as scp:
+                scp.get(remote_path, local_path, recursive=True)
+        except SCPException:
+            raise SCPException
 
 
 if __name__ == '__main__':
