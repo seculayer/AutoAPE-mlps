@@ -100,9 +100,12 @@ class SavedModelAbstract(object):
     @classmethod
     def _scp_model_from_storage(cls, dir_model: str, param_dict: dict) -> None:
         remote_path = f"{Constants.DIR_STORAGE}/{param_dict['model_nm']}"
-        cls.MRMS_SFTP_MANAGER.scp_from_storage(
-            remote_path, dir_model
-        )
+        try:
+            cls.MRMS_SFTP_MANAGER.scp_from_storage(
+                remote_path, dir_model
+            )
+        except Exception as e:
+            pass
 
     @classmethod
     def _save_case_fn(cls, model) -> Callable:

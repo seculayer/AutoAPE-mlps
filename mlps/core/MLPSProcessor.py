@@ -10,6 +10,7 @@ import traceback
 from typing import Union
 from threading import Timer
 from datetime import datetime
+import numpy as np
 
 from mlps.common.utils.FileUtils import FileUtils
 from mlps.common.info.JobInfo import JobInfoBuilder, JobInfo
@@ -166,10 +167,17 @@ class MLPSProcessor(object):
             for alg_idx, result in enumerate(result_list):
                 # predict result
                 key_name = f"{alg_idx}_result" if is_ensemble else "total_result"
-                if isinstance(result[line_idx], list) and len(result[line_idx]) > 1:
-                    jsonline[key_name] = int(result[line_idx].argmax(axis=1))
+                prob_key_name = f"{alg_idx}_accuracy" if is_ensemble else "accuracy"
+                if (isinstance(result[line_idx], list) or isinstance(result[line_idx], np.ndarray)) \
+                        and len(result[line_idx]) > 1:
+                    jsonline[key_name] = int(result[line_idx].argmax())
+                    jsonline[prob_key_name] = float(result[line_idx].max())
                 else:
-                    jsonline[key_name] = int(result[line_idx])
+                    try:
+                        jsonline[key_name] = int(result[line_idx])
+                    except Exception as e:
+                        self.LOGGER.error(f"result type : {type(result[line_idx])}")
+
             jsonline["eqp_dt"] = curr_time
             jsonline["hist_no"] = self.job_key
             json_data[line_idx] = jsonline
