@@ -151,7 +151,7 @@ class MLPSProcessor(object):
     @CalTimeDecorator("MLPS Result Write")
     def result_write(self, result_list):
         json_data = self.data_loader_manager.get_json_data()
-        json_data = self._insert_info(json_data, result_list)
+        json_data = self._insert_inference_info(json_data, result_list)
 
         ResultWriter.result_file_write(
             result_path=Constants.DIR_RESULT,
@@ -159,14 +159,14 @@ class MLPSProcessor(object):
             result_type="inference"
         )
 
-    def _insert_info(self, json_data, result_list):
+    def _insert_inference_info(self, json_data, result_list):
         curr_time = datetime.now().strftime('%Y%m%d%H%M%S')
         is_ensemble = True if len(result_list) > 1 else False
 
         for line_idx, jsonline in enumerate(json_data):
             for alg_idx, result in enumerate(result_list):
                 # predict result
-                key_name = f"{alg_idx}_result" if is_ensemble else "total_result"
+                key_name = f"{alg_idx}_result" if is_ensemble else "result"
                 prob_key_name = f"{alg_idx}_accuracy" if is_ensemble else "accuracy"
                 if (isinstance(result[line_idx], list) or isinstance(result[line_idx], np.ndarray)) \
                         and len(result[line_idx]) > 1:
@@ -179,7 +179,7 @@ class MLPSProcessor(object):
                         self.LOGGER.error(f"result type : {type(result[line_idx])}")
 
             jsonline["eqp_dt"] = curr_time
-            jsonline["hist_no"] = self.job_key
+            jsonline["infr_hist_no"] = self.job_key
             json_data[line_idx] = jsonline
 
         return json_data
