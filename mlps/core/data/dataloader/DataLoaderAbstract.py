@@ -33,10 +33,11 @@ class DataLoaderAbstract(object):
             #     value = list()
             #     for name in field.field_name.split("@COMMA@"):
             #         value.append(line.get(name, ""))
-            cvt_data = list()
+
             # TODO : 한 필드에 2개의 함수가 있을 경우 잘 동작하는지 확인
             for fn in functions[idx]:
                 value = fn.apply(value)
+
             if field.label():
                 labels += value
             else:

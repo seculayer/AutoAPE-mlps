@@ -129,7 +129,7 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
             validation_data=v_dataset,
             validation_steps=v_parallel_step,
             callbacks=[result_callback, early_stop_callback],
-            verbose=1,
+            verbose=0,
         )
 
     def predict(self, x):
