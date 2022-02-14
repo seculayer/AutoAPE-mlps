@@ -108,11 +108,32 @@ class SKLAlgAbstract(AlgorithmAbstract):
         return result_list
 
     def predict(self, x):
-        predict_result = self.model.predict(x)
+        batch_size = self.batch_size
+        start = 0
+        results = list()
+        len_x = len(x)
+
+        while start < len_x:
+            end = start + batch_size
+            batch_x = x[start: end]
+            try:
+                results.extend(self.model.predict(batch_x).tolist())
+            except:
+                results.extend(self.model.predict(batch_x))
+            start += batch_size
+
+            if self.param_dict["learning"] == "N":
+                progress_rate = start / len_x * 100
+                RestManager.send_inference_progress(
+                    prograss_rate=progress_rate,
+                    job_key=self.param_dict["job_key"]
+                )
+
+        results = np.array(results)
         if self.param_dict["algorithm_type"] == "Classifier":
-            if len(predict_result.shape) >= 2 and predict_result.shape[1] >= 2:  # case onehot encoding
-                predict_result = np.argmax(predict_result, axis=1)
-        return predict_result
+            if len(results.shape) >= 2 and results.shape[1] >= 2:  # case onehot encoding
+                results = np.argmax(results, axis=1)
+        return results
 
     def saved_model(self):
         SKLSavedModel.save(model=self)

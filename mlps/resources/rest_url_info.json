@@ -12,5 +12,6 @@
     "get_project_id": "/mrms/get_project_id",
     "get_infr_status_cd": "/mrms/get_infr_status_cd",
     "infr_status_update": "/mrms/status_update/inference",
-    "infr_time_update": "/mrms/infr_time_update"
+    "infr_time_update": "/mrms/infr_time_update",
+    "infr_progress": "/mrms/infr_progress"
 }

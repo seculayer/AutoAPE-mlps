@@ -14,6 +14,7 @@ from mlps.core.apeflow.interface.model.export.TFSavedModel import TFSavedModel
 from mlps.core.apeflow.api.algorithms.AlgorithmAbstract import AlgorithmAbstract
 from mlps.core.apeflow.interface.utils.tf.keras.LearnResultCallback import LearnResultCallback
 from mlps.core.apeflow.interface.utils.tf.keras.EarlyStopCallback import EarlyStopCallback
+from mlps.core.RestManager import RestManager
 
 
 class TFKerasAlgAbstract(AlgorithmAbstract):
@@ -136,18 +137,19 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
         batch_size = self.batch_size
         start = 0
         results = None
+        len_x = len(x)
 
-        while start < len(x):
+        while start < len_x:
             end = start + batch_size
-            if start == 0 and batch_size < len(x):
+            if start == 0 and batch_size < len_x:
                 batch_x = tf.keras.backend.cast(x[start: end], tf.float32)
                 results = self.model(batch_x).numpy()
 
-            elif start == 0 and batch_size >= len(x):
+            elif start == 0 and batch_size >= len_x:
                 batch_x = tf.keras.backend.cast(x, tf.float32)
                 results = self.model(batch_x).numpy()
 
-            elif end >= len(x):
+            elif end >= len_x:
                 batch_x = tf.keras.backend.cast(x[start:], tf.float32)
                 results = np.concatenate((results, self.model(batch_x).numpy()), axis=0)
 
@@ -155,6 +157,13 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
                 batch_x = tf.keras.backend.cast(x[start:end], tf.float32)
                 results = np.concatenate((results, self.model(batch_x).numpy()), axis=0)
             start += batch_size
+
+            if self.param_dict["learning"] == "N":
+                progress_rate = start / len_x * 100
+                RestManager.send_inference_progress(
+                    prograss_rate=progress_rate,
+                    job_key=self.param_dict["job_key"]
+                )
 
         return results
 
