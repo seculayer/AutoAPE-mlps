@@ -139,14 +139,19 @@ class MLPSProcessor(object):
 
     @CalTimeDecorator("MLPS Inference")
     def inference(self) -> None:
-        self.LOGGER.info(f"-- MLModels inference start. [{self.job_key}]")
+        try:
+            self.LOGGER.info(f"-- MLModels inference start. [{self.job_key}]")
 
-        inferenece_data: dict = self.data_loader_manager.get_inference_data()
+            inferenece_data: dict = self.data_loader_manager.get_inference_data()
 
-        result_list = self.model.predict(inferenece_data)
-        self.result_write(result_list)
+            result_list = self.model.predict(inferenece_data)
+            self.result_write(result_list)
+            RestManager.send_inference_progress(self.job_key, 100.0, "delete")
 
-        self.LOGGER.info("-- MLModels inference end. [{}]".format(self.job_key))
+            self.LOGGER.info("-- MLModels inference end. [{}]".format(self.job_key))
+        except Exception as e:
+            RestManager.send_inference_progress(self.job_key, 100.0, "delete")
+            raise e
 
     @CalTimeDecorator("MLPS Result Write")
     def result_write(self, result_list):

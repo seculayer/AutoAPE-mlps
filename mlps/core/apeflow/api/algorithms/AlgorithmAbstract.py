@@ -38,6 +38,7 @@ class AlgorithmAbstract(object):
         _param_dict["global_sn"] = str(param_dict["global_sn"])
         _param_dict["algorithm_type"] = str(param_dict["algorithm_type"])
         _param_dict["job_key"] = str(param_dict["job_key"])
+        _param_dict["learning"] = str(param_dict["learning"])
 
         return _param_dict
 

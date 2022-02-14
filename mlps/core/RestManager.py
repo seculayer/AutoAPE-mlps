@@ -173,6 +173,22 @@ class RestManager(object, metaclass=Singleton):
         return rst_sttus
 
     @staticmethod
+    def send_inference_progress(job_key: str, prograss_rate: float, mode="update"):
+        url = Constants.REST_URL_ROOT + Common.REST_URL_DICT.get("infr_progress", "")
+
+        hist_no = job_key.split("_")[-1]
+
+        obj = {
+            "infr_hist_no": hist_no,
+            "progress_rate": str(prograss_rate),
+            "mode": mode
+        }
+
+        rst_sttus = RestManager.post(url=url, data=obj)
+
+        return rst_sttus
+
+    @staticmethod
     def set_status(job_type, job_key, task_idx, status, message):
         curr_sttus_cd = RestManager.get_status_cd(job_type, job_key)
         if int(curr_sttus_cd) < int(status):
