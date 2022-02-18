@@ -40,5 +40,5 @@ class DataLoaderText(DataLoaderAbstract):
         if Constants.DATAPROCESS_CVT_DATA:
             self.write_dp_result(features, labels, file_list[0])  # file_list[0] : for dataset path
 
-        self.make_inout_units(features, labels)
+        self.make_inout_units(features, fields)
         return [features, labels, origin_data]

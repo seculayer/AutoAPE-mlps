@@ -57,13 +57,24 @@ class DataLoaderAbstract(object):
             functions.append(cvt_fn_list)
         return functions
 
-    def make_inout_units(self, features, labels):
+    def make_inout_units(self, features, fields: List[FieldInfo]):
         input_units = np.shape(features)[1:]
-        output_units = np.shape(labels)[-1]
+        output_units = self.get_output_units(fields)
         self.job_info.set_input_units(input_units)
         self.job_info.set_output_units(output_units)
         self.LOGGER.info("input_units : {}".format(input_units))
         self.LOGGER.info("output_units : {}".format(output_units))
+
+    def get_output_units(self, fields: List[FieldInfo]):
+        for field_info in fields:
+            self.LOGGER.info(field_info.is_label)
+            self.LOGGER.info(field_info.stat_dict)
+            if field_info.is_label:
+                try:
+                    return len(field_info.stat_dict.get("unique", {}))
+                except Exception as e:
+                    self.LOGGER.error(e, exc_info=True)
+                    return 1
 
     def write_dp_result(self, features, labels, file_path):
         rst_dict = dict()

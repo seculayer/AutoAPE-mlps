@@ -159,7 +159,8 @@ class TFKerasAlgAbstract(AlgorithmAbstract):
             start += batch_size
 
             if self.param_dict["learning"] == "N":
-                progress_rate = start / len_x * 100
+                temp = len_x if start > len_x else start
+                progress_rate = temp / len_x * 100
                 RestManager.send_inference_progress(
                     prograss_rate=progress_rate,
                     job_key=self.param_dict["job_key"]
