@@ -6,6 +6,7 @@ import os
 import json
 import joblib
 from typing import Callable
+import tensorflow as tf
 
 from tensorflow.keras.preprocessing.text import tokenizer_from_json
 from mlps.common.utils.FileUtils import FileUtils
@@ -32,7 +33,8 @@ class TFSavedModel(SavedModelAbstract):
 
     @classmethod
     def _save_model_keras(cls, model, dir_model):
-        model.model.save_weights(dir_model + '/weights.h5', save_format='h5')
+        # model.model.save_weights(dir_model + '/weights.h5', save_format='h5')
+        model.model.save(dir_model)
 
     @classmethod
     def _save_model_json(cls, model, dir_model):
@@ -97,7 +99,8 @@ class TFSavedModel(SavedModelAbstract):
     @classmethod
     def _load_model_keras(cls, model, dir_model):
         try:
-            model.model.load_weights(dir_model + '/weights.h5')
+            # model.model.load_weights(dir_model + '/weights.h5')
+            model.model = tf.keras.models.load_model(dir_model)
         except Exception as e:
             cls.LOGGER.error(e, exc_info=True)
             raise e

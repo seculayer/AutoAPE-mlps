@@ -20,7 +20,7 @@ class SKLSavedModel(SavedModelAbstract):
 
     @classmethod
     def _save_model_pkl(cls, model, dir_model):
-        joblib.dump(model.model, "{}/skl_model.pkl".format(dir_model))
+        joblib.dump(model.model, "{}/skl_model.joblib".format(dir_model))
 
     @classmethod
     def _load_case_fn(cls, model) -> Callable:
@@ -30,4 +30,4 @@ class SKLSavedModel(SavedModelAbstract):
 
     @classmethod
     def _load_model_pkl(cls, model, dir_model):
-        model.model = joblib.load("{}/skl_model.pkl".format(dir_model))
+        model.model = joblib.load("{}/skl_model.joblib".format(dir_model))
