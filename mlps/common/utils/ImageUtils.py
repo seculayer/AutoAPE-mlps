@@ -13,4 +13,5 @@ class ImageUtils(object):
     @staticmethod
     def load(buffer) -> np.array:
         img_array = np.frombuffer(buffer, dtype=np.uint8)
-        return cv2.imdecode(img_array, cv2.IMREAD_ANYCOLOR)
+        # return cv2.imdecode(img_array, cv2.IMREAD_ANYCOLOR)
+        return cv2.imdecode(img_array, cv2.IMREAD_COLOR)

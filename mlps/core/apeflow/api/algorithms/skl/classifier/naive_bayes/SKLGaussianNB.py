@@ -27,23 +27,8 @@ class SKLGaussianNB(SKLAlgAbstract):
         self.model = GaussianNB()
 
     def learn(self, dataset):
-        y = self._arg_max(dataset["y"])
-        self.model.fit(dataset["x"], y)
+        self.model.fit(dataset["x"], self._arg_max(dataset["y"]))
         self.learn_result(dataset)
-
-    def learn_result_classifier(self, dataset):
-        results = dict()
-        results["global_sn"] = self.param_dict["global_sn"]
-        y = self._arg_max(dataset["y"])
-        results["accuracy"] = self.model.score(X=dataset["x"], y=y)
-        loss = log_loss(y, self.predict(dataset["x"]))
-        results["loss"] = loss
-        results["step"] = self.learn_params.get("global_step", 1)
-
-        result_list = list()
-        result_list.append(results)
-
-        return result_list
 
 
 if __name__ == '__main__':

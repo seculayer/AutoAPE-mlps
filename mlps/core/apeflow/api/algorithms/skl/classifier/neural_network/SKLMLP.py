@@ -54,7 +54,7 @@ class SKLMLP(SKLAlgAbstract):
         )
 
     def learn(self, dataset):
-        self.model.fit(dataset["x"], dataset["y"])
+        self.model.fit(dataset["x"], y=self._arg_max(dataset["y"]))
         self.learn_result(dataset)
 
     def learn_result_classifier(self, dataset):
@@ -62,7 +62,7 @@ class SKLMLP(SKLAlgAbstract):
         for idx, loss in enumerate(self.model.loss_curve_):
             results = dict()
             results["global_sn"] = self.param_dict["global_sn"]
-            results["accuracy"] = self.model.score(X=dataset["x"], y=dataset["y"])
+            results["accuracy"] = self.model.score(X=dataset["x"], y=self._arg_max(dataset["y"]))
             results["loss"] = loss
             results["step"] = idx + 1
 

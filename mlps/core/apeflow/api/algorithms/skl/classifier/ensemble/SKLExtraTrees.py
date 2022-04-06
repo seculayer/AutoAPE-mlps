@@ -4,6 +4,7 @@
 # Powered by Seculayer © 2021 Service Model Team, R&D Center.
 
 from sklearn.ensemble import ExtraTreesClassifier
+import numpy as np
 
 from mlps.common.Constants import Constants
 from mlps.core.apeflow.api.algorithms.skl.SKLAlgAbstract import SKLAlgAbstract
@@ -25,12 +26,11 @@ class SKLExtraTrees(SKLAlgAbstract):
         self.model = ExtraTreesClassifier(verbose=0)
 
     def learn(self, dataset):
-        self.model.fit(dataset["x"], dataset["y"])
+        self.model.fit(dataset["x"], self._arg_max(dataset["y"]))
         self.learn_result(dataset)
 
 
 if __name__ == '__main__':
-    import numpy as np
     __dataset = {
         "x": np.array([[-1., -1.], [-2., -1.], [1., 1.], [2., 1.]]),
         # "y" : np.array([1, 1, 0, 0]),

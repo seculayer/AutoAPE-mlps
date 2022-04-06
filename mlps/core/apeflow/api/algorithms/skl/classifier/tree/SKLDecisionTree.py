@@ -28,7 +28,7 @@ class SKLDecisionTree(SKLAlgAbstract):
         self.model = DecisionTreeClassifier()
 
     def learn(self, dataset):
-        self.model.fit(dataset["x"], dataset["y"])
+        self.model.fit(dataset["x"], self._arg_max(dataset["y"]))
         self.learn_result(dataset)
 
 

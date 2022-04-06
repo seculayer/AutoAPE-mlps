@@ -58,8 +58,8 @@ class SKLAlgAbstract(AlgorithmAbstract):
     def learn_result_classifier(self, dataset):
         results = dict()
         # results["global_sn"] = self.param_dict["global_sn"]
-        results["accuracy"] = self.model.score(X=dataset["x"], y=dataset["y"])
-        loss = log_loss(dataset["y"], self.predict(dataset["x"]))
+        results["accuracy"] = self.model.score(X=dataset["x"], y=self._arg_max(dataset["y"]))
+        loss = log_loss(self._arg_max(dataset["y"]), self.predict(dataset["x"]))
         results["loss"] = loss
         results["step"] = self.learn_params.get("global_step", 1)
 
@@ -141,6 +141,32 @@ class SKLAlgAbstract(AlgorithmAbstract):
     def load_model(self):
         SKLSavedModel.load(model=self)
 
+    def eval_classifier(self, dataset: dict):
+        x = dataset["x"]
+        _y = self._arg_max(dataset["y"])
+
+        num_classes = self.param_dict["output_units"]
+
+        pred = self.predict(x)
+
+        results = list()
+        for c in range(int(num_classes)):
+            result = {
+                "total": str(np.sum(np.equal(_y, c), dtype="int32")),
+                # "TP": str(np.sum(np.take(np.equal(_y, c), np.where(np.equal(pred, c)))))  # 정탐
+            }
+            #####################
+            for p in range(int(num_classes)):
+                # actual: c, inference: p
+                # if c = p, value is TP
+                result[str(p)] = str(np.sum(np.take(np.equal(_y, c), np.where(np.equal(pred, p)))))
+            #####################
+            result["FN"] = str(int(result["total"]) - int(result[str(c)]))  # 미탐
+            # self.AI_LOGGER.info(result)
+            results.append(result)
+
+        return results
+
     def eval_clustering(self, dataset):
         x = dataset["x"]
 
@@ -192,7 +218,10 @@ class SKLAlgAbstract(AlgorithmAbstract):
         return result_list
 
     @staticmethod
-    def _arg_max(y: np.array) -> np.array:
-        if y.shape[1] >= 2:  # case onehot encoding
-            y = np.argmax(y, axis=1)
-        return y
+    def _arg_max(y: list) -> list:
+        try:
+            _y = np.argmax(y, axis=1).tolist()
+        except:
+            _y = y
+
+        return _y
