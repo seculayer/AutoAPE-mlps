@@ -86,11 +86,14 @@ RUN pip3.7 install /eyeCloudAI/app/ape/apeflow/apeflow-1.0.0-py3-none-any.whl --
 RUN mkdir -p /eyeCloudAI/app/ape/mlps
 WORKDIR /eyeCloudAI/app/ape/mlps
 
+COPY ./mlps.sh /eyeCloudAI/app/ape/mlps
+RUN chmod +x /eyeCloudAI/app/ape/mlps/mlps.sh
+
 COPY --from=builder "$app/mlps/lib" /eyeCloudAI/app/ape/mlps/lib
 COPY --from=builder "$app/mlps/dist/mlps-3.0.0-py3-none-any.whl" \
         /eyeCloudAI/app/ape/mlps/mlps-3.0.0-py3-none-any.whl
 
-RUN pip3.7 install /eyeCloudAI/app/ape/mlps/mlps-1.0.0-py3-none-any.whl --no-dependencies  \
+RUN pip3.7 install /eyeCloudAI/app/ape/mlps/mlps-3.0.0-py3-none-any.whl --no-dependencies  \
     -t /eyeCloudAI/app/ape/mlps/ \
     && rm /eyeCloudAI/app/ape/mlps/mlps-3.0.0-py3-none-any.whl
 
