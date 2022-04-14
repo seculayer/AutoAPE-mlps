@@ -3,12 +3,12 @@
 # e-mail : jinkim@seculayer.co.kr
 # Powered by Seculayer © 2021 Service Model Team
 
+from pycmmn.sftp.SFTPClientManager import SFTPClientManager
 from mlps.common.Common import Common
 from mlps.common.Constants import Constants
-from mlps.core.data.dataloader.DataLoaderText import DataLoaderText
+from mlps.info.JobInfo import JobInfo
 from mlps.core.data.dataloader.DataLoaderImage import DataLoaderImage
-from mlps.core.SFTPClientManager import SFTPClientManager
-from mlps.common.info.JobInfo import JobInfo
+from mlps.core.data.dataloader.DataLoaderText import DataLoaderText
 
 
 class DataloaderFactory(object):

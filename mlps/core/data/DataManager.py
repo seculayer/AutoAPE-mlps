@@ -4,30 +4,28 @@
 # Powered by Seculayer © 2021 Service Model Team, R&D Center.
 
 from multiprocessing import Queue
-from queue import Queue as nQ
 from typing import List
 import traceback
 
-from mlps.common.Singleton import Singleton
-from mlps.common.info.JobInfo import JobInfo
-from mlps.common.info.FieldInfo import FieldInfo
+from pycmmn.Singleton import Singleton
+from mlps.info.JobInfo import JobInfo
+from mlps.info.FieldInfo import FieldInfo
 
 from mlps.common.Common import Common
 from mlps.common.Constants import Constants
-from mlps.core.data.dataloader.DataLoaderProcessor import DataLoaderProcessor, DataLoaderProcessorBuilder
 from mlps.core.data.sampling.DataSampler import DataSampler
-from mlps.core.RestManager import RestManager
-from mlps.common.decorator.CalTimeDecorator import CalTimeDecorator
-from mlps.common.info.DatasetInfo import DatasetInfo
-from mlps.core.SFTPClientManager import SFTPClientManager
+from pycmmn.rest.RestManager import RestManager
+from pycmmn.decorator.CalTimeDecorator import CalTimeDecorator
+from mlps.info.DatasetInfo import DatasetInfo
+from pycmmn.sftp.SFTPClientManager import SFTPClientManager
 from mlps.core.data.DataLoaderFactory import DataloaderFactory
 
 
 class DataManager(object, metaclass=Singleton):
+    LOGGER = Common.LOGGER.getLogger()
 
     def __init__(self, job_info: JobInfo, sftp_client: SFTPClientManager) -> None:
         # threading.Thread.__init__(self)
-        self.LOGGER = Common.LOGGER.getLogger()
         self.job_info: JobInfo = job_info
         self.data_queue: Queue = Queue()
         self.DataSampler = DataSampler(self.job_info)
@@ -38,7 +36,7 @@ class DataManager(object, metaclass=Singleton):
 
         self.job_type = self.job_info.get_job_type()
 
-    @CalTimeDecorator("Data Manager")
+    @CalTimeDecorator("Data Manager", LOGGER)
     def run(self) -> None:
         try:
             self.LOGGER.info("DataManager Start.")
@@ -55,9 +53,11 @@ class DataManager(object, metaclass=Singleton):
             self.LOGGER.info("DataManager End.")
         except Exception as e:
             self.LOGGER.error(e, exc_info=True)
-            RestManager.set_status(self.job_info.get_job_type(), self.job_info.get_key(),
-                                   self.job_info.get_task_idx(), Constants.STATUS_ERROR,
-                                   traceback.format_exc())
+            RestManager.set_status(
+                Constants.REST_URL_ROOT, self.LOGGER,
+                self.job_info.get_job_type(), self.job_info.get_key(),
+                self.job_info.get_task_idx(), Constants.STATUS_ERROR,
+                traceback.format_exc())
             raise e
 
     def read_files(self, fields: List[FieldInfo]) \
@@ -80,52 +80,6 @@ class DataManager(object, metaclass=Singleton):
                     ).read(file_list, fields)
 
         return data_list
-
-    def read_subproc(self, file_list: List[str], fields: List[FieldInfo]) \
-            -> List:
-        len_files = len(file_list)
-        complete_cnt = 0
-        proc_queue: nQ[DataLoaderProcessor] = nQ()
-
-        features = list()
-        labels = list()
-        raw_data = list()
-
-        # sub process create
-        for idx, file_name in enumerate(file_list):
-            proc_queue.put(self._create_proc(file_name, fields, idx))
-
-        # sub process execute
-        while complete_cnt < len_files:
-            tmp_proc_list = list()
-            tmp_comp_cnt = 0
-            for _ in range(Constants.MAX_SUB_PROCESS):
-                if proc_queue.qsize() > 0:
-                    sub_proc = proc_queue.get()
-                    sub_proc.start()
-                    tmp_proc_list.append(sub_proc)
-
-            while tmp_comp_cnt < len(tmp_proc_list):
-                tmp_dataset = self.data_queue.get()
-                features += tmp_dataset[0]
-                labels += tmp_dataset[1]
-                raw_data += tmp_dataset[2]
-                tmp_comp_cnt += 1
-
-            for sub_proc in tmp_proc_list:
-                sub_proc.join()
-                complete_cnt += 1
-
-        return [features, labels, raw_data]
-
-    def _create_proc(self, file_name: str, fields: List[FieldInfo], idx: int) -> DataLoaderProcessor:
-        return DataLoaderProcessorBuilder() \
-            .set_data_queue(self.data_queue) \
-            .set_filename(file_name) \
-            .set_fields(fields) \
-            .set_idx(idx) \
-            .set_job_info(self.job_info) \
-            .build()
 
     def get_learn_data(self) -> dict:
         return {"x": self.dataset[0][0], "y": self.dataset[0][1]}

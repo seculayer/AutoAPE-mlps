@@ -22,11 +22,6 @@
         <description>None</description>
     </property>
     <property>
-        <name>resource_cnvrtr</name>
-        <value>/cnvrtr</value>
-        <description>resource folder for data converting.</description>
-    </property>
-    <property>
         <name>dir_data_root</name>
         <value>/data</value>
         <description>None</description>
@@ -42,33 +37,8 @@
         <description>None</description>
     </property>
     <property>
-        <name>dir_load_model</name>
-        <value>/load_models</value>
-        <description>None</description>
-    </property>
-    <property>
-        <name>dir_model</name>
-        <value>/models</value>
-        <description>None</description>
-    </property>
-    <property>
         <name>dir_storage</name>
         <value>/storage/ape</value>
-        <description>None</description>
-    </property>
-    <property>
-        <name>dir_learn_feat</name>
-        <value>/da</value>
-        <description>None</description>
-    </property>
-    <property>
-        <name>dir_verify_feat</name>
-        <value>/verifys</value>
-        <description>None</description>
-    </property>
-    <property>
-        <name>dir_rtdetect_feat</name>
-        <value>/rtdetect</value>
         <description>None</description>
     </property>
     <property>
@@ -77,23 +47,13 @@
         <description>None</description>
     </property>
     <property>
-        <name>dir_ml_tmp</name>
+        <name>dir_temp</name>
         <value>/temp</value>
         <description>None</description>
     </property>
     <property>
         <name>dir_error</name>
         <value>/errors</value>
-        <description>None</description>
-    </property>
-    <property>
-        <name>user_custom_converter_package_nm</name>
-        <value>cnvrtr</value>
-        <description>eyeCloudAI Custom converter class file path. default is [cnvrtr].</description>
-    </property>
-    <property>
-        <name>user_custom_algorithm_package_root</name>
-        <value>/eyeCloudAI/app/ape/custom</value>
         <description>None</description>
     </property>
     <!-- log setting -->
@@ -112,44 +72,11 @@
         <value>INFO</value>
         <description>[INFO, DEBUG, WARN, ERROR, CRITICAL]</description>
     </property>
-    <!-- mlps.core.manager setting -->
-    <property>
-        <name>job_ext</name>
-        <value>.job</value>
-        <description>None</description>
-    </property>
-    <property>
-        <name>max_sub_process</name>
-        <value>2</value>
-        <description>Cnt of Data Loader SUB Processor</description>
-    </property>
-    <property>
-        <name>remove_temp_folder</name>
-        <value>false</value>
-        <description>[true or false]</description>
-    </property>
-    <!-- mlps.core.dataloader setting -->
-    <property>
-        <name>dataloader_ext</name>
-        <value>.done</value>
-        <description>.done</description>
-    </property>
-    <property>
-        <name>dataloader_timeout</name>
-        <value>7200</value>
-        <description>Second</description>
-    </property>
-    <!-- mlps.core.cnvrtr setting -->
-    <property>
-        <name>cvt_data</name>
-        <value>False</value>
-        <description>None</description>
-    </property>
     <!-- rest url setting -->
     <property>
         <name>mrms_svc</name>
 <!--        <value>mrms-svc</value>-->
-        <value>10.1.35.118</value>
+        <value>10.1.35.72</value>
 <!--        <value>10.1.12.234</value>-->
         <description>None</description>
     </property>
@@ -179,5 +106,10 @@
         <name>etls_wating_time</name>
         <value>5</value>
         <description>Seconds</description>
+    </property>
+    <property>
+        <name>cvt_data</name>
+        <value>false</value>
+        <description>true or false</description>
     </property>
 </configuration>

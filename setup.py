@@ -10,7 +10,7 @@
 from typing import List
 
 from setuptools import setup, find_packages
-from mlps.common.utils.FileUtils import FileUtils
+from pycmmn.utils.FileUtils import FileUtils
 
 
 class APEPythonSetup(object):
