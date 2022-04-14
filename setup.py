@@ -70,7 +70,7 @@ class APEPythonSetup(object):
             },
             python_requires='>3.7',
             package_data={
-                self.module_nm: self.get_additional_file()
+                # self.module_nm: self.get_additional_file()
             },
             install_requires=self.get_require_packages(),
             zip_safe=False,
