@@ -22,17 +22,22 @@ RUN pip3.7 install -r requirements.txt -t $app/dataconverter/lib && python3.7 se
 
 # apeflow setup
 # specific branch
-RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" --single-branch -b SLCAI-54-automl-module https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-apeflow.git $app/apeflow
+RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" \
+    --single-branch -b SLCAI-54-automl-module https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-apeflow.git \
+    $app/apeflow
 #RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-apeflow.git $app/apeflow
 WORKDIR $app/apeflow
 RUN pip3.7 install -r requirements.txt -t $app/apeflow/lib && python3.7 setup.py bdist_wheel
 
 # mlps setup
 # specific branch
-RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" --single-branch -b SLCAI-54-automl-module https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-mlps.git $app/mlps
-#RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-mlps.git $app/mlps
+RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)"
+    --single-branch -b SLCAI-54-automl-module https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-mlps.git \
+    $app/mlps
+#RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-mlps.git $app/mlps \
+
 WORKDIR $app/mlps
-RUN pip3.7 install -r requirements.txt -t $app/mlps/lib && python3.7 setup.py bdist_wheel
+RUN pip3.7 install -r $app/mlps/requirements.txt -t $app/mlps/lib && python3.7 setup.py bdist_wheel
 
 
 
