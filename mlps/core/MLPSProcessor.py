@@ -2,7 +2,7 @@
 #  Author : Manki Baek
 #  e-mail : manki.baek@seculayer.com
 #  Powered by Seculayer © 2021 Service Model Team, R&D Center.
-
+import copy
 import os
 import json
 import traceback
@@ -39,7 +39,8 @@ class MLPSProcessor(object):
             .set_logger(self.LOGGER) \
             .set_sftp_client(self.mrms_sftp_manager) \
             .build()
-
+        job_info_for_log = copy.deepcopy(self.job_info.info_dict)
+        self.LOGGER.info(f"{job_info_for_log.pop('datasets')}")
         self.job_key: str = self.job_info.get_key()
         self.job_type: str = job_type
         self.task_idx: str = task_idx
