@@ -40,7 +40,8 @@ class MLPSProcessor(object):
             .set_sftp_client(self.mrms_sftp_manager) \
             .build()
         job_info_for_log = copy.deepcopy(self.job_info.info_dict)
-        self.LOGGER.info(f"{job_info_for_log.pop('datasets')}")
+        job_info_for_log.pop('datasets')
+        self.LOGGER.info(f"{job_info_for_log}")
         self.job_key: str = self.job_info.get_key()
         self.job_type: str = job_type
         self.task_idx: str = task_idx
