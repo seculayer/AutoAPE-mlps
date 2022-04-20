@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.3
-FROM registry.seculayer.com:31500/ape/python-base:py3.7 as builder
+FROM registry.seculayer.com:31500/ape/python-base-gpu:py3.7 as builder
 MAINTAINER jinkim "jinkim@seculayer.com"
 
 ARG app="/opt/app"
@@ -22,18 +22,14 @@ RUN pip3.7 install -r requirements.txt -t $app/dataconverter/lib && python3.7 se
 
 # apeflow setup
 # specific branch
-RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" \
-    --single-branch -b SLCAI-54-automl-module https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-apeflow.git \
-    $app/apeflow
+RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" --single-branch -b SLCAI-54-automl-module https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-apeflow.git $app/apeflow
 #RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-apeflow.git $app/apeflow
 WORKDIR $app/apeflow
 RUN pip3.7 install -r requirements.txt -t $app/apeflow/lib && python3.7 setup.py bdist_wheel
 
 # mlps setup
 # specific branch
-RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)"
-    --single-branch -b SLCAI-54-automl-module https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-mlps.git \
-    $app/mlps
+RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" --single-branch -b SLCAI-54-automl-module https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-mlps.git $app/mlps
 #RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-mlps.git $app/mlps \
 
 WORKDIR $app/mlps
@@ -41,7 +37,7 @@ RUN pip3.7 install -r $app/mlps/requirements.txt -t $app/mlps/lib && python3.7 s
 
 
 
-FROM registry.seculayer.com:31500/ape/python-base:py3.7 as app
+FROM registry.seculayer.com:31500/ape/python-base-gpu:py3.7 as app
 
 ARG app="/opt/app"
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
