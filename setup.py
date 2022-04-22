@@ -8,9 +8,9 @@
 # ----------------------------------------------------------------------------------------------
 
 from typing import List
+import os
 
 from setuptools import setup, find_packages
-from mlps.common.utils.FileUtils import FileUtils
 
 
 class APEPythonSetup(object):
@@ -33,9 +33,24 @@ class APEPythonSetup(object):
             ],
         )
 
+    @staticmethod
+    def read_dir(directory="./", ext=".done"):
+        file_names = os.listdir(directory)
+
+        res_file_names = list()
+        for file_name in file_names:
+            if ext == os.path.splitext(file_name)[-1]:
+                res_file_names.append("%s/%s" % (directory, file_name))
+
+        return res_file_names
+
+    @staticmethod
+    def get_realpath(file=None):
+        return os.path.dirname(os.path.realpath(file))
+
     def get_additional_file(self) -> List[str]:
-        file_list = FileUtils.read_dir(
-                directory=FileUtils.get_realpath(file=__file__) + "/" + self.module_nm + "/resources", ext=".json"
+        file_list = APEPythonSetup.read_dir(
+                directory=APEPythonSetup.get_realpath(file=__file__) + "/" + self.module_nm + "/resources", ext=".json"
         )
 
         return file_list
@@ -55,7 +70,7 @@ class APEPythonSetup(object):
             },
             python_requires='>3.7',
             package_data={
-                self.module_nm: self.get_additional_file()
+                # self.module_nm: self.get_additional_file()
             },
             install_requires=self.get_require_packages(),
             zip_safe=False,

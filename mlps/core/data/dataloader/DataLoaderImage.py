@@ -5,8 +5,8 @@
 
 from typing import List
 
+from dataconverter.core.ConvertAbstract import ConvertAbstract
 from mlps.common.Constants import Constants
-from mlps.core.data.cnvrtr.ConvertAbstract import ConvertAbstract
 from mlps.core.data.dataloader.DataLoaderAbstract import DataLoaderAbstract
 
 

@@ -7,8 +7,8 @@ import os
 import json
 import socket
 
-from mlps.common.utils.Utils import Utils
-from mlps.common.utils.FileUtils import FileUtils
+from pycmmn.utils.Utils import Utils
+from pycmmn.utils.FileUtils import FileUtils
 ######################################################################################
 
 

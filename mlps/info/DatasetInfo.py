@@ -4,9 +4,8 @@
 # Powered by Seculayer © 2021 Service Model Team, R&D Center.
 
 from typing import List, Dict
-import json
 
-from mlps.common.info.FieldInfo import FieldInfo
+from mlps.info.FieldInfo import FieldInfo
 
 
 class DatasetInfo(object):

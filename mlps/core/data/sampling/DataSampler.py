@@ -9,7 +9,7 @@ from typing import List, Callable
 
 from mlps.common.Common import Common
 from mlps.common.Constants import Constants
-from mlps.common.info import JobInfo
+from mlps.info.JobInfo import JobInfo
 
 
 class DataSampler(object):

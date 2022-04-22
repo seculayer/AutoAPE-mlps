@@ -5,13 +5,13 @@
 
 import logging
 
-from mlps.common.Singleton import Singleton
+from pycmmn.Singleton import Singleton
 from mlps.common.Constants import Constants
-from mlps.common.exceptions.JobFileLoadError import JobFileLoadError
-from mlps.core.RestManager import RestManager
-from mlps.common.info.DatasetInfo import DatasetInfo
-from mlps.core.SFTPClientManager import SFTPClientManager
-from mlps.common.utils.StringUtil import StringUtil
+from pycmmn.exceptions.JobFileLoadError import JobFileLoadError
+from pycmmn.rest.RestManager import RestManager
+from mlps.info.DatasetInfo import DatasetInfo
+from pycmmn.sftp.SFTPClientManager import SFTPClientManager
+from pycmmn.utils.StringUtil import StringUtil
 
 
 class JobInfo(object, metaclass=Singleton):
@@ -36,7 +36,7 @@ class JobInfo(object, metaclass=Singleton):
         filename = self._create_job_filename()
         try:
             if self.job_type == Constants.JOB_TYPE_LEARN:
-                case = f"{RestManager.get_project_id(self.hist_no)}"
+                case = f"{RestManager.get_project_id(rest_url_root=Constants.REST_URL_ROOT, logger=self.LOGGER, job_key=self.hist_no)}"
             else:  # self.job_type == Constants.JOB_TYPE_INFERENCE:
                 case = "inference"
             path = f"{self.job_dir}/{case}/{filename}"
