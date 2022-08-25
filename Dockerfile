@@ -1,101 +1,47 @@
 # syntax=docker/dockerfile:1.3
-FROM registry.seculayer.com:31500/ape/python-base-gpu:py3.7 as builder
-MAINTAINER jinkim "jinkim@seculayer.com"
+FROM seculayer/python:3.7 AS builder
+LABEL maintainer="jinkim jinkim@seculayer.com"
 
-ARG app="/opt/app"
+ARG APP_DIR="/opt/app"
+ARG POETRY_VERSION=1.1.13
 
-RUN pip3.7 install wheel && git config --global http.sslVerify false
+ENV POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    PATH="/root/.local/bin:$PATH"
 
-# pycmmn setup
-# specific branch
-RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" --single-branch -b SLCAI-54-automl-module https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-pycmmn.git $app/pycmmn
-#RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-pycmmn.git $app/pycmmn
-WORKDIR $app/pycmmn
-RUN pip3.7 install -r requirements.txt -t $app/pycmmn/lib && python3.7 setup.py bdist_wheel
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install install pipx
+RUN pipx ensurepath
+RUN pipx install "poetry==$POETRY_VERSION"
 
-# dataconverter setup
-# specific branch
-RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" --single-branch -b SLCAI-54-automl-module https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-dataconverter.git $app/dataconverter
-#RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-dataconverter.git $app/dataconverter
-WORKDIR $app/dataconverter
-RUN pip3.7 install -r requirements.txt -t $app/dataconverter/lib && python3.7 setup.py bdist_wheel
+WORKDIR ${APP_DIR}
 
-# apeflow setup
-# specific branch
-RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" --single-branch -b SLCAI-54-automl-module https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-apeflow.git $app/apeflow
-#RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-apeflow.git $app/apeflow
-WORKDIR $app/apeflow
-RUN pip3.7 install -r requirements.txt -t $app/apeflow/lib && python3.7 setup.py bdist_wheel
+COPY pyproject.toml poetry.lock ${APP_DIR}
 
-# mlps setup
-# specific branch
-RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" --single-branch -b SLCAI-54-automl-module https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-mlps.git $app/mlps
-#RUN --mount=type=secret,id=token git clone --depth=5 -c http.extraHeader="Authorization: Bearer $(cat /run/secrets/token)" https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-mlps.git $app/mlps \
+RUN --mount=type=secret,id=gitconfig,target=/root/.gitconfig,required=true \
+    --mount=type=secret,id=cert,required=true \
+    # --mount=type=cache,target=/root/.cache/pypoetry/cache \
+    # --mount=type=cache,target=/root/.cache/pypoetry/artifacts \
+    poetry install --no-dev --no-root --no-interaction --no-ansi
 
-WORKDIR $app/mlps
-RUN pip3.7 install -r $app/mlps/requirements.txt -t $app/mlps/lib && python3.7 setup.py bdist_wheel
-
-
-
-FROM registry.seculayer.com:31500/ape/python-base-gpu:py3.7 as app
-
-ARG app="/opt/app"
+FROM seculayer/python:3.7 AS app
+ARG APP_DIR="/opt/app"
+ARG CLOUD_AI_DIR="/eyeCloudAI/app/ape/mlps/"
+ENV CLOUD_AI_DIR ${CLOUD_AI_DIR}
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 
-# pycmmn install
-RUN mkdir -p /eyeCloudAI/app/ape/pycmmn
-WORKDIR /eyeCloudAI/app/ape/pycmmn
-
-COPY --from=builder "$app/pycmmn/lib" /eyeCloudAI/app/ape/pycmmn/lib
-COPY --from=builder "$app/pycmmn/dist/pycmmn-1.0.0-py3-none-any.whl" \
-        /eyeCloudAI/app/ape/pycmmn/pycmmn-1.0.0-py3-none-any.whl
-
-RUN pip3.7 install /eyeCloudAI/app/ape/pycmmn/pycmmn-1.0.0-py3-none-any.whl --no-dependencies  \
-    -t /eyeCloudAI/app/ape/pycmmn/ \
-    && rm /eyeCloudAI/app/ape/pycmmn/pycmmn-1.0.0-py3-none-any.whl
-
-# dataconverter install
-RUN mkdir -p /eyeCloudAI/app/ape/dataconverter
-WORKDIR /eyeCloudAI/app/ape/dataconverter
-
-COPY --from=builder "$app/dataconverter/lib" /eyeCloudAI/app/ape/dataconverter/lib
-COPY --from=builder "$app/dataconverter/dist/dataconverter-1.0.0-py3-none-any.whl" \
-        /eyeCloudAI/app/ape/dataconverter/dataconverter-1.0.0-py3-none-any.whl
-
-RUN pip3.7 install /eyeCloudAI/app/ape/dataconverter/dataconverter-1.0.0-py3-none-any.whl --no-dependencies  \
-    -t /eyeCloudAI/app/ape/dataconverter/ \
-    && rm /eyeCloudAI/app/ape/dataconverter/dataconverter-1.0.0-py3-none-any.whl
-
-# apeflow install
-RUN mkdir -p /eyeCloudAI/app/ape/apeflow
-WORKDIR /eyeCloudAI/app/ape/apeflow
-
-COPY --from=builder "$app/apeflow/lib" /eyeCloudAI/app/ape/apeflow/lib
-COPY --from=builder "$app/apeflow/dist/apeflow-1.0.0-py3-none-any.whl" \
-        /eyeCloudAI/app/ape/apeflow/apeflow-1.0.0-py3-none-any.whl
-
-RUN pip3.7 install /eyeCloudAI/app/ape/apeflow/apeflow-1.0.0-py3-none-any.whl --no-dependencies  \
-    -t /eyeCloudAI/app/ape/apeflow/ \
-    && rm /eyeCloudAI/app/ape/apeflow/apeflow-1.0.0-py3-none-any.whl
-
-# mlps install
-RUN mkdir -p /eyeCloudAI/app/ape/mlps
-WORKDIR /eyeCloudAI/app/ape/mlps
-
-COPY ./mlps.sh /eyeCloudAI/app/ape/mlps
-RUN chmod +x /eyeCloudAI/app/ape/mlps/mlps.sh
-
-COPY --from=builder "$app/mlps/lib" /eyeCloudAI/app/ape/mlps/lib
-COPY --from=builder "$app/mlps/dist/mlps-3.0.0-py3-none-any.whl" \
-        /eyeCloudAI/app/ape/mlps/mlps-3.0.0-py3-none-any.whl
-
-RUN pip3.7 install /eyeCloudAI/app/ape/mlps/mlps-3.0.0-py3-none-any.whl --no-dependencies  \
-    -t /eyeCloudAI/app/ape/mlps/ \
-    && rm /eyeCloudAI/app/ape/mlps/mlps-3.0.0-py3-none-any.whl
+RUN mkdir -p ${CLOUD_AI_DIR}
+WORKDIR ${CLOUD_AI_DIR}
 
 RUN groupadd -g 1000 aiuser
 RUN useradd -r -u 1000 -g aiuser aiuser
 RUN chown -R aiuser:aiuser /eyeCloudAI
 USER aiuser
 
-CMD []
+COPY --chown=aiuser:aiuser --from=builder ${APP_DIR}/.venv ${CLOUD_AI_DIR}/.venv
+COPY --chown=aiuser:aiuser mlps ${CLOUD_AI_DIR}/mlps
+COPY --chown=aiuser:aiuser mlps.sh ${CLOUD_AI_DIR}
+RUN chmod +x ${CLOUD_AI_DIR}/mlps.sh
+
+ENV PATH="${CLOUD_AI_DIR}/.venv/bin:$PATH"
+
+CMD ["bash", "-c", "${CLOUD_AI_DIR}/mlps.sh"]
