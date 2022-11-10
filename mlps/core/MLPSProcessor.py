@@ -85,6 +85,7 @@ class MLPSProcessor(object):
             self.model_init()
             if self.job_type == Constants.JOB_TYPE_LEARN:
                 self.learn()
+                self.copy_job()
                 self.eval()
             else:  # self.job_type == Constants.JOB_TYPE_INFERENCE:
                 self.inference()
@@ -162,16 +163,14 @@ class MLPSProcessor(object):
 
             result_list = self.model.predict(inferenece_data)
             self.result_write(result_list)
-            RestManager.send_inference_progress(
-                Constants.REST_URL_ROOT, self.LOGGER, self.job_key, 100.0, "delete"
-            )
 
             self.LOGGER.info("-- MLModels inference end. [{}]".format(self.job_key))
         except Exception as e:
+            raise e
+        finally:
             RestManager.send_inference_progress(
                 Constants.REST_URL_ROOT, self.LOGGER, self.job_key, 100.0, "delete"
             )
-            raise e
 
     @CalTimeDecorator("MLPS Result Write", LOGGER)
     def result_write(self, result_list):
@@ -208,3 +207,10 @@ class MLPSProcessor(object):
             json_data[line_idx] = jsonline
 
         return json_data
+
+    def copy_job(self):
+        if int(self.job_info.get_task_idx()) == 0:
+            job_path = "{}/{}/{}.job".format(Constants.DIR_JOB, self.job_info.get_project_id(), self.job_key)
+            dir_model = "{}/{}".format(Constants.DIR_STORAGE, self.job_info.get_hist_no())
+
+            self.mrms_sftp_manager.scp_from_storage(job_path, dir_model)
