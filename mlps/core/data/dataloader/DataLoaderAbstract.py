@@ -28,13 +28,13 @@ class DataLoaderAbstract(object):
         labels = list()
 
         for idx, field in enumerate(fields):
-            if True:  # not field.multiple():
+            if not field.multiple():
                 name = field.field_name
                 value = line.get(name, "")
-            # else:
-            #     value = list()
-            #     for name in field.field_name.split("@COMMA@"):
-            #         value.append(line.get(name, ""))
+            else:
+                value = list()
+                for name in field.field_name.split("@COMMA@"):
+                    value.append(line.get(name, ""))
 
             # TODO : 한 필드에 2개의 함수가 있을 경우 잘 동작하는지 확인
             for fn in functions[idx]:

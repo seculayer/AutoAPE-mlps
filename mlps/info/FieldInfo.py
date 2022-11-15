@@ -23,6 +23,7 @@ class FieldInfo(object):
         else:
             self.is_label = False
         # self.is_multiple = StringUtil.get_boolean(field_dict.get("is_multiple", "N"))
+        self.is_multiple = True if len(self.field_name.split("@COMMA@")) >= 2 else False
         self.function: List[ConvertFunctionInfo] = self._create_functions(field_dict.get("functions", ""))
 
     def __str__(self) -> str:
@@ -31,8 +32,8 @@ class FieldInfo(object):
     def label(self) -> bool:
         return self.is_label
 
-    # def multiple(self) -> bool:
-    #     return self.is_multiple
+    def multiple(self) -> bool:
+        return self.is_multiple
 
     # --- static variables
     _REGEX_FN_STR = "(\\[\\[@[\\w\\d_]+\\([^\\]]*\\)\\]\\])"
