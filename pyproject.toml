@@ -1,8 +1,9 @@
 [tool.poetry]
 name = "mlps"
 version = "3.0.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "AutoAPE : MLPS"
+authors = ["JIN KIM <jin.kim@seculayer.com>"]
+include = ["conf"]
 
 [tool.poetry.dependencies]
 python = "^3.7,<3.10"

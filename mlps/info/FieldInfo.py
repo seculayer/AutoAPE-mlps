@@ -16,6 +16,7 @@ class FieldInfo(object):
         self.field_name = field_dict.get("name", "")
         self.target_field = project_target_field
         self.stat_dict = field_dict.get("statistic", dict())
+        self.field_type = field_dict.get("field_type")
 
         # self.is_label = StringUtil.get_boolean(field_dict.get("is_label", "N"))
         if self.target_field == self.field_name:

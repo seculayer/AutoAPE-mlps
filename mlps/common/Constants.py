@@ -105,6 +105,14 @@ class Constants(object, metaclass=Singleton):
     DATASET_FORMAT_TEXT = "1"
     DATASET_FORMAT_IMAGE = "2"
 
+    # TABLE FIELD TYPE
+    FIELD_TYPE_NULL = "null"
+    FIELD_TYPE_INT = "int"
+    FIELD_TYPE_FLOAT = "float"
+    FIELD_TYPE_STRING = "string"
+    FIELD_TYPE_IMAGE = "image"
+    FIELD_TYPE_DATE = "date"
+    FIELD_TYPE_LIST = "list"
 
 if __name__ == "__main__":
     print(Constants.__dict__)
