@@ -31,14 +31,22 @@ class MLPSProcessor(object):
             Constants.MRMS_USER, Constants.MRMS_PASSWD, self.LOGGER
         )
 
-        self.job_info: JobInfo = JobInfoBuilder() \
-            .set_hist_no(hist_no=hist_no) \
-            .set_task_idx(task_idx) \
-            .set_job_dir(Constants.DIR_JOB) \
-            .set_job_type(job_type=job_type) \
-            .set_logger(self.LOGGER) \
-            .set_sftp_client(self.mrms_sftp_manager) \
-            .build()
+        try:
+            self.job_info: JobInfo = JobInfoBuilder() \
+                .set_hist_no(hist_no=hist_no) \
+                .set_task_idx(task_idx) \
+                .set_job_dir(Constants.DIR_JOB) \
+                .set_job_type(job_type=job_type) \
+                .set_logger(self.LOGGER) \
+                .set_sftp_client(self.mrms_sftp_manager) \
+                .build()
+        except Exception as e:
+            RestManager.set_status(
+                Constants.REST_URL_ROOT, self.LOGGER,
+                job_type, hist_no, task_idx,
+                Constants.STATUS_ERROR, '-'
+            )
+            raise e
         job_info_for_log = copy.deepcopy(self.job_info.info_dict)
         job_info_for_log.pop('datasets')
         self.LOGGER.info(f"{job_info_for_log}")

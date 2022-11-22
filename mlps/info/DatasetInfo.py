@@ -26,7 +26,12 @@ class DatasetInfo(object):
         fields = list()
         for field_dict in data_analysis_json:
             field_sn: int = int(field_dict.get("field_sn"))
-            field = FieldInfo(field_dict, metadata[field_sn], project_target_field)
+            meta_dict = None
+            try:
+                meta_dict = metadata[field_sn]
+            except IndexError:
+                meta_dict = {}
+            field = FieldInfo(field_dict, meta_dict, project_target_field)
             fields.append(field)
 
         return fields
