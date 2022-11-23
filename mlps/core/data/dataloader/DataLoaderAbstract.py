@@ -36,9 +36,9 @@ class DataLoaderAbstract(object):
                 name = field.field_name
                 value = line.get(name, "")
             else:
-                value = dict()
+                value = list()
                 for name in field.field_name.split("@COMMA@"):
-                    value[name] = line.get(name, "")
+                    value.append(line.get(name, ""))
 
             # TODO : 한 필드에 2개의 함수가 있을 경우 잘 동작하는지 확인
             for fn in functions[idx]:
