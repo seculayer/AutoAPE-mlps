@@ -6,7 +6,7 @@ import copy
 import os
 import json
 import traceback
-from typing import Union
+from typing import Union, Dict, List
 from threading import Timer
 from datetime import datetime
 import numpy as np
@@ -191,7 +191,7 @@ class MLPSProcessor(object):
             result_type="inference"
         )
 
-    def _insert_inference_info(self, json_data, result_list):
+    def _insert_inference_info(self, json_data, result_list: List[Dict]):
         curr_time = datetime.now().strftime('%Y%m%d%H%M%S')
         is_ensemble = True if len(result_list) > 1 else False
 
@@ -200,15 +200,16 @@ class MLPSProcessor(object):
                 # predict result
                 key_name = f"{alg_idx}_result" if is_ensemble else "result"
                 prob_key_name = f"{alg_idx}_accuracy" if is_ensemble else "accuracy"
-                if (isinstance(result[line_idx], list) or isinstance(result[line_idx], np.ndarray)) \
-                        and len(result[line_idx]) > 1:
-                    jsonline[key_name] = int(result[line_idx].argmax())
-                    jsonline[prob_key_name] = float(result[line_idx].max())
-                else:
-                    try:
-                        jsonline[key_name] = int(result[line_idx])
-                    except Exception as e:
-                        self.LOGGER.error(f"result type : {type(result[line_idx])}")
+
+                jsonline[key_name] = int(result["pred"][line_idx])
+                if result["proba"] is not None:
+                    if isinstance(result["proba"][line_idx], (list, np.ndarray)):
+                        jsonline[prob_key_name] = float(result["proba"][line_idx].max())
+                    else:
+                        try:
+                            jsonline[prob_key_name] = float(result["proba"][line_idx])
+                        except Exception as e:
+                            self.LOGGER.error(f"result type : {type(result['proba'][line_idx])}")
 
             jsonline["eqp_dt"] = curr_time
             jsonline["infr_hist_no"] = self.job_key
