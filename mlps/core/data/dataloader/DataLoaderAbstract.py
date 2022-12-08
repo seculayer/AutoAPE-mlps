@@ -21,28 +21,54 @@ class DataLoaderAbstract(object):
 
     def __init__(self, job_info, sftp_client):
         self.job_info = job_info
+        self.functions: List[List[ConvertAbstract]] = self.build_functions(
+            self.job_info.get_dataset_info().get_fields()
+        )
         self.sftp_client = sftp_client
+        self.is_exception = False
 
-    @staticmethod
-    def _convert(line, fields: List[FieldInfo], functions) -> Tuple[list, list, dict]:
+        self.LOGGER.info(self.functions)
+
+    def build_functions(self, fields: List[FieldInfo]) -> List[List[ConvertAbstract]]:
+        functions: List[List[ConvertAbstract]] = list()
+        for field in fields:
+            cvt_fn_list: List[ConvertAbstract] = list()
+            for fn_info in field.get_function():
+                cvt_fn_list.append(ConvertFactory.create_cvt_fn(
+                    cvt_fn_info=fn_info,
+                    logger=self.LOGGER,
+                    cvt_dict=RestManager.get_cnvr_dict(
+                        rest_url_root=Constants.REST_URL_ROOT, logger=self.LOGGER
+                    )
+                ))
+            functions.append(cvt_fn_list)
+        return functions
+
+    def _convert(self, line, fields: List[FieldInfo], functions) -> Tuple[list, list, dict]:
         features = list()
         labels = list()
+        line_error = False
 
         for idx, field in enumerate(fields):
+            name = field.field_name
             if field.field_type == Constants.FIELD_TYPE_LIST:
-                name = field.field_name
                 value = ListParser.parse(line.get(name, "[]"))
             elif not field.multiple():
-                name = field.field_name
                 value = line.get(name, "")
             else:
                 value = list()
-                for name in field.field_name.split("@COMMA@"):
-                    value.append(line.get(name, ""))
+                for _name in name.split("@COMMA@"):
+                    value.append(line.get(_name, ""))
 
             # TODO : 한 필드에 2개의 함수가 있을 경우 잘 동작하는지 확인
             for fn in functions[idx]:
-                value = fn.apply(value)
+                try:
+                    value = fn.apply(value)
+                except Exception as e:
+                    if not self.is_exception:
+                        self.LOGGER.error(e, exc_info=True)
+                    value = [0] * fn.get_num_feat()
+                    line_error = True
 
             if field.label():
                 labels += value
@@ -51,23 +77,10 @@ class DataLoaderAbstract(object):
                     features = value[0]
                 else:
                     features += value
-        return features, labels, line
 
-    @classmethod
-    def build_functions(cls, fields: List[FieldInfo]) -> List[List[ConvertAbstract]]:
-        functions: List[List[ConvertAbstract]] = list()
-        for field in fields:
-            cvt_fn_list: List[ConvertAbstract] = list()
-            for fn_info in field.get_function():
-                cvt_fn_list.append(ConvertFactory.create_cvt_fn(
-                    cvt_fn_info=fn_info,
-                    logger=cls.LOGGER,
-                    cvt_dict=RestManager.get_cnvr_dict(
-                        rest_url_root=Constants.REST_URL_ROOT, logger=cls.LOGGER
-                    )
-                ))
-            functions.append(cvt_fn_list)
-        return functions
+        self.is_exception = line_error
+
+        return features, labels, line
 
     def make_inout_units(self, features, fields: List[FieldInfo]):
         input_units = np.shape(features)[1:]
