@@ -44,6 +44,11 @@ class DataLoaderAbstract(object):
             for fn in functions[idx]:
                 value = fn.apply(value)
 
+            # nan check
+            for i, v in enumerate(value):
+                if v != v:
+                    value[i] = 0.0
+
             if field.label():
                 labels += value
             else:
