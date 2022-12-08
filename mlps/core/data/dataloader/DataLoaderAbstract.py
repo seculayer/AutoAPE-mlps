@@ -70,6 +70,11 @@ class DataLoaderAbstract(object):
                     value = [0] * fn.get_num_feat()
                     line_error = True
 
+            # nan check
+            for i, v in enumerate(value):
+                if v != v:
+                    value[i] = 0.0
+
             if field.label():
                 labels += value
             else:
