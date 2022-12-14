@@ -67,13 +67,13 @@ class DataLoaderAbstract(object):
                 except Exception as e:
                     if not self.is_exception:
                         self.LOGGER.error(e, exc_info=True)
-                    value = [0] * fn.get_num_feat()
+                    value = self.get_dummy(fn)
                     line_error = True
 
             # nan check
-            for i, v in enumerate(value):
-                if v != v:
-                    value[i] = 0.0
+            # for i, v in enumerate(value):
+            #     if v != v:
+            #         value[i] = 0.0
 
             if field.label():
                 labels += value
@@ -83,7 +83,8 @@ class DataLoaderAbstract(object):
                 else:
                     features += value
 
-        self.is_exception = line_error
+        if not self.is_exception and line_error:
+            self.is_exception = line_error
 
         return features, labels, line
 
@@ -130,3 +131,14 @@ class DataLoaderAbstract(object):
 
     def read(self, file_list: List[str], fields: List[FieldInfo]) -> List:
         raise NotImplementedError
+
+    @staticmethod
+    def get_dummy(fn):
+        if fn.get_return_type == "str":
+            dummy_val = ""
+        elif fn.get_return_type == "float":
+            dummy_val = 0.
+        else:
+            dummy_val = 0
+
+        return [dummy_val] * fn.get_num_feat()

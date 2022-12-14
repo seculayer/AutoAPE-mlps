@@ -155,7 +155,7 @@ class DataSampler(object):
         try:
             # if one_hot data
             if len(learn_data[1][0]) >= 2:
-                labels_encoded = list(np.argmax(learn_data[1], 1))
+                labels_encoded = list(np.argmax(learn_data[1], axis=1))
             else:
                 labels_encoded = [0 for label in learn_data[1]]
         except Exception as e:

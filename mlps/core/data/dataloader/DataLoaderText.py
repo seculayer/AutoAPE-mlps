@@ -16,9 +16,6 @@ class DataLoaderText(DataLoaderAbstract):
         super().__init__(job_info, sftp_client)
 
     def read(self, file_list, fields):
-        functions: List[List[ConvertAbstract]] = self.build_functions(fields)
-        self.LOGGER.info(functions)
-
         features = list()
         labels = list()
         origin_data = list()
@@ -33,9 +30,11 @@ class DataLoaderText(DataLoaderAbstract):
                 line: str = next(generator)
                 if line == "#file_end#":
                     break
-                feature, label, data = self._convert(line, fields, functions)
+                feature, label, data = self._convert(line, fields, self.functions)
 
                 features.append(feature), labels.append(label), origin_data.append(data)
+
+            self.is_exception = False
 
         if Constants.DATAPROCESS_CVT_DATA:
             self.write_dp_result(features, labels, file_list[0])  # file_list[0] : for dataset path
