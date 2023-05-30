@@ -20,7 +20,6 @@ gensim = "^3.7"
 numpy = "^1.21"
 pycmmn = {git = "https://ssdlc-bitbucket.seculayer.com:8443/scm/slaism/autoape-pycmmn.git", rev = "main"}
 scikit-learn = "^1.0"
-scp = "^0.14.4"
 tensorflow = "~2.7"
 torch = "^1.11.0"
 

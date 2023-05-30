@@ -115,10 +115,10 @@ class JobInfo(object, metaclass=Singleton):
         return self.info_dict.get("datasets", {}).get("metadata_json", {}).get("file_list")
 
     def get_dataset_lines(self) -> list:
-        if self.get_dataset_format() == Constants.DATASET_FORMAT_TEXT:
-            return self.info_dict.get("datasets", {}).get("metadata_json", {}).get("file_num_line")
-        elif self.get_dataset_format() == Constants.DATASET_FORMAT_IMAGE:
+        if self.get_dataset_format() == Constants.DATASET_FORMAT_IMAGE:
             return self.info_dict.get("datasets", {}).get("metadata_json", {}).get("file_num")
+        else:  # Constants.DATASET_FORMAT_TEXT, Constants.DATASET_FORMAT_TABLE
+            return self.info_dict.get("datasets", {}).get("metadata_json", {}).get("file_num_line")
 
     def get_dist_yn(self) -> bool:
         return StringUtil.get_boolean(self.info_dict.get("algorithms", {}).get("dist_yn", "").lower())
