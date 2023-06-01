@@ -104,6 +104,7 @@ class Constants(object, metaclass=Singleton):
 
     DATASET_FORMAT_TEXT = "1"
     DATASET_FORMAT_IMAGE = "2"
+    DATASET_FORMAT_TABLE = "3"
 
     # TABLE FIELD TYPE
     FIELD_TYPE_NULL = "null"

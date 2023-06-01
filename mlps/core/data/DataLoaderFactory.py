@@ -18,7 +18,8 @@ class DataloaderFactory(object):
     def create(dataset_format: str, job_info: JobInfo, sftp_client: SFTPClientManager):
         case = {
             Constants.DATASET_FORMAT_TEXT: "DataLoaderText",
-            Constants.DATASET_FORMAT_IMAGE: "DataLoaderImage"
+            Constants.DATASET_FORMAT_IMAGE: "DataLoaderImage",
+            Constants.DATASET_FORMAT_TABLE: "DataLoaderText"
         }.get(dataset_format)
         return eval(case)(job_info, sftp_client)
 
