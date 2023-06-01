@@ -222,4 +222,7 @@ class MLPSProcessor(object):
             job_path = "{}/{}/{}.job".format(Constants.DIR_JOB, self.job_info.get_project_id(), self.job_key)
             dir_model = "{}/{}".format(Constants.DIR_STORAGE, self.job_info.get_hist_no())
 
-            self.mrms_sftp_manager.scp_from_storage(job_path, dir_model)
+            with self.mrms_sftp_manager.get_client().open(f"{job_path}", option="r") as r:
+                job = r.read()
+            with self.mrms_sftp_manager.get_client().open(f"{dir_model}/{self.job_key}.job", option='w') as w:
+                w.write(job)
