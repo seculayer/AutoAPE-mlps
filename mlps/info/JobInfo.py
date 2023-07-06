@@ -7,7 +7,7 @@ import logging
 
 from pycmmn.Singleton import Singleton
 from mlps.common.Constants import Constants
-from pycmmn.exceptions.JobFileLoadError import JobFileLoadError
+from pycmmn.exceptions.FileLoadError import FileLoadError
 from pycmmn.rest.RestManager import RestManager
 from mlps.info.DatasetInfo import DatasetInfo
 from pycmmn.sftp.SFTPClientManager import SFTPClientManager
@@ -44,7 +44,7 @@ class JobInfo(object, metaclass=Singleton):
 
         except Exception as e:
             self.LOGGER.error(str(e), exc_info=True)
-            raise JobFileLoadError(key=filename)
+            raise FileLoadError(file_name=filename)
 
         return job_dict
 
