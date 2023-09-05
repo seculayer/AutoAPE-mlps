@@ -102,7 +102,7 @@ class DataLoaderAbstract(object):
             self.LOGGER.info(field_info.stat_dict)
             if field_info.is_label:
                 try:
-                    return len(field_info.stat_dict.get("unique", {}))
+                    return field_info.stat_dict.get("unique").get("unique_count")
                 except Exception as e:
                     self.LOGGER.error(e, exc_info=True)
                     return 1
