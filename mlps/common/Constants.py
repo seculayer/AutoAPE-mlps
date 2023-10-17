@@ -66,7 +66,7 @@ class Constants(object, metaclass=Singleton):
         "log_level", "INFO"
     )  # one of [INFO, DEBUG, WARN, ERROR, CRITICAL]
 
-    ETLS_WAITING_TIME = int(_CONFIG.get("etls_wating_time", "5"))
+    ETLS_WAITING_TIME = int(_CONFIG.get("etls_waiting_time", "5"))
 
     REST_URL_ROOT = "http://{}:{}".format(
         _CONFIG.get("mrms_svc", "mrms-svc"),

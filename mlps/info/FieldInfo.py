@@ -11,10 +11,10 @@ from dataconverter.core.ConvertFunctionInfo import ConvertFunctionInfo, ConvertF
 
 
 class FieldInfo(object):
-    def __init__(self, field_dict: dict, metadata_dict: dict, project_target_field: str):
+    def __init__(self, field_dict: dict, metadata_dict: dict, target_field: str):
         self.field_sn = StringUtil.get_int(field_dict.get("field_sn", 0))
         self.field_name = field_dict.get("name", "")
-        self.target_field = project_target_field
+        self.target_field = target_field
         self.stat_dict = field_dict.get("statistic", dict())
         self.field_type = field_dict.get("field_type")
 
