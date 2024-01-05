@@ -43,6 +43,8 @@ class ResultWriter(object):
             line_idx = 0
             for line in batch_result:
                 # json.dump(line, codecs.getwriter("utf-8")(f) , ensure_ascii=False)
+                if line.__contains__('image'):
+                    line.pop('image')
                 json.dump(line, f, ensure_ascii=False)
                 f.write("\n")
 

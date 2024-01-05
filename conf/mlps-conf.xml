@@ -103,7 +103,7 @@
         <value>jTf6XrqcYX1SAhv9JUPq+w==</value>
     </property>
     <property>
-        <name>etls_wating_time</name>
+        <name>etls_waiting_time</name>
         <value>5</value>
         <description>Seconds</description>
     </property>
