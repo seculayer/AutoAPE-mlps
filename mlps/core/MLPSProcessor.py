@@ -184,16 +184,25 @@ class MLPSProcessor(object):
     def result_write(self, result_list):
         json_data = self.data_loader_manager.get_json_data()
         json_data = self._insert_inference_info(json_data, result_list)
-
-        ResultWriter.result_file_write(
-            result_path=Constants.DIR_RESULT,
-            results=json_data,
-            result_type="inference"
-        )
+        try:
+            ResultWriter.result_file_write(
+                result_path=Constants.DIR_RESULT,
+                results=json_data,
+                result_type="inference"
+            )
+        except TypeError as e:
+            self.LOGGER.error(e, exc_info=True)
+            self.LOGGER.error(f"json_data : {json_data}")
 
     def _insert_inference_info(self, json_data, result_list: List[Dict]):
         curr_time = datetime.now().strftime('%Y%m%d%H%M%S')
         is_ensemble = True if len(result_list) > 1 else False
+        target_field_unique_keys: list = []
+
+        for field_info in self.job_info.get_dataset_info().get_fields():
+            if field_info.label():
+                target_field_unique_keys = list(field_info.stat_dict['unique']['unique'].keys())
+                break
 
         for line_idx, jsonline in enumerate(json_data):
             for alg_idx, result in enumerate(result_list):
@@ -201,10 +210,10 @@ class MLPSProcessor(object):
                 key_name = f"{alg_idx}_result" if is_ensemble else "result"
                 prob_key_name = f"{alg_idx}_accuracy" if is_ensemble else "accuracy"
 
-                jsonline[key_name] = int(result["pred"][line_idx])
+                jsonline[key_name] = target_field_unique_keys[int(result["pred"][line_idx])]
                 if result["proba"] is not None:
                     if isinstance(result["proba"][line_idx], (list, np.ndarray)):
-                        jsonline[prob_key_name] = float(result["proba"][line_idx].max())
+                        jsonline[prob_key_name] = float(max(result["proba"][line_idx]))
                     else:
                         try:
                             jsonline[prob_key_name] = float(result["proba"][line_idx])
