@@ -7,7 +7,7 @@ import logging
 
 from pycmmn.Singleton import Singleton
 from mlps.common.Constants import Constants
-from pycmmn.exceptions.JobFileLoadError import JobFileLoadError
+from pycmmn.exceptions.FileLoadError import FileLoadError
 from pycmmn.rest.RestManager import RestManager
 from mlps.info.DatasetInfo import DatasetInfo
 from pycmmn.sftp.SFTPClientManager import SFTPClientManager
@@ -44,7 +44,7 @@ class JobInfo(object, metaclass=Singleton):
 
         except Exception as e:
             self.LOGGER.error(str(e), exc_info=True)
-            raise JobFileLoadError(key=filename)
+            raise FileLoadError(file_name=filename)
 
         return job_dict
 
@@ -98,7 +98,7 @@ class JobInfo(object, metaclass=Singleton):
         return self.info_dict.get("project_id")
 
     def get_target_field(self) -> str:
-        return self.info_dict.get("project_target_field")
+        return self.info_dict.get("target_field")
 
     def get_dataset_cnt_labels(self) -> dict:
         meta_list: list = self.info_dict.get("datasets", {}).get("metadata_json", {}).get("meta")
@@ -115,10 +115,10 @@ class JobInfo(object, metaclass=Singleton):
         return self.info_dict.get("datasets", {}).get("metadata_json", {}).get("file_list")
 
     def get_dataset_lines(self) -> list:
-        if self.get_dataset_format() == Constants.DATASET_FORMAT_TEXT:
-            return self.info_dict.get("datasets", {}).get("metadata_json", {}).get("file_num_line")
-        elif self.get_dataset_format() == Constants.DATASET_FORMAT_IMAGE:
+        if self.get_dataset_format() == Constants.DATASET_FORMAT_IMAGE:
             return self.info_dict.get("datasets", {}).get("metadata_json", {}).get("file_num")
+        else:  # Constants.DATASET_FORMAT_TEXT, Constants.DATASET_FORMAT_TABLE
+            return self.info_dict.get("datasets", {}).get("metadata_json", {}).get("file_num_line")
 
     def get_dist_yn(self) -> bool:
         return StringUtil.get_boolean(self.info_dict.get("algorithms", {}).get("dist_yn", "").lower())

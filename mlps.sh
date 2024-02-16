@@ -15,7 +15,7 @@ if [ -x "${APP_PATH}/mlps/.venv/bin/python3" ]
 then
   PYTHON_BIN="$APP_PATH/mlps/.venv/bin/python3"
 else
-  PYTHON_BIN="$(command -v python3)"
+  PYTHON_BIN="$(command -v python3.7)"
 
   export PYTHONPATH=$PYTHONPATH:$APP_PATH/mlps/lib:$APP_PATH/mlps
   export PYTHONPATH=$PYTHONPATH:$APP_PATH/pycmmn/lib:$APP_PATH/pycmmn

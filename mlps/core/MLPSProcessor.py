@@ -6,7 +6,7 @@ import copy
 import os
 import json
 import traceback
-from typing import Union
+from typing import Union, Dict, List
 from threading import Timer
 from datetime import datetime
 import numpy as np
@@ -31,14 +31,22 @@ class MLPSProcessor(object):
             Constants.MRMS_USER, Constants.MRMS_PASSWD, self.LOGGER
         )
 
-        self.job_info: JobInfo = JobInfoBuilder() \
-            .set_hist_no(hist_no=hist_no) \
-            .set_task_idx(task_idx) \
-            .set_job_dir(Constants.DIR_JOB) \
-            .set_job_type(job_type=job_type) \
-            .set_logger(self.LOGGER) \
-            .set_sftp_client(self.mrms_sftp_manager) \
-            .build()
+        try:
+            self.job_info: JobInfo = JobInfoBuilder() \
+                .set_hist_no(hist_no=hist_no) \
+                .set_task_idx(task_idx) \
+                .set_job_dir(Constants.DIR_JOB) \
+                .set_job_type(job_type=job_type) \
+                .set_logger(self.LOGGER) \
+                .set_sftp_client(self.mrms_sftp_manager) \
+                .build()
+        except Exception as e:
+            RestManager.set_status(
+                Constants.REST_URL_ROOT, self.LOGGER,
+                job_type, hist_no, task_idx,
+                Constants.STATUS_ERROR, '-'
+            )
+            raise e
         job_info_for_log = copy.deepcopy(self.job_info.info_dict)
         job_info_for_log.pop('datasets')
         self.LOGGER.info(f"{job_info_for_log}")
@@ -85,6 +93,7 @@ class MLPSProcessor(object):
             self.model_init()
             if self.job_type == Constants.JOB_TYPE_LEARN:
                 self.learn()
+                self.copy_job()
                 self.eval()
             else:  # self.job_type == Constants.JOB_TYPE_INFERENCE:
                 self.inference()
@@ -162,49 +171,67 @@ class MLPSProcessor(object):
 
             result_list = self.model.predict(inferenece_data)
             self.result_write(result_list)
-            RestManager.send_inference_progress(
-                Constants.REST_URL_ROOT, self.LOGGER, self.job_key, 100.0, "delete"
-            )
 
             self.LOGGER.info("-- MLModels inference end. [{}]".format(self.job_key))
         except Exception as e:
+            raise e
+        finally:
             RestManager.send_inference_progress(
                 Constants.REST_URL_ROOT, self.LOGGER, self.job_key, 100.0, "delete"
             )
-            raise e
 
     @CalTimeDecorator("MLPS Result Write", LOGGER)
     def result_write(self, result_list):
         json_data = self.data_loader_manager.get_json_data()
         json_data = self._insert_inference_info(json_data, result_list)
+        try:
+            ResultWriter.result_file_write(
+                result_path=Constants.DIR_RESULT,
+                results=json_data,
+                result_type="inference"
+            )
+        except TypeError as e:
+            self.LOGGER.error(e, exc_info=True)
+            self.LOGGER.error(f"json_data : {json_data}")
 
-        ResultWriter.result_file_write(
-            result_path=Constants.DIR_RESULT,
-            results=json_data,
-            result_type="inference"
-        )
-
-    def _insert_inference_info(self, json_data, result_list):
+    def _insert_inference_info(self, json_data, result_list: List[Dict]):
         curr_time = datetime.now().strftime('%Y%m%d%H%M%S')
         is_ensemble = True if len(result_list) > 1 else False
+        target_field_unique_keys: list = []
+
+        for field_info in self.job_info.get_dataset_info().get_fields():
+            if field_info.label():
+                target_field_unique_keys = list(field_info.stat_dict['unique']['unique'].keys())
+                break
 
         for line_idx, jsonline in enumerate(json_data):
             for alg_idx, result in enumerate(result_list):
                 # predict result
                 key_name = f"{alg_idx}_result" if is_ensemble else "result"
                 prob_key_name = f"{alg_idx}_accuracy" if is_ensemble else "accuracy"
-                if (isinstance(result[line_idx], list) or isinstance(result[line_idx], np.ndarray)) \
-                        and len(result[line_idx]) > 1:
-                    jsonline[key_name] = int(result[line_idx].argmax())
-                    jsonline[prob_key_name] = float(result[line_idx].max())
-                else:
-                    try:
-                        jsonline[key_name] = int(result[line_idx])
-                    except Exception as e:
-                        self.LOGGER.error(f"result type : {type(result[line_idx])}")
+
+                jsonline[key_name] = target_field_unique_keys[int(result["pred"][line_idx])]
+                if result["proba"] is not None:
+                    if isinstance(result["proba"][line_idx], (list, np.ndarray)):
+                        jsonline[prob_key_name] = float(max(result["proba"][line_idx]))
+                    else:
+                        try:
+                            jsonline[prob_key_name] = float(result["proba"][line_idx])
+                        except Exception as e:
+                            self.LOGGER.error(f"result type : {type(result['proba'][line_idx])}")
 
             jsonline["eqp_dt"] = curr_time
             jsonline["infr_hist_no"] = self.job_key
             json_data[line_idx] = jsonline
 
         return json_data
+
+    def copy_job(self):
+        if int(self.job_info.get_task_idx()) == 0:
+            job_path = "{}/{}/{}.job".format(Constants.DIR_JOB, self.job_info.get_project_id(), self.job_key)
+            dir_model = "{}/{}".format(Constants.DIR_STORAGE, self.job_info.get_hist_no())
+
+            with self.mrms_sftp_manager.get_client().open(f"{job_path}", option="r") as r:
+                job = r.read()
+            with self.mrms_sftp_manager.get_client().open(f"{dir_model}/{self.job_key}.job", option='w') as w:
+                w.write(job)
